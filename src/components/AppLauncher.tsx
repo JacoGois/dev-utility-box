@@ -9,16 +9,23 @@ import {
 import { AppKey, apps, appsType } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
-import { Dock as DockIcon, Monitor } from "lucide-react";
+import {
+  // Dock as DockIcon,
+  Monitor,
+} from "lucide-react";
 
 export function AppLauncher() {
-  const { isAppLauncherOpen, toggleLauncher, addToDock, addToDesktop } =
-    useDockStore();
+  const {
+    isAppLauncherOpen,
+    toggleLauncher,
+    //  addToDock,
+    addToDesktop,
+  } = useDockStore();
   const { openApp } = useWindowStore();
 
   return (
     <Dialog open={isAppLauncherOpen} onOpenChange={toggleLauncher}>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-4xl z-[99999]">
         <DialogHeader>
           <DialogTitle>Todos os Aplicativos</DialogTitle>
         </DialogHeader>
@@ -34,7 +41,7 @@ export function AppLauncher() {
                   className="flex flex-col items-center gap-2 text-center"
                 >
                   <div
-                    className="flex flex-col gap-2 items-center cursor-pointer"
+                    className="flex flex-col gap-2 items-center cursor-pointer hover:opacity-70"
                     onClick={() => {
                       openApp(key);
                       toggleLauncher();
@@ -46,17 +53,17 @@ export function AppLauncher() {
                     <div className="text-xs font-medium">{app.name}</div>
                   </div>
                   <div className="flex gap-2">
-                    <button
+                    {/* <button
                       onClick={() => addToDock(key)}
                       title="Adicionar ao Dock"
-                      className="bg-card cursor-pointer hover:bg-card-200 p-1 rounded-md"
+                      className="bg-card cursor-pointer hover:opacity-70 p-1 rounded-md"
                     >
                       <DockIcon className="w-4 h-4" />
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => addToDesktop(key)}
                       title="Adicionar à Área de Trabalho"
-                      className="bg-card cursor-pointer hover:bg-card-200 p-1 rounded-md"
+                      className="bg-card cursor-pointer hover:opacity-70 p-1 rounded-md"
                     >
                       <Monitor className="w-4 h-4" />
                     </button>

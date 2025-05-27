@@ -20,7 +20,7 @@ export default function Desktop({ children }: Props) {
   return (
     <div
       className="w-screen h-screen bg-cover overflow-hidden bg-center relative"
-      style={{ backgroundImage: `url(${background})` }}
+      style={{ backgroundImage: background }}
     >
       <div className="absolute top-4 left-4 flex gap-4 z-10">
         {(desktopApps as AppKey[]).map((key) => {

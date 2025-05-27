@@ -9,6 +9,7 @@ type DockStore = {
   addToDock: (app: AppKey) => void;
   addToDesktop: (app: AppKey) => void;
   removeFromDock: (app: AppKey) => void;
+  removeFromDesktop: (app: AppKey) => void;
 };
 
 export const useDockStore = create<DockStore>((set) => ({
@@ -32,5 +33,9 @@ export const useDockStore = create<DockStore>((set) => ({
   removeFromDock: (appKey: AppKey) =>
     set((state) => ({
       dockApps: state.dockApps.filter((a) => a !== appKey),
+    })),
+  removeFromDesktop: (appKey: AppKey) =>
+    set((state) => ({
+      desktopApps: state.desktopApps.filter((a) => a !== appKey),
     })),
 }));

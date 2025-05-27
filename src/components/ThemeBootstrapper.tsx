@@ -1,4 +1,3 @@
-// ThemeBootstrapper.tsx
 "use client";
 
 import { useThemeStore } from "@/stores/useThemeStore";

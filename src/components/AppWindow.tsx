@@ -1,6 +1,7 @@
 "use client";
 
 import { apps } from "@/lib/apps";
+import { cn } from "@/lib/utils";
 import { useWindowStore, WindowInstance } from "@/stores/useWindowStore";
 import { motion } from "framer-motion";
 import { Minus, Square, X } from "lucide-react";
@@ -17,8 +18,8 @@ export default function AppWindow({ instance }: Props) {
     focusApp,
     focusStack,
     minimizedApps,
-    toggleMaximizeApp,
     maximizedApps,
+    toggleMaximizeApp,
     minimizeApp,
   } = useWindowStore();
 
@@ -29,87 +30,28 @@ export default function AppWindow({ instance }: Props) {
   const isMinimized = minimizedApps.includes(id);
   const isMaximized = maximizedApps.includes(id);
   const index = focusStack.findIndex((i) => i === id);
-  const zIndex = 100 + index;
+  const zIndex = index === -1 ? 100 : 100 + index;
 
-  const nodeRef = useRef<HTMLDivElement>(null!);
-  const [defaultPosition, setDefaultPosition] = useState({ x: 0, y: 0 });
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const width = 400;
-    const height = 300;
-    const x = window.innerWidth / 2 - width / 2;
-    const y = window.innerHeight / 2 - height / 2;
-    setDefaultPosition({ x, y });
-    setReady(true);
-  }, []);
-
-  const isHidden = isMinimized || !ready;
-
-  if (!ready) return null;
-
-  return isMaximized ? (
-    <motion.div
-      ref={nodeRef}
-      onMouseDown={() => focusApp(id)}
-      style={{
-        zIndex,
-        top: 0,
-        left: 0,
-        pointerEvents: isHidden ? "none" : "auto",
-        visibility: isHidden ? "hidden" : "visible",
-      }}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: isHidden ? 0 : 1, scale: isHidden ? 0.95 : 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.2 }}
-      className="absolute w-screen h-screen bg-foreground"
+  return (
+    <WindowShell
+      id={id}
+      isMaximized={isMaximized}
+      isMinimized={isMinimized}
+      zIndex={zIndex}
+      onFocus={() => focusApp(id)}
+      onToggleMaximize={() => toggleMaximizeApp(id)}
+      header={
+        <WindowHeader
+          title={app.name}
+          isMaximized={isMaximized}
+          onMinimize={() => minimizeApp(id)}
+          onMaximize={() => toggleMaximizeApp(id)}
+          onClose={() => closeApp(id)}
+        />
+      }
     >
-      <WindowHeader
-        title={app.name}
-        onMinimize={() => minimizeApp(id)}
-        onMaximize={() => toggleMaximizeApp(id)}
-        onClose={() => closeApp(id)}
-      />
       <Component />
-    </motion.div>
-  ) : (
-    <Draggable
-      handle=".handle"
-      nodeRef={nodeRef}
-      defaultPosition={defaultPosition}
-      onStart={() => {
-        if (isMaximized) {
-          toggleMaximizeApp(id);
-        }
-      }}
-    >
-      <div
-        ref={nodeRef}
-        onMouseDown={() => focusApp(id)}
-        style={{
-          zIndex,
-          visibility: isHidden ? "hidden" : "visible",
-        }}
-        className="absolute"
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: isHidden ? 0 : 1, scale: isHidden ? 0.95 : 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.2 }}
-          className="w-[400px] h-[300px] bg-foreground rounded-lg overflow-hidden shadow-lg"
-        >
-          <WindowHeader
-            title={app.name}
-            onMinimize={() => minimizeApp(id)}
-            onMaximize={() => toggleMaximizeApp(id)}
-            onClose={() => closeApp(id)}
-          />
-          <Component />
-        </motion.div>
-      </div>
-    </Draggable>
+    </WindowShell>
   );
 }
 
@@ -118,14 +60,24 @@ function WindowHeader({
   onMinimize,
   onMaximize,
   onClose,
+  isMaximized,
 }: {
   title: string;
   onMinimize: () => void;
   onMaximize: () => void;
   onClose: () => void;
+  isMaximized?: boolean;
 }) {
   return (
-    <div className="bg-card text-foreground px-4 py-2 flex justify-between items-center handle cursor-move rounded-t-lg">
+    <div
+      onDoubleClick={onMaximize}
+      className={cn(
+        "bg-card text-foreground px-4 py-2 flex justify-between items-center handle",
+        {
+          "rounded-t-lg cursor-move": !isMaximized,
+        }
+      )}
+    >
       <span>{title}</span>
       <div className="flex gap-2">
         <Minus
@@ -142,5 +94,90 @@ function WindowHeader({
         />
       </div>
     </div>
+  );
+}
+
+function WindowShell({
+  isMaximized,
+  isMinimized,
+  zIndex,
+  onFocus,
+  onToggleMaximize,
+  header,
+  children,
+}: {
+  id: string;
+  isMaximized: boolean;
+  isMinimized: boolean;
+  zIndex: number;
+  onFocus: () => void;
+  onToggleMaximize: () => void;
+  header: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  const nodeRef = useRef<HTMLDivElement>(null!);
+  const [defaultPosition, setDefaultPosition] = useState({ x: 0, y: 0 });
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const width = 400;
+    const height = 300;
+    const x = window.innerWidth / 2 - width / 2;
+    const y = window.innerHeight / 2 - height / 2;
+    setDefaultPosition({ x, y });
+    setReady(true);
+  }, []);
+
+  if (!ready) return null;
+
+  const hiddenStyle = isMinimized
+    ? {
+        visibility: "hidden" as const,
+        pointerEvents: "none" as const,
+      }
+    : {};
+
+  return (
+    <Draggable
+      handle=".handle"
+      nodeRef={nodeRef}
+      disabled={isMaximized}
+      defaultPosition={defaultPosition}
+      position={isMaximized ? { x: 0, y: 0 } : undefined}
+      bounds="parent"
+      enableUserSelectHack={false}
+      onStart={() => {
+        if (isMaximized) onToggleMaximize();
+      }}
+    >
+      <motion.div
+        ref={nodeRef}
+        style={{
+          zIndex,
+          ...hiddenStyle,
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className={cn("absolute", {
+          "top-0 left-0": isMaximized,
+        })}
+      >
+        <div
+          onMouseDown={onFocus}
+          className={cn(
+            "bg-foreground overflow-hidden shadow-lg flex flex-col",
+            {
+              "w-screen h-screen": isMaximized,
+              "w-[400px] h-[300px] rounded-lg": !isMaximized,
+            }
+          )}
+        >
+          {header}
+          <div className="flex-1 overflow-auto p-4">{children}</div>
+        </div>
+      </motion.div>
+    </Draggable>
   );
 }

@@ -6,6 +6,6 @@ type DesktopStore = {
 };
 
 export const useDesktopStore = create<DesktopStore>((set) => ({
-  background: "/wallpaper-default.jpg",
+  background: "var(--background-url)",
   setBackground: (bg) => set({ background: bg }),
 }));

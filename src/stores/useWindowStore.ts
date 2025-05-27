@@ -66,7 +66,7 @@ export const useWindowStore = create<WindowStore>((set) => ({
 
   focusApp: (id) =>
     set((state) => ({
-      focusStack: state.focusStack.filter((w) => w !== id).concat(id),
+      focusStack: [...state.focusStack.filter((w) => w !== id), id],
     })),
 
   minimizeApp: (id) =>
