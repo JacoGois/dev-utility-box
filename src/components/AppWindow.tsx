@@ -173,14 +173,17 @@ function WindowShell({
         >
           <div
             onMouseDown={onFocus}
-            className={cn("flex flex-col bg-foreground shadow-lg", {
-              "w-screen h-screen": isMaximized,
-              "rounded-lg": !isMaximized,
-              "w-full h-full": !isMaximized,
-            })}
+            className={cn(
+              "flex flex-col bg-foreground overflow-hidden shadow-lg",
+              {
+                "w-screen h-screen": isMaximized,
+                "rounded-lg": !isMaximized,
+                "w-full h-full": !isMaximized,
+              }
+            )}
           >
             {header}
-            <div className="flex-1 overflow-auto p-4">{children}</div>
+            <div className="w-full h-full overflow-hidden">{children}</div>
           </div>
         </ResizableBox>
       </motion.div>
