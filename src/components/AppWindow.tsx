@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 import { Minus, Square, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
+import { ResizableBox } from "react-resizable";
+import "react-resizable/css/styles.css";
 
 type Props = {
   instance: WindowInstance;
@@ -102,7 +104,6 @@ function WindowShell({
   isMinimized,
   zIndex,
   onFocus,
-  onToggleMaximize,
   header,
   children,
 }: {
@@ -117,6 +118,7 @@ function WindowShell({
 }) {
   const nodeRef = useRef<HTMLDivElement>(null!);
   const [defaultPosition, setDefaultPosition] = useState({ x: 0, y: 0 });
+  const [size, setSize] = useState({ width: 400, height: 300 });
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -145,17 +147,11 @@ function WindowShell({
       defaultPosition={defaultPosition}
       position={isMaximized ? { x: 0, y: 0 } : undefined}
       bounds="parent"
-      enableUserSelectHack={false}
-      onStart={() => {
-        if (isMaximized) onToggleMaximize();
-      }}
+      cancel=".react-resizable-handle"
     >
       <motion.div
         ref={nodeRef}
-        style={{
-          zIndex,
-          ...hiddenStyle,
-        }}
+        style={{ zIndex, ...hiddenStyle }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -164,19 +160,29 @@ function WindowShell({
           "top-0 left-0": isMaximized,
         })}
       >
-        <div
-          onMouseDown={onFocus}
-          className={cn(
-            "bg-foreground overflow-hidden shadow-lg flex flex-col",
-            {
-              "w-screen h-screen": isMaximized,
-              "w-[400px] h-[300px] rounded-lg": !isMaximized,
-            }
-          )}
+        <ResizableBox
+          width={size.width}
+          height={size.height}
+          minConstraints={[300, 200]}
+          maxConstraints={[window.innerWidth, window.innerHeight]}
+          onResizeStop={(_, data) =>
+            setSize({ width: data.size.width, height: data.size.height })
+          }
+          resizeHandles={isMaximized ? [] : ["se", "e", "s"]}
+          handle={isMaximized ? <span /> : undefined}
         >
-          {header}
-          <div className="flex-1 overflow-auto p-4">{children}</div>
-        </div>
+          <div
+            onMouseDown={onFocus}
+            className={cn("flex flex-col bg-foreground shadow-lg", {
+              "w-screen h-screen": isMaximized,
+              "rounded-lg": !isMaximized,
+              "w-full h-full": !isMaximized,
+            })}
+          >
+            {header}
+            <div className="flex-1 overflow-auto p-4">{children}</div>
+          </div>
+        </ResizableBox>
       </motion.div>
     </Draggable>
   );
