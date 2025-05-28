@@ -5,16 +5,17 @@ import { cn } from "@/lib/utils";
 import { useWindowStore, WindowInstance } from "@/stores/useWindowStore";
 import { motion } from "framer-motion";
 import { Minus, Square, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
+import ErrorBoundary from "./ErrorBoundary";
 
 type Props = {
   instance: WindowInstance;
 };
 
-export default function AppWindow({ instance }: Props) {
+function AppWindow({ instance }: Props) {
   const {
     closeApp,
     focusApp,
@@ -52,10 +53,14 @@ export default function AppWindow({ instance }: Props) {
         />
       }
     >
-      <Component />
+      <ErrorBoundary appName={app.name}>
+        <Component instanceId={id} />
+      </ErrorBoundary>
     </WindowShell>
   );
 }
+
+export default React.memo(AppWindow);
 
 function WindowHeader({
   title,

@@ -4,6 +4,7 @@ import { AppKey } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
 import { LucideIcon } from "lucide-react";
+import React, { useCallback } from "react";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -16,10 +17,14 @@ type Props = {
   app: { name: string; icon: LucideIcon };
 };
 
-export default function AppIcon({ appKey, app }: Props) {
+function AppIcon({ appKey, app }: Props) {
   const { openApp } = useWindowStore();
   const { removeFromDesktop } = useDockStore();
   const Icon = app.icon;
+
+  const handleOpenApp = useCallback(() => {
+    openApp(appKey);
+  }, [openApp, appKey]);
 
   return (
     <ContextMenu>
@@ -36,7 +41,7 @@ export default function AppIcon({ appKey, app }: Props) {
       </ContextMenuTrigger>
 
       <ContextMenuContent className="w-48">
-        <ContextMenuItem onClick={() => openApp(appKey)}>Abrir</ContextMenuItem>
+        <ContextMenuItem onClick={handleOpenApp}>Abrir</ContextMenuItem>
         <ContextMenuItem onClick={() => removeFromDesktop(appKey)}>
           Remover da Área de Trabalho
         </ContextMenuItem>
@@ -44,3 +49,5 @@ export default function AppIcon({ appKey, app }: Props) {
     </ContextMenu>
   );
 }
+
+export default React.memo(AppIcon);

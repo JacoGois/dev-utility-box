@@ -1,16 +1,18 @@
-import { PomodoroApp } from "@/apps/PomodoroApp";
+import { Pomodoro } from "@/apps/Pomodoro";
 import { Timer } from "lucide-react";
 
 export const apps = {
   Pomodoro: {
     name: "Pomodoro",
     icon: Timer,
-    component: PomodoroApp,
+    component: Pomodoro,
+    maxInstances: 1,
   },
   Timer: {
     name: "Timer",
     icon: Timer,
-    component: PomodoroApp,
+    component: Pomodoro,
+    maxInstances: 3,
   },
 } as const;
 

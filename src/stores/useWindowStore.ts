@@ -1,5 +1,5 @@
-import type { AppKey } from "@/lib/apps";
-import { nanoid } from "nanoid";
+import { apps, type AppKey } from "@/lib/apps";
+import { toast } from "sonner";
 import { create } from "zustand";
 import { useDockStore } from "./useDockStore";
 
@@ -22,18 +22,27 @@ type WindowStore = {
   restoreApp: (id: string) => void;
 };
 
-export const useWindowStore = create<WindowStore>((set) => ({
+export const useWindowStore = create<WindowStore>((set, get) => ({
   openApps: [],
   focusStack: [],
   minimizedApps: [],
   maximizedApps: [],
 
-  openApp: (appKey) => {
-    const id = nanoid();
-    const newInstance = { id, appKey };
+  openApp: (appKey: AppKey) => {
+    const currentCount = get().openApps.filter(
+      (app) => app.appKey === appKey
+    ).length;
+    const maxAllowed = apps[appKey].maxInstances ?? Infinity;
+
+    if (currentCount >= maxAllowed) {
+      toast("Você já abriu o número máximo de janelas deste aplicativo.");
+      return;
+    }
+
+    const id = `${appKey}-${Date.now()}`;
 
     set((state) => ({
-      openApps: [...state.openApps, newInstance],
+      openApps: [...state.openApps, { id, appKey }],
       focusStack: [...state.focusStack, id],
     }));
 
