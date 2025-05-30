@@ -9,7 +9,7 @@ export const apps = {
     maxInstances: 1,
   },
   Timer: {
-    name: "Timer",
+    name: "omo",
     icon: Timer,
     component: Pomodoro,
     maxInstances: 3,

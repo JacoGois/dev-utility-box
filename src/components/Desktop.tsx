@@ -3,10 +3,12 @@
 import { AppKey, apps } from "@/lib/apps";
 import { useDesktopStore } from "@/stores/useDesktopStore";
 import { useDockStore } from "@/stores/useDockStore";
+import { useSpotlightStore } from "@/stores/useSpotlightStore";
 import { useWindowStore } from "@/stores/useWindowStore";
-import React from "react";
+import React, { useEffect } from "react";
 import AppIcon from "./AppIcon";
 import AppWindow from "./AppWindow";
+import { SpotlightSearch } from "./SpotlightSearch";
 
 type Props = {
   children?: React.ReactNode;
@@ -16,6 +18,21 @@ export default function Desktop({ children }: Props) {
   const { background } = useDesktopStore();
   const { openApps } = useWindowStore();
   const { desktopApps } = useDockStore();
+  const { openSpotlight, isOpen: isSpotlightOpen } = useSpotlightStore();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault();
+        openSpotlight();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isSpotlightOpen]);
 
   return (
     <div
@@ -34,6 +51,7 @@ export default function Desktop({ children }: Props) {
       ))}
 
       {children}
+      <SpotlightSearch />
     </div>
   );
 }
