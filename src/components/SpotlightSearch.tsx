@@ -114,11 +114,16 @@ export function SpotlightSearch() {
                     >
                       <Icon
                         className={cn(
-                          "w-6 h-6 text-muted-foreground",
-                          index === selectedIndex && "text-foreground"
+                          "w-6 h-6 text-foreground",
+                          index === selectedIndex && "text-primary-foreground"
                         )}
                       />
-                      <span className="text-sm font-medium text-foreground">
+                      <span
+                        className={cn(
+                          "text-sm font-medium text-foreground",
+                          index === selectedIndex && "text-primary-foreground"
+                        )}
+                      >
                         {item.name}
                       </span>
                     </div>

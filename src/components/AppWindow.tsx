@@ -123,12 +123,12 @@ function WindowShell({
 }) {
   const nodeRef = useRef<HTMLDivElement>(null!);
   const [defaultPosition, setDefaultPosition] = useState({ x: 0, y: 0 });
-  const [size, setSize] = useState({ width: 400, height: 300 });
+  const [size, setSize] = useState({ width: 600, height: 500 });
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const width = 400;
-    const height = 300;
+    const width = 600;
+    const height = 500;
     const x = window.innerWidth / 2 - width / 2;
     const y = window.innerHeight / 2 - height / 2;
     setDefaultPosition({ x, y });

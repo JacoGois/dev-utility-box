@@ -1,5 +1,6 @@
+import { MarkdownNotes } from "@/apps/MarkdownNotes";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { Timer } from "lucide-react";
+import { NotebookPen, Timer } from "lucide-react";
 
 export const apps = {
   Pomodoro: {
@@ -8,11 +9,11 @@ export const apps = {
     component: Pomodoro,
     maxInstances: 1,
   },
-  Timer: {
-    name: "omo",
-    icon: Timer,
-    component: Pomodoro,
-    maxInstances: 3,
+  MarkdownNotes: {
+    name: "Notas Markdown",
+    icon: NotebookPen,
+    component: MarkdownNotes,
+    maxInstances: 1,
   },
 } as const;
 
