@@ -83,7 +83,7 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
 
     if (typeof window !== "undefined") {
       const audio = new Audio("/pomodoro.mp3");
-      audio.play().catch((err) => console.error("Erro ao tocar áudio:", err));
+      audio.play();
 
       if ("Notification" in window && Notification.permission === "granted") {
         new Notification("Tempo finalizado!", {
@@ -221,12 +221,7 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
 
     if (legacyHistoryStr) {
       localStorage.setItem(storageKeys.pomodoroHistory, legacyHistoryStr);
-      try {
-        setSessionHistory(JSON.parse(legacyHistoryStr));
-      } catch (e) {
-        console.error("Erro ao parsear histórico legado:", e);
-        setSessionHistory([]);
-      }
+      setSessionHistory(JSON.parse(legacyHistoryStr));
     }
 
     Object.values(legacyKeys).forEach((key) => localStorage.removeItem(key));
