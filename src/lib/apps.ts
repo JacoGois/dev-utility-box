@@ -1,10 +1,12 @@
 import { CodeSnippets } from "@/apps/CodeSnippets";
 import { CommandCenter } from "@/apps/CommandCenter";
 import { JSONTools } from "@/apps/JSONTools";
+import { KnowledgeBase } from "@/apps/KnowledgeBase";
 import { MarkdownNotes } from "@/apps/MarkdownNotes";
 import { Pomodoro } from "@/apps/Pomodoro";
 import {
   Braces,
+  Brain,
   Code2,
   NotebookPen,
   TerminalSquare,
@@ -45,6 +47,13 @@ export const apps = {
     shortName: "Comandos",
     icon: TerminalSquare,
     component: CommandCenter,
+    maxInstances: 1,
+  },
+  KnowledgeBase: {
+    name: "Base de Conhecimento (BETA)",
+    shortName: "Conhecimento",
+    icon: Brain,
+    component: KnowledgeBase,
     maxInstances: 1,
   },
 } as const;

@@ -201,8 +201,8 @@
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -212,10 +212,10 @@
 }
 
 body.theme-ubuntu ::-webkit-scrollbar-thumb {
-  background-color: var(--primary);
+  background-color: var(--border);
 }
 body.theme-ubuntu ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--primary);
+  background-color: var(--border);
 }
 
 .stable-scrollbar-container {
