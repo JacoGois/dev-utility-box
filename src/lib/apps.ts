@@ -1,7 +1,8 @@
 import { CodeSnippets } from "@/apps/CodeSnippets";
+import { JSONTools } from "@/apps/JSONTools";
 import { MarkdownNotes } from "@/apps/MarkdownNotes";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { Code2, NotebookPen, Timer } from "lucide-react";
+import { Braces, Code2, NotebookPen, Timer } from "lucide-react";
 
 export const apps = {
   Pomodoro: {
@@ -23,6 +24,13 @@ export const apps = {
     shortName: "Snippets",
     icon: Code2,
     component: CodeSnippets,
+    maxInstances: 1,
+  },
+  JSONTools: {
+    name: "Ferramentas JSON",
+    shortName: "JSON",
+    icon: Braces,
+    component: JSONTools,
     maxInstances: 1,
   },
 } as const;
