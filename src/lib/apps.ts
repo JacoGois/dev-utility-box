@@ -6,18 +6,21 @@ import { Code2, NotebookPen, Timer } from "lucide-react";
 export const apps = {
   Pomodoro: {
     name: "Pomodoro",
+    shortName: "Pomodoro",
     icon: Timer,
     component: Pomodoro,
     maxInstances: 1,
   },
   MarkdownNotes: {
     name: "Notas Markdown",
+    shortName: "Notas",
     icon: NotebookPen,
     component: MarkdownNotes,
     maxInstances: 1,
   },
   CodeSnippets: {
     name: "Snippets de Código",
+    shortName: "Snippets",
     icon: Code2,
     component: CodeSnippets,
     maxInstances: 1,

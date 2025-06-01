@@ -14,7 +14,7 @@ import {
 
 type Props = {
   appKey: AppKey;
-  app: { name: string; icon: LucideIcon };
+  app: { shortName: string; icon: LucideIcon };
 };
 
 function AppIcon({ appKey, app }: Props) {
@@ -36,7 +36,7 @@ function AppIcon({ appKey, app }: Props) {
           <div className="w-16 h-16 bg-foreground/20 rounded-lg flex items-center justify-center text-foreground">
             <Icon className="w-8 h-8" />
           </div>
-          <span className="text-foreground text-sm">{app.name}</span>
+          <span className="text-foreground text-sm">{app.shortName}</span>
         </button>
       </ContextMenuTrigger>
 
