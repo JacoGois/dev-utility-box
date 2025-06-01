@@ -1,5 +1,6 @@
 "use client";
 
+import { DeleteConfirmDialog } from "@/components/DeleteConfirmDialog";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ScrollArea } from "@/components/ui/ScrollArea";
@@ -7,9 +8,10 @@ import { Textarea } from "@/components/ui/Textarea";
 import { cn } from "@/lib/utils";
 import { Edit3, Eye, PlusCircle, Trash2 } from "lucide-react";
 import { nanoid } from "nanoid";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { toast } from "sonner";
 import { Note } from "./shared";
 
 type MarkdownNotesProps = {
@@ -18,7 +20,7 @@ type MarkdownNotesProps = {
 
 const NOTES_STORAGE_KEY_PREFIX = "markdown-notes-app-";
 
-export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
+function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
   const storageKey = useMemo(
     () => `${NOTES_STORAGE_KEY_PREFIX}${instanceId}`,
     [instanceId]
@@ -30,6 +32,8 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
   const [editorTitle, setEditorTitle] = useState<string>("");
   const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -39,37 +43,39 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
 
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-
       if (key && key.startsWith(prefix)) {
         keysProcessedForLoading.push(key);
-
         const savedNotesArrayRaw = localStorage.getItem(key);
-
         if (savedNotesArrayRaw) {
-          const notesInThisKey = JSON.parse(savedNotesArrayRaw) as Note[];
-          if (Array.isArray(notesInThisKey)) {
-            notesInThisKey.forEach((note) => {
-              if (
-                note &&
-                typeof note.id === "string" &&
-                typeof note.title === "string" &&
-                typeof note.content === "string" &&
-                typeof note.createdAt === "number" &&
-                typeof note.updatedAt === "number"
-              ) {
-                const existingNote = allLoadedNotesMap.get(note.id);
-                if (!existingNote || note.updatedAt > existingNote.updatedAt) {
-                  allLoadedNotesMap.set(note.id, note);
+          try {
+            const notesInThisKey = JSON.parse(savedNotesArrayRaw) as Note[];
+            if (Array.isArray(notesInThisKey)) {
+              notesInThisKey.forEach((note) => {
+                if (
+                  note &&
+                  typeof note.id === "string" &&
+                  typeof note.title === "string" &&
+                  typeof note.content === "string" &&
+                  typeof note.createdAt === "number" &&
+                  typeof note.updatedAt === "number"
+                ) {
+                  const existingNote = allLoadedNotesMap.get(note.id);
+                  if (
+                    !existingNote ||
+                    note.updatedAt > existingNote.updatedAt
+                  ) {
+                    allLoadedNotesMap.set(note.id, note);
+                  }
                 }
-              }
-            });
+              });
+            }
+          } catch (e) {
+            console.error(`Erro ao parsear JSON da chave ${key}:`, e);
           }
         }
       }
     }
-
     const finalNotesArray = Array.from(allLoadedNotesMap.values());
-
     if (finalNotesArray.length > 0) {
       const sortedNotes = [...finalNotesArray].sort(
         (a, b) => b.updatedAt - a.updatedAt
@@ -80,7 +86,6 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
       setNotes([]);
       setSelectedNoteId(null);
     }
-
     const timeoutId = setTimeout(() => {
       if (typeof window !== "undefined") {
         keysProcessedForLoading.forEach((keyToDelete) => {
@@ -89,10 +94,9 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
           }
         });
       }
-    }, 0);
-
+    }, 100);
     return () => clearTimeout(timeoutId);
-  }, [instanceId]);
+  }, [instanceId, storageKey]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -111,6 +115,7 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
     } else {
       setEditorTitle("");
       setEditorContent("");
+      setIsPreviewMode(false);
     }
   }, [selectedNoteId, notes]);
 
@@ -124,6 +129,10 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
     };
     setNotes((prevNotes) => [newNote, ...prevNotes]);
     setSelectedNoteId(newNote.id);
+    setIsPreviewMode(false);
+    requestAnimationFrame(() => {
+      document.getElementById("markdown-note-title-input")?.focus();
+    });
   }, []);
 
   const handleSelectNote = (noteId: string) => {
@@ -132,17 +141,11 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
 
   const handleUpdateNote = useCallback(() => {
     if (!selectedNoteId) return;
-
     setNotes((prevNotes) => {
       const noteToUpdate = prevNotes.find((note) => note.id === selectedNoteId);
-
-      if (!noteToUpdate) {
-        return prevNotes;
-      }
-
+      if (!noteToUpdate) return prevNotes;
       const titleHasChanged = editorTitle !== noteToUpdate.title;
       const contentHasChanged = editorContent !== noteToUpdate.content;
-
       if (titleHasChanged || contentHasChanged) {
         return prevNotes.map((note) =>
           note.id === selectedNoteId
@@ -154,39 +157,41 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
               }
             : note
         );
-      } else {
-        return prevNotes;
       }
+      return prevNotes;
     });
   }, [selectedNoteId, editorTitle, editorContent]);
 
   useEffect(() => {
+    if (!selectedNoteId) return;
     const timer = setTimeout(() => {
-      if (selectedNoteId) {
-        handleUpdateNote();
-      }
+      handleUpdateNote();
     }, 1000);
     return () => clearTimeout(timer);
-  }, [editorContent, editorTitle, handleUpdateNote, selectedNoteId]);
-
-  const handleDeleteNote = useCallback(() => {
-    if (!selectedNoteId) return;
-    if (
-      window.confirm(
-        `Tem certeza que deseja excluir a nota "${editorTitle || "esta nota"}"?`
-      )
-    ) {
-      setNotes((prevNotes) =>
-        prevNotes.filter((note) => note.id !== selectedNoteId)
-      );
-      setSelectedNoteId(null);
-    }
-  }, [selectedNoteId, editorTitle]);
+  }, [editorContent, editorTitle, selectedNoteId, handleUpdateNote]);
 
   const selectedNote = useMemo(
     () => notes.find((n) => n.id === selectedNoteId),
     [notes, selectedNoteId]
   );
+
+  const handleDeleteNotePress = useCallback(() => {
+    if (selectedNote) {
+      setShowDeleteDialog(true);
+    } else {
+      toast.error("Nenhuma nota selecionada para excluir.");
+    }
+  }, [selectedNote]);
+
+  const confirmActualDelete = useCallback(() => {
+    if (!selectedNoteId) return;
+    setNotes((prevNotes) =>
+      prevNotes.filter((note) => note.id !== selectedNoteId)
+    );
+    setSelectedNoteId(null);
+    setIsPreviewMode(false);
+    toast.info("Nota excluída.");
+  }, [selectedNoteId, notes]);
 
   return (
     <div className="flex h-full w-full bg-card text-card-foreground border-t border-border">
@@ -201,7 +206,7 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
             <PlusCircle className="mr-2 h-4 w-4" /> Nova Nota
           </Button>
         </div>
-        <ScrollArea className="flex-grow h-[85%]">
+        <ScrollArea className="flex-grow h-[calc(100%-55px)]">
           {notes
             .sort((a, b) => b.updatedAt - a.updatedAt)
             .map((note) => (
@@ -229,6 +234,11 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
                 </p>
               </div>
             ))}
+          {notes.length === 0 && (
+            <p className="p-4 text-center text-sm text-muted-foreground">
+              Nenhuma nota criada. Clique em {'"Nova Nota"'}.
+            </p>
+          )}
         </ScrollArea>
       </div>
 
@@ -237,11 +247,12 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
           <>
             <div className="p-2 border-b border-border flex items-center justify-between">
               <Input
+                id="markdown-note-title-input"
                 type="text"
                 value={editorTitle}
                 onChange={(e) => setEditorTitle(e.target.value)}
                 placeholder="Título da Nota"
-                className="text-lg font-semibold border-0 focus:ring-0 shadow-none flex-grow"
+                className="text-lg font-semibold border-0 focus:ring-0 shadow-none flex-grow bg-transparent"
               />
               <div className="flex items-center gap-2">
                 <Button
@@ -257,7 +268,7 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
                   )}
                 </Button>
                 <Button
-                  onClick={handleDeleteNote}
+                  onClick={handleDeleteNotePress}
                   variant="ghost"
                   size="sm"
                   title="Excluir Nota"
@@ -290,6 +301,19 @@ export function MarkdownNotes({ instanceId }: MarkdownNotesProps) {
           </div>
         )}
       </div>
+
+      <DeleteConfirmDialog
+        isOpen={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={confirmActualDelete}
+        title="Confirmar Exclusão de Nota"
+        itemName={selectedNote?.title || "esta nota"}
+        description="Esta ação não pode ser desfeita. A nota será excluída permanentemente."
+        confirmButtonVariant="destructive"
+      />
     </div>
   );
 }
+
+const MemoizedMarkdownNotes = React.memo(MarkdownNotes);
+export { MemoizedMarkdownNotes as MarkdownNotes };
