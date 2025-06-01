@@ -1,8 +1,15 @@
 import { CodeSnippets } from "@/apps/CodeSnippets";
+import { CommandCenter } from "@/apps/CommandCenter";
 import { JSONTools } from "@/apps/JSONTools";
 import { MarkdownNotes } from "@/apps/MarkdownNotes";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { Braces, Code2, NotebookPen, Timer } from "lucide-react";
+import {
+  Braces,
+  Code2,
+  NotebookPen,
+  TerminalSquare,
+  Timer,
+} from "lucide-react";
 
 export const apps = {
   Pomodoro: {
@@ -31,6 +38,13 @@ export const apps = {
     shortName: "JSON",
     icon: Braces,
     component: JSONTools,
+    maxInstances: 1,
+  },
+  CommandCenter: {
+    name: "Central de Comandos",
+    shortName: "Comandos",
+    icon: TerminalSquare,
+    component: CommandCenter,
     maxInstances: 1,
   },
 } as const;
