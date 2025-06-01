@@ -18,7 +18,7 @@ const HistoryList = React.memo(
       <Card className="flex-1 flex flex-col min-h-44 @md:min-h-0">
         <CardHeader>
           <CardTitle className="flex items-center text-sm @sm:text-base @lg:text-lg">
-            <History className="w-4 h-4 @sm:w-5 @sm:h-5 mr-2 text-accent" />
+            <History className="w-4 h-4 @sm:w-5 @sm:h-5 mr-2 text-primary" />
             Histórico Recente
           </CardTitle>
         </CardHeader>

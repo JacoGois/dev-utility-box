@@ -30,7 +30,7 @@ export function AppLauncher() {
           <DialogTitle>Todos os Aplicativos</DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-4 gap-6 pt-4">
+        <div className="grid grid-cols-5 gap-4 pt-4">
           {(Object.entries(apps) as [AppKey, appsType[AppKey]][]).map(
             ([key, app]) => {
               const Icon = app.icon;
