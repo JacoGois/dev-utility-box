@@ -1,6 +1,7 @@
 import { CodeSnippets } from "@/apps/CodeSnippets";
 import { CommandCenter } from "@/apps/CommandCenter";
 import { JSONTools } from "@/apps/JSONTools";
+import { KanbanBoard } from "@/apps/KanbanBoard";
 import { KnowledgeBase } from "@/apps/KnowledgeBase";
 import { MarkdownNotes } from "@/apps/MarkdownNotes";
 import { Pomodoro } from "@/apps/Pomodoro";
@@ -8,6 +9,7 @@ import {
   Braces,
   Brain,
   Code2,
+  Kanban,
   NotebookPen,
   TerminalSquare,
   Timer,
@@ -54,6 +56,13 @@ export const apps = {
     shortName: "Conhecimento",
     icon: Brain,
     component: KnowledgeBase,
+    maxInstances: 1,
+  },
+  KanbanBoard: {
+    name: "Quadro Kanban (Em construção)",
+    icon: Kanban,
+    shortName: "Kanban",
+    component: KanbanBoard,
     maxInstances: 1,
   },
 } as const;
