@@ -4,11 +4,15 @@ import { useThemeStore } from "@/stores/useThemeStore";
 import { useEffect } from "react";
 
 export function ThemeBootstrapper() {
-  const { currentTheme } = useThemeStore();
+  const { hydrateTheme, currentTheme } = useThemeStore();
 
   useEffect(() => {
-    document.body.classList.add(`theme-${currentTheme}`);
-  }, [currentTheme]);
+    hydrateTheme();
+  }, [hydrateTheme]);
+
+  if (!currentTheme) {
+    return null;
+  }
 
   return null;
 }

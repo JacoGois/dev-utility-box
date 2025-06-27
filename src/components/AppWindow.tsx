@@ -123,6 +123,7 @@ function WindowShell({
 }) {
   const nodeRef = useRef<HTMLDivElement>(null!);
   const [defaultPosition, setDefaultPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [size, setSize] = useState({ width: 600, height: 500 });
   const [ready, setReady] = useState(false);
 
@@ -132,6 +133,7 @@ function WindowShell({
     const x = window.innerWidth / 2 - width / 2;
     const y = window.innerHeight / 2 - height / 2;
     setDefaultPosition({ x, y });
+    setPosition({ x, y });
     setReady(true);
   }, []);
 
@@ -150,9 +152,12 @@ function WindowShell({
       nodeRef={nodeRef}
       disabled={isMaximized}
       defaultPosition={defaultPosition}
-      position={isMaximized ? { x: 0, y: 0 } : undefined}
+      position={isMaximized ? { x: 0, y: 0 } : position}
       bounds="parent"
       cancel=".react-resizable-handle"
+      onStop={(_, data) => {
+        setPosition({ x: data.x, y: data.y });
+      }}
     >
       <motion.div
         ref={nodeRef}

@@ -1,21 +1,40 @@
 import { create } from "zustand";
 
-type ThemeKey = "ubuntu" | "macos";
+export type ThemeKey = "ubuntu" | "macos" | "windows-xp";
 
-const getStoredTheme = () =>
-  typeof localStorage !== "undefined"
-    ? (localStorage.getItem("theme") as ThemeKey) || "ubuntu"
-    : "ubuntu";
+export const defaultTheme: ThemeKey = "ubuntu";
 
 export const useThemeStore = create<{
-  currentTheme: ThemeKey;
+  currentTheme: ThemeKey | null;
   setTheme: (theme: ThemeKey) => void;
+  hydrateTheme: () => void;
 }>((set) => ({
-  currentTheme: getStoredTheme(),
+  currentTheme: null,
   setTheme: (theme) => {
-    document.body.classList.remove("theme-ubuntu", "theme-macos");
-    document.body.classList.add(`theme-${theme}`);
-    localStorage.setItem("theme", theme);
+    if (typeof document !== "undefined") {
+      document.body.classList.remove(
+        "theme-ubuntu",
+        "theme-macos",
+        "theme-windows-xp"
+      );
+      document.body.classList.add(`theme-${theme}`);
+      localStorage.setItem("theme", theme);
+    }
     set({ currentTheme: theme });
+  },
+  hydrateTheme: () => {
+    if (typeof localStorage !== "undefined") {
+      const storedTheme =
+        (localStorage.getItem("theme") as ThemeKey) || defaultTheme;
+      set((state) => {
+        state.setTheme(storedTheme);
+        return { currentTheme: storedTheme };
+      });
+    } else {
+      set((state) => {
+        state.setTheme(defaultTheme);
+        return { currentTheme: defaultTheme };
+      });
+    }
   },
 }));

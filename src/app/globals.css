@@ -191,6 +191,55 @@
   --sidebar-ring: oklch(0.6 0.08 255);
 }
 
+.theme-windows-xp {
+  --background-url: url("/wallpaper-xp.jpg");
+  --background: oklch(0.48 0.11 255);
+
+  --foreground: oklch(0.05 0 0);
+
+  --card: oklch(0.93 0.01 240);
+  --card-foreground: oklch(0.05 0 0);
+  --popover: oklch(0.93 0.01 240);
+  --popover-foreground: oklch(0.05 0 0);
+
+  --primary: oklch(0.55 0.22 260);
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary: oklch(0.85 0.01 240);
+  --secondary-foreground: oklch(0.1 0 0);
+  --muted: oklch(0.93 0.01 240);
+  --muted-foreground: oklch(0.45 0.02 260);
+
+  --accent: oklch(0.7 0.25 135);
+  --accent-foreground: oklch(1 0 0);
+
+  --destructive: oklch(0.63 0.24 27);
+  --border: oklch(0.7 0.01 240);
+  --input: oklch(1 0 0);
+  --ring: oklch(0.6 0.24 260);
+
+  --radius: 0rem;
+
+  --font-geist-sans: "Tahoma", sans-serif;
+  --font-geist-mono: "Courier New", monospace;
+}
+
+.theme-windows-xp [data-slot="button"] {
+  border-width: 1px;
+  border-style: solid;
+  border-top-color: hsl(0 0% 100% / 0.8);
+  border-left-color: hsl(0 0% 100% / 0.8);
+  border-bottom-color: hsl(0 0% 40% / 1);
+  border-right-color: hsl(0 0% 40% / 1);
+}
+
+.theme-windows-xp [data-slot="button"]:active {
+  border-top-color: hsl(0 0% 40% / 1);
+  border-left-color: hsl(0 0% 40% / 1);
+  border-bottom-color: hsl(0 0% 100% / 0.8);
+  border-right-color: hsl(0 0% 100% / 0.8);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
