@@ -1,6 +1,8 @@
 import type { AppKey } from "@/lib/apps";
 import { create } from "zustand";
 
+import { createJSONStorage, persist } from "zustand/middleware";
+
 type DockStore = {
   dockApps: AppKey[];
   desktopApps: AppKey[];
@@ -12,30 +14,42 @@ type DockStore = {
   removeFromDesktop: (app: AppKey) => void;
 };
 
-export const useDockStore = create<DockStore>((set) => ({
-  dockApps: [],
-  desktopApps: [],
-  isAppLauncherOpen: false,
-  toggleLauncher: () =>
-    set((state) => ({ isAppLauncherOpen: !state.isAppLauncherOpen })),
-  addToDock: (app) =>
-    set((state) =>
-      state.dockApps.includes(app)
-        ? state
-        : { dockApps: [...state.dockApps, app] }
-    ),
-  addToDesktop: (app) =>
-    set((state) =>
-      state.desktopApps.includes(app)
-        ? state
-        : { desktopApps: [...state.desktopApps, app] }
-    ),
-  removeFromDock: (appKey: AppKey) =>
-    set((state) => ({
-      dockApps: state.dockApps.filter((a) => a !== appKey),
-    })),
-  removeFromDesktop: (appKey: AppKey) =>
-    set((state) => ({
-      desktopApps: state.desktopApps.filter((a) => a !== appKey),
-    })),
-}));
+export const useDockStore = create<DockStore>()(
+  persist(
+    (set) => ({
+      dockApps: [],
+      desktopApps: [],
+      isAppLauncherOpen: false,
+      toggleLauncher: () =>
+        set((state) => ({ isAppLauncherOpen: !state.isAppLauncherOpen })),
+      addToDock: (app) =>
+        set((state) =>
+          state.dockApps.includes(app)
+            ? state
+            : { dockApps: [...state.dockApps, app] }
+        ),
+      addToDesktop: (app) =>
+        set((state) =>
+          state.desktopApps.includes(app)
+            ? state
+            : { desktopApps: [...state.desktopApps, app] }
+        ),
+      removeFromDock: (appKey: AppKey) =>
+        set((state) => ({
+          dockApps: state.dockApps.filter((a) => a !== appKey),
+        })),
+      removeFromDesktop: (appKey: AppKey) =>
+        set((state) => ({
+          desktopApps: state.desktopApps.filter((a) => a !== appKey),
+        })),
+    }),
+    {
+      name: "dock-store-state",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        dockApps: state.dockApps,
+        desktopApps: state.desktopApps,
+      }),
+    }
+  )
+);

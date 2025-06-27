@@ -18,13 +18,13 @@ const TimerDisplay = React.memo(
       0,
       Math.min(
         100,
-        ((modeConfig.duration - secondsLeft) / modeConfig.duration) * 100
+        ((modeConfig?.duration - secondsLeft) / modeConfig?.duration) * 100
       )
     );
 
     const strokeDashoffset =
       CIRCUMFERENCE - (progressValue / 100) * CIRCUMFERENCE;
-    const CurrentModeIcon = modeConfig.icon;
+    const CurrentModeIcon = modeConfig?.icon;
 
     return (
       <div className="flex flex-col items-center space-y-3 @sm:space-y-4 @lg:space-y-6">
@@ -53,7 +53,7 @@ const TimerDisplay = React.memo(
               strokeDashoffset={strokeDashoffset}
               className="transition-all duration-1000 ease-linear"
               strokeLinecap="round"
-              style={{ color: modeConfig.color }}
+              style={{ color: modeConfig?.color }}
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -62,7 +62,7 @@ const TimerDisplay = React.memo(
               {minutes}:{seconds}
             </div>
             <div className="text-xs @sm:text-sm text-muted-foreground mt-1">
-              {modeConfig.label}
+              {modeConfig?.label}
             </div>
           </div>
         </div>

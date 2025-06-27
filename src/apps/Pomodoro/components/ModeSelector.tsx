@@ -13,8 +13,8 @@ interface ModeSelectorProps {
 const ModeSelector = React.memo(
   ({ currentMode, onModeChange, modesData }: ModeSelectorProps) => {
     return (
-      <Card className="flex-shrink-0">
-        <CardContent className="flex flex-wrap gap-2 @sm:gap-3 justify-center p-4 @sm:p-6">
+      <Card className="flex-shrink-0 py-0 @md:py-6">
+        <CardContent className="flex flex-col @md:flex-row gap-2 @sm:gap-3 justify-center p-4 @sm:p-6">
           {Object.entries(modesData).map(([key, val]) => {
             const IconComponent = val.icon;
             const modeKey = key as keyof typeof MODES;
@@ -26,7 +26,7 @@ const ModeSelector = React.memo(
                 size="sm"
                 className={`text-xs @sm:text-sm transition-all duration-200 ${
                   currentMode === key
-                    ? "shadow-md scale-105"
+                    ? "shadow-md scale-102 @md:scale-105"
                     : "hover:scale-102"
                 }`}
               >

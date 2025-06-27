@@ -105,6 +105,7 @@ function WindowHeader({
 }
 
 function WindowShell({
+  id,
   isMaximized,
   isMinimized,
   zIndex,
@@ -122,9 +123,10 @@ function WindowShell({
   children: React.ReactNode;
 }) {
   const nodeRef = useRef<HTMLDivElement>(null!);
-  const [defaultPosition, setDefaultPosition] = useState({ x: 0, y: 0 });
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [size, setSize] = useState({ width: 600, height: 500 });
+  const { positions, sizes, setWindowPosition, setWindowSize } =
+    useWindowStore();
+  const position = positions[id];
+  const size = sizes[id];
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -132,12 +134,16 @@ function WindowShell({
     const height = 500;
     const x = window.innerWidth / 2 - width / 2;
     const y = window.innerHeight / 2 - height / 2;
-    setDefaultPosition({ x, y });
-    setPosition({ x, y });
+    if (!position) {
+      setWindowPosition(id, { x, y });
+    }
+    if (!size) {
+      setWindowSize(id, { width: 600, height: 500 });
+    }
     setReady(true);
   }, []);
 
-  if (!ready) return null;
+  if (!ready || !position || !size) return null;
 
   const hiddenStyle = isMinimized
     ? {
@@ -151,12 +157,11 @@ function WindowShell({
       handle=".handle"
       nodeRef={nodeRef}
       disabled={isMaximized}
-      defaultPosition={defaultPosition}
       position={isMaximized ? { x: 0, y: 0 } : position}
       bounds="parent"
       cancel=".react-resizable-handle"
       onStop={(_, data) => {
-        setPosition({ x: data.x, y: data.y });
+        setWindowPosition(id, { x: data.x, y: data.y });
       }}
     >
       <motion.div
@@ -176,7 +181,10 @@ function WindowShell({
           minConstraints={[300, 200]}
           maxConstraints={[window.innerWidth, window.innerHeight]}
           onResizeStop={(_, data) =>
-            setSize({ width: data.size.width, height: data.size.height })
+            setWindowSize(id, {
+              width: data.size.width,
+              height: data.size.height,
+            })
           }
           resizeHandles={isMaximized ? [] : ["se", "e", "s"]}
           handle={isMaximized ? <span /> : undefined}

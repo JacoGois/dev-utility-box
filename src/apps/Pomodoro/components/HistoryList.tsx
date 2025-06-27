@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { cn } from "@/lib/utils";
 import { History } from "lucide-react";
 import React from "react";
 import { MODES, Session } from "../shared";
@@ -23,7 +24,11 @@ const HistoryList = React.memo(
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-1 overflow-hidden">
-          <div className="space-y-1 @sm:space-y-2 h-full overflow-y-auto">
+          <div
+            className={cn("space-y-1 @sm:space-y-2 h-full overflow-y-auto", {
+              "min-h-10": sessionHistory.length,
+            })}
+          >
             {sessionHistory
               .slice()
               .reverse()

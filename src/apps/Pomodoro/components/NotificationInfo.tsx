@@ -9,7 +9,7 @@ interface NotificationInfoProps {
 const NotificationInfo = React.memo(
   ({ notificationDenied }: NotificationInfoProps) => {
     return (
-      <Card className="flex-shrink-0">
+      <Card className="flex-shrink-0 py-0">
         <CardContent className="p-3 @sm:p-4">
           <div className="flex items-center space-x-2 @sm:space-x-3">
             {notificationDenied ? (
