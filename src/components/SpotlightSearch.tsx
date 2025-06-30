@@ -81,7 +81,7 @@ export function SpotlightSearch() {
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeSpotlight()}>
       <DialogContent
         noCloseIcon
-        className="p-0 max-w-xl top-[20%] translate-y-[-20%] z-[99999] shadow-2xl"
+        className="p-0 max-w-xl top-[20%] translate-y-[-20%] z-[999999999] shadow-2xl"
         onOpenAutoFocus={(e) => e.preventDefault()}
         onKeyDown={handleKeyDown}
       >

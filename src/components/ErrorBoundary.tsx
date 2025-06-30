@@ -1,11 +1,18 @@
 "use client";
 
-import { Component, ErrorInfo, ReactNode } from "react";
+import React, {
+  cloneElement,
+  Component,
+  ErrorInfo,
+  isValidElement,
+  ReactNode,
+} from "react";
 
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
   appName?: string;
+  parentModalContainerRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 interface State {
@@ -70,7 +77,27 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    return this.props.children;
+    const { children, parentModalContainerRef } = this.props;
+
+    if (parentModalContainerRef) {
+      const childrenWithProps = React.Children.map(children, (child) => {
+        if (isValidElement(child)) {
+          return cloneElement(
+            child as React.ReactElement<{
+              parentModalContainerRef: React.RefObject<HTMLDivElement | null>;
+            }>,
+            {
+              parentModalContainerRef,
+            }
+          );
+        }
+        return child;
+      });
+
+      return childrenWithProps;
+    }
+
+    return children;
   }
 }
 

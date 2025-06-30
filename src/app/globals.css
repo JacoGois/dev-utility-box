@@ -270,3 +270,20 @@ body.theme-ubuntu ::-webkit-scrollbar-thumb:hover {
 .stable-scrollbar-container {
   scrollbar-gutter: stable;
 }
+
+body.theme-ubuntu input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+body.theme-ubuntu input[type="number"]::-webkit-inner-spin-button,
+body.theme-ubuntu input[type="number"]::-webkit-outer-spin-button {
+  filter: invert(0.8);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 150ms ease-in-out;
+}
+
+body.theme-ubuntu input[type="number"]::-webkit-inner-spin-button:hover,
+body.theme-ubuntu input[type="number"]::-webkit-outer-spin-button:hover {
+  opacity: 1;
+}

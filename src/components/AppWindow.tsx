@@ -5,7 +5,13 @@ import { cn } from "@/lib/utils";
 import { useWindowStore, WindowInstance } from "@/stores/useWindowStore";
 import { motion } from "framer-motion";
 import { Minus, Square, X } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  cloneElement,
+  isValidElement,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
@@ -122,6 +128,7 @@ function WindowShell({
   header: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const contentRef = useRef<HTMLDivElement>(null);
   const nodeRef = useRef<HTMLDivElement>(null!);
   const { positions, sizes, setWindowPosition, setWindowSize } =
     useWindowStore();
@@ -142,6 +149,20 @@ function WindowShell({
     }
     setReady(true);
   }, []);
+
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (isValidElement(child)) {
+      return cloneElement(
+        child as React.ReactElement<{
+          parentModalContainerRef: React.RefObject<HTMLDivElement | null>;
+        }>,
+        {
+          parentModalContainerRef: contentRef,
+        }
+      );
+    }
+    return child;
+  });
 
   if (!ready || !position || !size) return null;
 
@@ -201,7 +222,9 @@ function WindowShell({
             )}
           >
             {header}
-            <div className="w-full h-full overflow-hidden">{children}</div>
+            <div ref={contentRef} className="w-full h-full overflow-hidden">
+              {childrenWithProps}
+            </div>
           </div>
         </ResizableBox>
       </motion.div>

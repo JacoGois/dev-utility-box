@@ -3,7 +3,8 @@
 import { Card, CardContent } from "@/components/ui/Card";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
 import _ from "lodash";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
+import { ConfigModal } from "./components/ConfigModal";
 import { HistoryList } from "./components/HistoryList";
 import { ModeSelector } from "./components/ModeSelector";
 import { NotificationInfo } from "./components/NotificationInfo";
@@ -24,9 +25,13 @@ const defaultState = {
 
 type PomodoroProps = {
   instanceId: string;
+  parentModalContainerRef?: RefObject<HTMLDivElement>;
 };
 
-export function Pomodoro({ instanceId }: PomodoroProps) {
+export function Pomodoro({
+  instanceId,
+  parentModalContainerRef,
+}: PomodoroProps) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -144,9 +149,10 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
-      className="h-full w-full bg-background p-2 sm:p-4 overflow-auto @container stable-scrollbar-container"
+      className="h-full w-full bg-background p-2 sm:p-4 overflow-auto @container stable-scrollbar-container relative"
     >
-      <div className="h-full flex flex-col max-w-none space-y-3 @sm:space-y-4 @lg:space-y-6">
+      <ConfigModal parentModalContainerRef={parentModalContainerRef} />
+      <div className="h-full flex flex-col max-w-none space-y-3 @sm:space-y-4 @lg:space-y-6 mt-8 @sm:mt-0">
         <div className="text-center py-2 @sm:py-4 @lg:py-6 flex-shrink-0">
           <h1 className="text-xl @sm:text-2xl @lg:text-4xl font-bold text-foreground mb-1 @sm:mb-2">
             Timer Pomodoro
