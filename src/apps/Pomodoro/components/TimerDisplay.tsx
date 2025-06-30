@@ -5,22 +5,23 @@ import { CIRCUMFERENCE, MODES, TIMER_SVG_RADIUS } from "../shared";
 interface TimerDisplayProps {
   secondsLeft: number;
   modeConfig: (typeof MODES)[keyof typeof MODES];
+  duration: number;
 }
 
 const TimerDisplay = React.memo(
-  ({ secondsLeft, modeConfig }: TimerDisplayProps) => {
+  ({ secondsLeft, modeConfig, duration }: TimerDisplayProps) => {
     const minutes = Math.floor(secondsLeft / 60)
       .toString()
       .padStart(2, "0");
     const seconds = (secondsLeft % 60).toString().padStart(2, "0");
 
-    const progressValue = Math.max(
-      0,
-      Math.min(
-        100,
-        ((modeConfig?.duration - secondsLeft) / modeConfig?.duration) * 100
-      )
-    );
+    const progressValue =
+      duration > 0
+        ? Math.max(
+            0,
+            Math.min(100, ((duration - secondsLeft) / duration) * 100)
+          )
+        : 0;
 
     const strokeDashoffset =
       CIRCUMFERENCE - (progressValue / 100) * CIRCUMFERENCE;

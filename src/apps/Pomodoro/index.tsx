@@ -13,14 +13,28 @@ import { TimerControls } from "./components/TimerControls";
 import { TimerDisplay } from "./components/TimerDisplay";
 import { MODES, Session } from "./shared";
 
-const defaultState = {
+export const defaultState = {
   mode: "pomodoro" as keyof typeof MODES,
-  secondsLeft: MODES.pomodoro.duration,
   isRunning: false,
   completedPomodoros: 0,
   sessionHistory: [] as Session[],
   notificationDenied: false,
   scrollPosition: 0,
+
+  pomodoroTime: 25,
+  shortBreakTime: 5,
+  longBreakTime: 15,
+  longBreakInterval: 4,
+  autoStartBreaks: false,
+  autoStartPomodoros: false,
+
+  alarmSound: "kitchen",
+  alarmVolume: [50],
+  alarmRepeat: 1,
+  tickingSound: "none",
+  tickingVolume: [50],
+
+  secondsLeft: 25 * 60,
 };
 
 type PomodoroProps = {
@@ -34,6 +48,12 @@ export function Pomodoro({
 }: PomodoroProps) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const durationsInMinutes = {
+    pomodoro: state.pomodoroTime,
+    shortBreak: state.shortBreakTime,
+    longBreak: state.longBreakTime,
+  };
 
   const handleSessionEnd = useCallback(() => {
     setState((prevState) => {
@@ -54,23 +74,27 @@ export function Pomodoro({
           : prevState.completedPomodoros;
       const nextMode =
         prevState.mode === "pomodoro"
-          ? nextPomodoros % 4 === 0
+          ? nextPomodoros % prevState.longBreakInterval === 0
             ? "longBreak"
             : "shortBreak"
           : "pomodoro";
 
+      const shouldAutoStart =
+        (nextMode.includes("Break") && prevState.autoStartBreaks) ||
+        (nextMode === "pomodoro" && prevState.autoStartPomodoros);
+
       return {
-        isRunning: false,
+        isRunning: shouldAutoStart,
         sessionHistory: [
           ...prevState.sessionHistory,
           { mode: prevState.mode, completedAt: new Date().toISOString() },
         ],
         completedPomodoros: nextPomodoros,
         mode: nextMode,
-        secondsLeft: MODES[nextMode].duration,
+        secondsLeft: (durationsInMinutes[nextMode] || 25) * 60,
       };
     });
-  }, [setState]);
+  }, [durationsInMinutes]);
 
   useEffect(() => {
     if (!state.isRunning) return;
@@ -107,25 +131,25 @@ export function Pomodoro({
     setState({
       isRunning: !state.isRunning,
     });
-  }, [setState]);
+  }, [state.isRunning]);
 
   const handleChangeMode = useCallback(
     (newMode: keyof typeof MODES) => {
       setState({
         mode: newMode,
-        secondsLeft: MODES[newMode].duration,
+        secondsLeft: (durationsInMinutes[newMode] || 25) * 60,
         isRunning: false,
       });
     },
-    [setState]
+    [durationsInMinutes]
   );
 
   const handleResetTimerCurrentMode = useCallback(() => {
     setState({
-      secondsLeft: MODES[state.mode].duration,
+      secondsLeft: (durationsInMinutes[state.mode] || 25) * 60,
       isRunning: false,
     });
-  }, [state.mode, setState]);
+  }, [state.mode, durationsInMinutes]);
 
   const handleScroll = useMemo(
     () =>
@@ -134,7 +158,7 @@ export function Pomodoro({
           setState({ scrollPosition: scrollRef.current.scrollTop });
         }
       }, 5000),
-    [setState]
+    []
   );
 
   const sessionsTodayCount = useMemo(() => {
@@ -151,7 +175,10 @@ export function Pomodoro({
       onScroll={handleScroll}
       className="h-full w-full bg-background p-2 sm:p-4 overflow-auto @container stable-scrollbar-container relative"
     >
-      <ConfigModal parentModalContainerRef={parentModalContainerRef} />
+      <ConfigModal
+        instanceId={instanceId}
+        parentModalContainerRef={parentModalContainerRef}
+      />
       <div className="h-full flex flex-col max-w-none space-y-3 @sm:space-y-4 @lg:space-y-6 mt-8 @sm:mt-0">
         <div className="text-center py-2 @sm:py-4 @lg:py-6 flex-shrink-0">
           <h1 className="text-xl @sm:text-2xl @lg:text-4xl font-bold text-foreground mb-1 @sm:mb-2">
@@ -174,6 +201,7 @@ export function Pomodoro({
               <TimerDisplay
                 secondsLeft={state.secondsLeft}
                 modeConfig={MODES[state.mode]}
+                duration={durationsInMinutes[state.mode] * 60}
               />
               <div className="mt-4 @sm:mt-6 flex justify-center">
                 <TimerControls

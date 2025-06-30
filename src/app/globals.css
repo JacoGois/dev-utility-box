@@ -268,7 +268,7 @@ body.theme-ubuntu ::-webkit-scrollbar-thumb:hover {
 }
 
 .stable-scrollbar-container {
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
 }
 
 body.theme-ubuntu input[type="number"] {

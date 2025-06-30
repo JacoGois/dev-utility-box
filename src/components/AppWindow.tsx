@@ -157,7 +157,7 @@ function WindowShell({
           parentModalContainerRef: React.RefObject<HTMLDivElement | null>;
         }>,
         {
-          parentModalContainerRef: contentRef,
+          parentModalContainerRef: isMaximized ? undefined : contentRef,
         }
       );
     }
