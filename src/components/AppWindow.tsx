@@ -44,6 +44,8 @@ function AppWindow({ instance }: Props) {
   return (
     <WindowShell
       id={id}
+      maxWidth={app.maxWidth}
+      maxHeight={app.maxHeight}
       isMaximized={isMaximized}
       isMinimized={isMinimized}
       zIndex={zIndex}
@@ -52,6 +54,7 @@ function AppWindow({ instance }: Props) {
       header={
         <WindowHeader
           title={app.name}
+          hasSizeLimit={!!(app.maxWidth || app.maxHeight)}
           isMaximized={isMaximized}
           onMinimize={() => minimizeApp(id)}
           onMaximize={() => toggleMaximizeApp(id)}
@@ -74,16 +77,22 @@ function WindowHeader({
   onMaximize,
   onClose,
   isMaximized,
+  hasSizeLimit = false,
 }: {
   title: string;
   onMinimize: () => void;
   onMaximize: () => void;
   onClose: () => void;
   isMaximized?: boolean;
+  hasSizeLimit?: boolean;
 }) {
   return (
     <div
-      onDoubleClick={onMaximize}
+      onDoubleClick={() => {
+        if (!hasSizeLimit) {
+          onMaximize();
+        }
+      }}
       className={cn(
         "bg-card text-foreground px-4 py-2 flex justify-between items-center handle",
         {
@@ -97,10 +106,12 @@ function WindowHeader({
           className="w-4 h-4 hover:opacity-70 cursor-pointer"
           onClick={onMinimize}
         />
-        <Square
-          className="w-4 h-4 hover:opacity-70 cursor-pointer"
-          onClick={onMaximize}
-        />
+        {!hasSizeLimit && (
+          <Square
+            className="w-4 h-4 hover:opacity-70 cursor-pointer"
+            onClick={onMaximize}
+          />
+        )}
         <X
           className="w-4 h-4 hover:opacity-70 cursor-pointer"
           onClick={onClose}
@@ -118,6 +129,8 @@ function WindowShell({
   onFocus,
   header,
   children,
+  maxWidth,
+  maxHeight,
 }: {
   id: string;
   isMaximized: boolean;
@@ -127,6 +140,8 @@ function WindowShell({
   onToggleMaximize: () => void;
   header: React.ReactNode;
   children: React.ReactNode;
+  maxWidth?: number;
+  maxHeight?: number;
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const nodeRef = useRef<HTMLDivElement>(null!);
@@ -200,7 +215,10 @@ function WindowShell({
           width={size.width}
           height={size.height}
           minConstraints={[300, 200]}
-          maxConstraints={[window.innerWidth, window.innerHeight]}
+          maxConstraints={[
+            maxWidth || window.innerWidth,
+            maxHeight || window.innerHeight,
+          ]}
           onResizeStop={(_, data) =>
             setWindowSize(id, {
               width: data.size.width,

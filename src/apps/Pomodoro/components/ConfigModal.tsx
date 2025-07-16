@@ -10,15 +10,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
+import { Input } from "@/components/ui/form/Input";
+import { Label } from "@/components/ui/form/Label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/Select";
+} from "@/components/ui/form/SelectCore";
 import { Slider } from "@/components/ui/Slider";
 import { Switch } from "@/components/ui/Switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
@@ -164,7 +164,11 @@ export function ConfigModal({
               <BarChart3 className="h-4 w-4" />
               Timer
             </TabsTrigger>
-            <TabsTrigger value="sound" className="flex items-center gap-2">
+            <TabsTrigger
+              disabled
+              value="sound"
+              className="flex items-center gap-2"
+            >
               <Volume2 className="h-4 w-4" />
               Som
             </TabsTrigger>

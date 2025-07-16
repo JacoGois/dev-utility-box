@@ -2,16 +2,16 @@
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { ScrollArea } from "@/components/ui/ScrollArea";
+import { Input } from "@/components/ui/form/Input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/Textarea";
+} from "@/components/ui/form/SelectCore";
+import { Textarea } from "@/components/ui/form/Textarea";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import { cn } from "@/lib/utils";
 import {
   Code2,

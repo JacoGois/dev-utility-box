@@ -8,8 +8,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/Textarea";
+} from "@/components/ui/form/SelectCore";
+import { Textarea } from "@/components/ui/form/Textarea";
 import JsonView from "@uiw/react-json-view";
 import { vscodeTheme } from "@uiw/react-json-view/vscode";
 import _ from "lodash";

@@ -4,6 +4,7 @@
 // import { KanbanBoard } from "@/apps/KanbanBoard";
 // import { KnowledgeBase } from "@/apps/KnowledgeBase";
 // import { MarkdownNotes } from "@/apps/MarkdownNotes";
+import { Auth } from "@/apps/Auth";
 import { Pomodoro } from "@/apps/Pomodoro";
 import {
   // Braces,
@@ -13,6 +14,7 @@ import {
   // NotebookPen,
   // TerminalSquare,
   Timer,
+  User,
 } from "lucide-react";
 
 export const apps = {
@@ -22,14 +24,18 @@ export const apps = {
     icon: Timer,
     component: Pomodoro,
     maxInstances: 1,
+    maxWidth: undefined,
+    maxHeight: undefined,
   },
-  // MarkdownNotes: {
-  //   name: "Notas Markdown",
-  //   shortName: "Notas",
-  //   icon: NotebookPen,
-  //   component: MarkdownNotes,
-  //   maxInstances: 1,
-  // },
+  Auth: {
+    name: "Autenticação",
+    shortName: "Autenticação",
+    icon: User,
+    component: Auth,
+    maxInstances: 2,
+    maxWidth: 550,
+    maxHeight: 850,
+  },
   // CodeSnippets: {
   //   name: "Snippets de Código",
   //   shortName: "Snippets",

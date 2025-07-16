@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Checkbox } from "@/components/ui/Checkbox";
+import { Checkbox } from "@/components/ui/form/Checkbox";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { cn } from "@/lib/utils";
 import { useKanbanStore } from "@/stores/useKanbanStore";

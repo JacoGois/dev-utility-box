@@ -3,7 +3,6 @@
 import { DeleteConfirmDialog } from "@/components/DeleteConfirmDialog";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Checkbox } from "@/components/ui/Checkbox";
 import {
   Dialog,
   DialogClose,
@@ -12,12 +11,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
+import { Checkbox } from "@/components/ui/form/Checkbox";
+import { Input } from "@/components/ui/form/Input";
+import { Textarea } from "@/components/ui/form/Textarea";
 import {
   ScrollBar as HorizontalScrollBar,
   ScrollArea,
 } from "@/components/ui/ScrollArea";
-import { Textarea } from "@/components/ui/Textarea";
 import { cn } from "@/lib/utils";
 import { useKanbanStore } from "@/stores/useKanbanStore";
 import {

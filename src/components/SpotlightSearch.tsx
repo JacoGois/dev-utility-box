@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
+import { Input } from "@/components/ui/form/Input";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { cn } from "@/lib/utils";
 import { useSpotlightStore } from "@/stores/useSpotlightStore";

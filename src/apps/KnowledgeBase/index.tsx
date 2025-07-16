@@ -10,9 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
-import { Input } from "@/components/ui/Input";
+import { Input } from "@/components/ui/form/Input";
+import { Textarea } from "@/components/ui/form/Textarea";
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import { Textarea } from "@/components/ui/Textarea";
 import { cn } from "@/lib/utils";
 import {
   Brain,

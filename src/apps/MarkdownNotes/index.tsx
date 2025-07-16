@@ -2,9 +2,9 @@
 
 import { DeleteConfirmDialog } from "@/components/DeleteConfirmDialog";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Input } from "@/components/ui/form/Input";
+import { Textarea } from "@/components/ui/form/Textarea";
 import { ScrollArea } from "@/components/ui/ScrollArea";
-import { Textarea } from "@/components/ui/Textarea";
 import { cn } from "@/lib/utils";
 import { Edit3, Eye, PlusCircle, Trash2 } from "lucide-react";
 import { nanoid } from "nanoid";
