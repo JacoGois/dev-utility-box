@@ -2,16 +2,11 @@
 
 import { apps } from "@/lib/apps";
 import { cn } from "@/lib/utils";
+import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import { useWindowStore, WindowInstance } from "@/stores/useWindowStore";
 import { motion } from "framer-motion";
 import { Minus, Square, X } from "lucide-react";
-import React, {
-  cloneElement,
-  isValidElement,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
@@ -144,12 +139,17 @@ function WindowShell({
   maxHeight?: number;
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const setShellRef = useWindowShellStore((state) => state.setShellRef);
   const nodeRef = useRef<HTMLDivElement>(null!);
   const { positions, sizes, setWindowPosition, setWindowSize } =
     useWindowStore();
   const position = positions[id];
   const size = sizes[id];
   const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setShellRef(id, isMaximized ? null : contentRef);
+  }, [id, isMaximized]);
 
   useEffect(() => {
     const width = 600;
@@ -164,20 +164,6 @@ function WindowShell({
     }
     setReady(true);
   }, []);
-
-  const childrenWithProps = React.Children.map(children, (child) => {
-    if (isValidElement(child)) {
-      return cloneElement(
-        child as React.ReactElement<{
-          parentModalContainerRef: React.RefObject<HTMLDivElement | null>;
-        }>,
-        {
-          parentModalContainerRef: isMaximized ? undefined : contentRef,
-        }
-      );
-    }
-    return child;
-  });
 
   if (!ready || !position || !size) return null;
 
@@ -241,7 +227,7 @@ function WindowShell({
           >
             {header}
             <div ref={contentRef} className="w-full h-full overflow-hidden">
-              {childrenWithProps}
+              {children}
             </div>
           </div>
         </ResizableBox>

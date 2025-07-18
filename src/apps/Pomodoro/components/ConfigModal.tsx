@@ -31,7 +31,7 @@ import { defaultState } from "..";
 
 type ConfigModalProps = {
   instanceId: string;
-  parentModalContainerRef?: RefObject<HTMLDivElement>;
+  parentModalContainerRef?: RefObject<HTMLDivElement | null> | null;
 };
 
 type PomodoroSettings = Omit<

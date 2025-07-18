@@ -2,8 +2,9 @@
 
 import { Card, CardContent } from "@/components/ui/Card";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import _ from "lodash";
-import { RefObject, useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { ConfigModal } from "./components/ConfigModal";
 import { HistoryList } from "./components/HistoryList";
 import { ModeSelector } from "./components/ModeSelector";
@@ -39,14 +40,13 @@ export const defaultState = {
 
 type PomodoroProps = {
   instanceId: string;
-  parentModalContainerRef?: RefObject<HTMLDivElement>;
 };
 
-export function Pomodoro({
-  instanceId,
-  parentModalContainerRef,
-}: PomodoroProps) {
+export function Pomodoro({ instanceId }: PomodoroProps) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const parentModalContainerRef = useWindowShellStore(
+    (state) => state.refs[instanceId]
+  );
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const durationsInMinutes = {

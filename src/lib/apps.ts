@@ -5,8 +5,13 @@
 // import { KnowledgeBase } from "@/apps/KnowledgeBase";
 // import { MarkdownNotes } from "@/apps/MarkdownNotes";
 import { Auth } from "@/apps/Auth";
+import { DataGenerator } from "@/apps/DataGenerator";
+import { JSONTools } from "@/apps/JSONTools";
 import { Pomodoro } from "@/apps/Pomodoro";
+// import { TodoList } from "@/apps/TodoList";
 import {
+  Braces,
+  // NotebookPen,
   // Braces,
   // Brain,
   // Code2,
@@ -36,18 +41,35 @@ export const apps = {
     maxWidth: 550,
     maxHeight: 850,
   },
+  JSONTools: {
+    name: "Ferramentas JSON",
+    shortName: "JSON",
+    icon: Braces,
+    component: JSONTools,
+    maxInstances: 4,
+    maxWidth: undefined,
+    maxHeight: undefined,
+  },
+  DataGenerator: {
+    name: "Gerador de Dados",
+    shortName: "Gerador",
+    icon: Braces,
+    component: DataGenerator,
+    maxInstances: 4,
+    maxWidth: undefined,
+    maxHeight: undefined,
+  },
+  // Todo: {
+  //   name: "To Do List",
+  //   shortName: "To Do",
+  //   icon: NotebookPen,
+  //   component: TodoList,
+  // },
   // CodeSnippets: {
   //   name: "Snippets de Código",
   //   shortName: "Snippets",
   //   icon: Code2,
   //   component: CodeSnippets,
-  //   maxInstances: 1,
-  // },
-  // JSONTools: {
-  //   name: "Ferramentas JSON",
-  //   shortName: "JSON",
-  //   icon: Braces,
-  //   component: JSONTools,
   //   maxInstances: 1,
   // },
   // CommandCenter: {
