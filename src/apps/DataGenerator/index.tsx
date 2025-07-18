@@ -1,8 +1,10 @@
 "use client";
 
 import { faker } from "@faker-js/faker";
-import { Download, Loader2, X } from "lucide-react";
-import { FC, RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { Download, Loader2, Trash2, X } from "lucide-react";
+import { FC, useCallback, useEffect, useRef } from "react";
+
+import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
 
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -17,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/form/SelectCore";
 import { Textarea } from "@/components/ui/form/Textarea";
+import { toast } from "sonner";
 
 type SelectedField = {
   id: string;
@@ -24,31 +27,15 @@ type SelectedField = {
   fakerMethod: string;
 };
 
-type GeneratorState = {
-  selectedFields: SelectedField[];
-  quantity: number;
-  outputFormat: "json" | "csv";
-  generatedData: string;
-  isLoading: boolean;
-  csvOptions: {
-    includeHeader: boolean;
-    delimiter: "," | ";";
-  };
-};
-
-const initialState: GeneratorState = {
-  selectedFields: [
-    { id: "1", fieldName: "id", fakerMethod: "string.uuid" },
-    { id: "2", fieldName: "name", fakerMethod: "person.fullName" },
-    { id: "3", fieldName: "email", fakerMethod: "internet.email" },
-  ],
+export const defaultState = {
+  selectedFields: [] as SelectedField[],
   quantity: 10,
-  outputFormat: "json",
+  outputFormat: "json" as "json" | "csv",
   generatedData: "",
   isLoading: false,
   csvOptions: {
     includeHeader: true,
-    delimiter: ",",
+    delimiter: "," as "," | ";",
   },
 };
 
@@ -71,11 +58,11 @@ const AVAILABLE_FAKER_FIELDS = {
 
 type DataGeneratorProps = {
   instanceId: string;
-  parentModalContainerRef?: RefObject<HTMLDivElement>;
 };
 
 export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
-  const [state, setState] = useState(initialState);
+  const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+
   const workerRef = useRef<Worker | null>(null);
 
   useEffect(() => {
@@ -85,55 +72,67 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
     workerRef.current.onmessage = (
       event: MessageEvent<{ generatedData: string }>
     ) => {
-      setState((s) => ({
-        ...s,
+      setState({
         generatedData: event.data.generatedData,
         isLoading: false,
-      }));
+      });
     };
     return () => {
       workerRef.current?.terminate();
     };
   }, []);
 
-  const handleAddField = useCallback((fakerMethod: string) => {
-    if (!fakerMethod) return;
-    const defaultFieldName = fakerMethod.split(".").pop() || "field";
-    setState((s) => ({
-      ...s,
-      selectedFields: [
-        ...s.selectedFields,
-        { id: faker.string.uuid(), fieldName: defaultFieldName, fakerMethod },
-      ],
-    }));
-  }, []);
+  const handleAddField = useCallback(
+    (fakerMethod: string) => {
+      if (!fakerMethod) return;
+      const defaultFieldName = fakerMethod.split(".").pop() || "field";
+      setState((s) => ({
+        selectedFields: [
+          ...s.selectedFields,
+          { id: faker.string.uuid(), fieldName: defaultFieldName, fakerMethod },
+        ],
+      }));
+    },
+    [setState]
+  );
 
-  const handleRemoveField = useCallback((id: string) => {
-    setState((s) => ({
-      ...s,
-      selectedFields: s.selectedFields.filter((field) => field.id !== id),
-    }));
-  }, []);
+  const handleRemoveField = useCallback(
+    (id: string) => {
+      setState((s) => ({
+        selectedFields: s.selectedFields.filter((field) => field.id !== id),
+      }));
+    },
+    [setState]
+  );
 
-  const handleFieldNameChange = useCallback((id: string, newName: string) => {
-    setState((s) => ({
-      ...s,
-      selectedFields: s.selectedFields.map((f) =>
-        f.id === id ? { ...f, fieldName: newName } : f
-      ),
-    }));
-  }, []);
+  const handleFieldNameChange = useCallback(
+    (id: string, newName: string) => {
+      setState((s) => ({
+        selectedFields: s.selectedFields.map((f) =>
+          f.id === id ? { ...f, fieldName: newName } : f
+        ),
+      }));
+    },
+    [setState]
+  );
+
+  const handleClearSchema = useCallback(() => {
+    setState({ selectedFields: defaultState.selectedFields });
+    toast.success("Schema Limpo!", {
+      description: "A configuração de campos foi resetada.",
+    });
+  }, [setState]);
 
   const handleGenerateData = useCallback(() => {
     if (!workerRef.current || state.selectedFields.length === 0) return;
-    setState((s) => ({ ...s, isLoading: true, generatedData: "" }));
+    setState({ isLoading: true, generatedData: "" });
     workerRef.current.postMessage({
       fields: state.selectedFields,
       quantity: state.quantity,
       format: state.outputFormat,
       csvOptions: state.csvOptions,
     });
-  }, [state]);
+  }, [state, setState]);
 
   const handleDownload = useCallback(() => {
     if (!state.generatedData) return;
@@ -154,6 +153,26 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
   return (
     <div className="grid grid-cols-1 @container lg:grid-cols-3 gap-4 h-full w-full overflow-auto p-4 bg-background">
       <div className="lg:col-span-1 flex flex-col gap-4">
+        {/* MUDANÇA: O Card de gerenciamento agora só precisa do botão de Limpar.
+            A persistência é automática, então o botão "Salvar" não é mais necessário. */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Gerenciamento de Schema</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Button
+              variant="outline"
+              onClick={handleClearSchema}
+              className="w-full"
+            >
+              <Trash2 className="mr-2 h-4 w-4" /> Resetar/Limpar Schema
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* O restante do JSX permanece praticamente o mesmo, mas agora
+            as funções `setState` que eles chamam são as do seu hook customizado. */}
+
         <Card>
           <CardHeader>
             <CardTitle>Tipos de Dados</CardTitle>
@@ -173,8 +192,7 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
                 )}
               </SelectContent>
             </Select>
-
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
               {state.selectedFields.map((field) => (
                 <div key={field.id} className="flex items-center gap-2">
                   <Input
@@ -182,7 +200,6 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
                     onChange={(e) =>
                       handleFieldNameChange(field.id, e.target.value)
                     }
-                    className="flex-grow"
                   />
                   <Button
                     variant="ghost"
@@ -209,12 +226,10 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
                 type="number"
                 value={state.quantity}
                 onChange={(e) =>
-                  setState((s) => ({
-                    ...s,
+                  setState({
                     quantity: Math.max(1, parseInt(e.target.value) || 1),
-                  }))
+                  })
                 }
-                max="100000"
                 className="mt-2"
               />
             </div>
@@ -225,23 +240,18 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
                   variant={
                     state.outputFormat === "json" ? "default" : "outline"
                   }
-                  onClick={() =>
-                    setState((s) => ({ ...s, outputFormat: "json" }))
-                  }
+                  onClick={() => setState({ outputFormat: "json" })}
                 >
                   JSON
                 </Button>
                 <Button
                   variant={state.outputFormat === "csv" ? "default" : "outline"}
-                  onClick={() =>
-                    setState((s) => ({ ...s, outputFormat: "csv" }))
-                  }
+                  onClick={() => setState({ outputFormat: "csv" })}
                 >
                   CSV
                 </Button>
               </div>
             </div>
-
             {state.outputFormat === "csv" && (
               <div className="space-y-4 border-t pt-4">
                 <div className="flex items-center space-x-2">
@@ -250,7 +260,6 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
                     checked={state.csvOptions.includeHeader}
                     onCheckedChange={(checked) =>
                       setState((s) => ({
-                        ...s,
                         csvOptions: {
                           ...s.csvOptions,
                           includeHeader: !!checked,
@@ -268,7 +277,6 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
                     value={state.csvOptions.delimiter}
                     onValueChange={(value: "," | ";") =>
                       setState((s) => ({
-                        ...s,
                         csvOptions: { ...s.csvOptions, delimiter: value },
                       }))
                     }
@@ -303,8 +311,7 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
             <CardTitle>Dados Gerados</CardTitle>
             {state.generatedData && !state.isLoading && (
               <Button variant="outline" size="sm" onClick={handleDownload}>
-                <Download className="mr-2 h-4 w-4" />
-                Baixar
+                <Download className="mr-2 h-4 w-4" /> Baixar
               </Button>
             )}
           </CardHeader>
