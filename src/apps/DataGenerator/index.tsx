@@ -1,8 +1,8 @@
 "use client";
 
 import { faker } from "@faker-js/faker";
-import { Download, Loader2, Trash2, X } from "lucide-react";
-import { FC, useCallback, useEffect, useRef } from "react";
+import { Download, Library, Loader2, Trash2, X } from "lucide-react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
 
@@ -19,7 +19,9 @@ import {
   SelectValue,
 } from "@/components/ui/form/SelectCore";
 import { Textarea } from "@/components/ui/form/Textarea";
+import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import { toast } from "sonner";
+import { FieldLibraryDialog } from "./components/FieldLibraryDialog";
 
 type SelectedField = {
   id: string;
@@ -61,7 +63,11 @@ type DataGeneratorProps = {
 };
 
 export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
+  const parentModalContainerRef = useWindowShellStore(
+    (state) => state.refs[instanceId]
+  );
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 
   const workerRef = useRef<Worker | null>(null);
 
@@ -153,8 +159,13 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
   return (
     <div className="grid grid-cols-1 @container lg:grid-cols-3 gap-4 h-full w-full overflow-auto p-4 bg-background">
       <div className="lg:col-span-1 flex flex-col gap-4">
-        {/* MUDANÇA: O Card de gerenciamento agora só precisa do botão de Limpar.
-            A persistência é automática, então o botão "Salvar" não é mais necessário. */}
+        <FieldLibraryDialog
+          open={isLibraryOpen}
+          onOpenChange={setIsLibraryOpen}
+          onSelectField={handleAddField}
+          availableFields={AVAILABLE_FAKER_FIELDS}
+          parentModalContainerRef={parentModalContainerRef}
+        />
         <Card>
           <CardHeader>
             <CardTitle>Gerenciamento de Schema</CardTitle>
@@ -178,20 +189,15 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
             <CardTitle>Tipos de Dados</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Select onValueChange={handleAddField}>
-              <SelectTrigger>
-                <SelectValue placeholder="Adicionar um campo..." />
-              </SelectTrigger>
-              <SelectContent className="z-[9999999999]">
-                {Object.entries(AVAILABLE_FAKER_FIELDS).map(
-                  ([name, method]) => (
-                    <SelectItem key={method} value={method}>
-                      {name}
-                    </SelectItem>
-                  )
-                )}
-              </SelectContent>
-            </Select>
+            {/* MUDANÇA: O <Select> foi substituído por este botão. */}
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsLibraryOpen(true)}
+            >
+              <Library className="mr-2 h-4 w-4" /> Adicionar Campo da Biblioteca
+            </Button>
+
             <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
               {state.selectedFields.map((field) => (
                 <div key={field.id} className="flex items-center gap-2">
