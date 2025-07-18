@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -15,7 +14,7 @@ type FieldLibraryDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelectField: (fakerMethod: string) => void;
-  availableFields: Record<string, string>;
+  availableFields: Record<string, Record<string, string>>;
   parentModalContainerRef?: RefObject<HTMLDivElement | null> | null;
 };
 
@@ -33,29 +32,35 @@ export function FieldLibraryDialog({
 
   return (
     <CommandDialog
-      className="p-0 z-[9999999]"
-      portalContainer={parentModalContainerRef?.current ?? undefined}
       open={open}
       onOpenChange={onOpenChange}
+      className="sm:max-w-3xl z-[99999999]"
+      portalContainer={parentModalContainerRef?.current ?? undefined}
     >
-      <Command>
-        <CommandInput placeholder="Buscar um tipo de dado..." />
-        <CommandList>
-          <CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
-          <CommandGroup heading="Campos Disponíveis">
-            {Object.entries(availableFields).map(([name, method]) => (
-              <CommandItem
-                key={method}
-                value={name}
-                onSelect={() => handleSelect(method)}
-                className="cursor-pointer"
-              >
-                {name}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </Command>
+      <CommandInput placeholder="Buscar por qualquer tipo de dado..." />
+      <CommandList className="max-h-[60vh] overflow-y-auto">
+        <CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 p-2">
+          {Object.entries(availableFields).map(([groupName, fields]) => (
+            <CommandGroup
+              key={groupName}
+              heading={groupName}
+              className="break-inside-avoid"
+            >
+              {Object.entries(fields).map(([fieldName, method]) => (
+                <CommandItem
+                  key={method}
+                  value={fieldName}
+                  onSelect={() => handleSelect(method)}
+                  className="cursor-pointer"
+                >
+                  {fieldName}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          ))}
+        </div>
+      </CommandList>
     </CommandDialog>
   );
 }

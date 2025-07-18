@@ -11,6 +11,7 @@ import { Pomodoro } from "@/apps/Pomodoro";
 // import { TodoList } from "@/apps/TodoList";
 import {
   Braces,
+  FileJson,
   // NotebookPen,
   // Braces,
   // Brain,
@@ -53,7 +54,7 @@ export const apps = {
   DataGenerator: {
     name: "Gerador de Dados",
     shortName: "Gerador",
-    icon: Braces,
+    icon: FileJson,
     component: DataGenerator,
     maxInstances: 4,
     maxWidth: undefined,

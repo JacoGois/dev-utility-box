@@ -269,7 +269,7 @@ function JSONToolsComponent() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full p-3 md:p-4 gap-3 md:gap-4 bg-card text-card-foreground border-t">
+    <div className="flex flex-col h-full w-full p-3 md:p-4 gap-3 md:gap-4 bg-card text-card-foreground border-t overflow-auto">
       <div className="flex items-center gap-2 md:gap-3 flex-wrap border-b pb-3 md:pb-4">
         <Button
           onClick={handleFormatValidate}
@@ -395,7 +395,7 @@ function JSONToolsComponent() {
         </div>
       )}
 
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 overflow-hidden h-full mt-2">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 overflow-hidden h-full min-h-32 mt-2">
         <div className="flex flex-col gap-1 h-full overflow-auto">
           <div className="flex justify-between items-center mb-1">
             <div className="flex items-center gap-2">
