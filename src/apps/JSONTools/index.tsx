@@ -10,9 +10,9 @@ import {
   SelectValue,
 } from "@/components/ui/form/SelectCore";
 import { Textarea } from "@/components/ui/form/Textarea";
+import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
 import JsonView from "@uiw/react-json-view";
 import { vscodeTheme } from "@uiw/react-json-view/vscode";
-import _ from "lodash";
 import {
   CheckCircle,
   Copy,
@@ -26,7 +26,7 @@ import {
   Upload,
   XCircle,
 } from "lucide-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 const indentOptions = [
@@ -35,121 +35,83 @@ const indentOptions = [
   { label: "Tabulação", value: "\t" },
 ];
 
-type ParsedJsonType = object | unknown[] | string | number | boolean | null;
+export const defaultState = {
+  inputValue: "",
+  outputValue: "",
+  indentSpace: 2 as number | string,
+  outputViewMode: "text" as "text" | "tree",
+};
 
-function JSONToolsComponent() {
-  const [inputValue, setInputValue] = useState<string>("");
-  const [outputValue, setOutputValue] = useState<string>("");
+type JSONToolsProps = {
+  instanceId: string;
+};
+
+function JSONToolsComponent({ instanceId }: JSONToolsProps) {
+  const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const { inputValue, outputValue, indentSpace, outputViewMode } = state;
+
   const [error, setError] = useState<string | null>(null);
-  const [indentSpace, setIndentSpace] = useState<number | string>(2);
-
-  const [isValidJson, setIsValidJson] = useState<boolean | null>(null);
-  const [parsedJsonForTree, setParsedJsonForTree] =
-    useState<ParsedJsonType>(null);
-  const [outputViewMode, setOutputViewMode] = useState<"text" | "tree">("text");
-  const [jsonStats, setJsonStats] = useState<{
-    lines: number;
-    chars: number;
-    sizeKB: string;
-    rawSize: number;
-  } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const debouncedValidate = useCallback(
-    _.debounce((value: string) => {
-      if (!value.trim()) {
-        setIsValidJson(null);
-        setParsedJsonForTree(null);
-        setJsonStats(null);
-        setError(null);
-        return;
-      }
-      try {
-        const parsed = JSON.parse(value);
-        setIsValidJson(true);
-        setParsedJsonForTree(parsed);
-        const lines = value.split("\n").length;
-        const chars = value.length;
-        const sizeBytes = new Blob([value]).size;
-        const sizeKB = (sizeBytes / 1024).toFixed(2);
-        setJsonStats({
-          lines,
-          chars,
-          sizeKB: `${sizeKB} KB`,
-          rawSize: sizeBytes,
-        });
-        setError(null);
-      } catch (e) {
-        console.error(e);
-        setIsValidJson(false);
-        setParsedJsonForTree(null);
-        setJsonStats(null);
-      }
-    }, 300),
-    []
-  );
-
-  useEffect(() => {
-    debouncedValidate(inputValue);
-  }, [inputValue, debouncedValidate]);
+  const { isValidJson, parsedJsonForTree, jsonStats } = useMemo(() => {
+    if (!inputValue.trim()) {
+      return { isValidJson: null, parsedJsonForTree: null, jsonStats: null };
+    }
+    try {
+      const parsed = JSON.parse(inputValue);
+      const lines = inputValue.split("\n").length;
+      const chars = inputValue.length;
+      const sizeBytes = new Blob([inputValue]).size;
+      const sizeKB = (sizeBytes / 1024).toFixed(2);
+      return {
+        isValidJson: true,
+        parsedJsonForTree: parsed,
+        jsonStats: { lines, chars, sizeKB: `${sizeKB} KB`, rawSize: sizeBytes },
+      };
+    } catch {
+      return { isValidJson: false, parsedJsonForTree: null, jsonStats: null };
+    }
+  }, [inputValue]);
 
   const handleParseAndSetOutput = useCallback(
     (input: string, operation: "format" | "minify") => {
-      if (!input.trim()) {
-        setOutputValue("");
-        setError(null);
-        setParsedJsonForTree(null);
-        toast.info("Área de entrada vazia.");
+      if (!isValidJson) {
+        setState({ outputValue: "" });
+        const errorMessage = `JSON de entrada inválido.`;
+        setError(errorMessage);
+        toast.error("Erro ao processar JSON.");
         return false;
       }
       try {
-        const parsed = JSON.parse(input);
         let resultJsonString: string;
-
         if (operation === "format") {
-          resultJsonString = JSON.stringify(parsed, null, indentSpace);
-          toast.success("JSON formatado e válido!");
+          resultJsonString = JSON.stringify(
+            parsedJsonForTree,
+            null,
+            indentSpace
+          );
+          toast.success("JSON formatado!");
         } else {
-          resultJsonString = JSON.stringify(parsed);
+          resultJsonString = JSON.stringify(parsedJsonForTree);
           toast.success("JSON minificado!");
         }
-
-        setOutputValue(resultJsonString);
-        setParsedJsonForTree(parsed);
+        setState({ outputValue: resultJsonString });
         setError(null);
-        setIsValidJson(true);
         return true;
       } catch (e) {
-        console.error(e);
-        setOutputValue("");
-        setParsedJsonForTree(null);
-        const errorMessage = `JSON Inválido: ${(
-          e as { message: string }
-        ).message.substring(0, 150)}`;
+        setState({ outputValue: "" });
+        const errorMessage = `Erro inesperado: ${(e as Error).message}`;
         setError(errorMessage);
-        setIsValidJson(false);
         toast.error("Erro ao processar JSON.");
         return false;
       }
     },
-    [indentSpace]
+    [isValidJson, parsedJsonForTree, indentSpace, setState]
   );
 
-  const handleFormatValidate = useCallback(() => {
-    handleParseAndSetOutput(inputValue, "format");
-  }, [inputValue, handleParseAndSetOutput]);
-
-  const handleMinify = useCallback(() => {
-    handleParseAndSetOutput(inputValue, "minify");
-  }, [inputValue, handleParseAndSetOutput]);
-
   const handleClear = () => {
-    setInputValue("");
-    setOutputValue("");
+    setState({ inputValue: "", outputValue: "" });
     setError(null);
-    setIsValidJson(null);
-    setParsedJsonForTree(null);
-    setJsonStats(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -169,15 +131,13 @@ function JSONToolsComponent() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        try {
-          const text = e.target?.result as string;
-          setInputValue(text);
-          toast.success(`Arquivo "${file.name}" carregado.`);
-        } catch (e) {
-          console.error(e);
-          setError("Não foi possível ler o arquivo.");
-          toast.error("Erro ao ler arquivo.");
-        }
+        const text = e.target?.result as string;
+        setState({ inputValue: text, outputValue: "" });
+        toast.success(`Arquivo "${file.name}" carregado.`);
+      };
+      reader.onerror = () => {
+        setError("Não foi possível ler o arquivo.");
+        toast.error("Erro ao ler arquivo.");
       };
       reader.readAsText(file);
     }
@@ -186,38 +146,25 @@ function JSONToolsComponent() {
 
   const handleDownload = () => {
     let contentToDownload = outputValue;
-    let fileName = "processed.json";
-
-    if (outputViewMode === "tree" && parsedJsonForTree && isValidJson) {
+    if (!contentToDownload.trim() && isValidJson) {
       contentToDownload = JSON.stringify(parsedJsonForTree, null, indentSpace);
-      fileName = "formatted_tree.json";
-    } else if (!outputValue.trim() && parsedJsonForTree && isValidJson) {
-      contentToDownload = JSON.stringify(parsedJsonForTree, null, indentSpace);
-      fileName = "formatted_input.json";
     }
-
     if (!contentToDownload.trim()) {
       toast.error("Nenhum conteúdo na saída para baixar.");
       return;
     }
-    try {
-      JSON.parse(contentToDownload);
-      const blob = new Blob([contentToDownload], {
-        type: "application/json;charset=utf-8",
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      toast.success("JSON baixado!");
-    } catch (e) {
-      console.error(e);
-      toast.error("O conteúdo da saída não é JSON válido para download.");
-    }
+    const blob = new Blob([contentToDownload], {
+      type: "application/json;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "processed.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("JSON baixado!");
   };
 
   const handleEscapeString = () => {
@@ -225,15 +172,11 @@ function JSONToolsComponent() {
       toast.info("Entrada vazia para escapar.");
       return;
     }
-
-    setOutputViewMode("text");
-
-    const jsonStringValue = JSON.stringify(inputValue);
-    setOutputValue(jsonStringValue);
-
-    setParsedJsonForTree(null);
+    setState({
+      outputViewMode: "text",
+      outputValue: JSON.stringify(inputValue),
+    });
     setError(null);
-    setIsValidJson(null);
     toast.success("String escapada para valor JSON.");
   };
 
@@ -242,28 +185,18 @@ function JSONToolsComponent() {
       toast.info("Entrada vazia para desescapar.");
       return;
     }
-
     try {
       const unescaped = JSON.parse(inputValue);
       if (typeof unescaped === "string") {
-        setOutputValue(unescaped);
-        setParsedJsonForTree(null);
+        setState({ outputViewMode: "text", outputValue: unescaped });
         setError(null);
-        setIsValidJson(null);
-        setOutputViewMode("text");
         toast.success("String desescapada.");
       } else {
-        setError(
-          'A entrada não resultou em uma string após desescapar (deve ser uma string JSON, ex: "texto").'
-        );
+        setError('A entrada não é uma string JSON válida (ex: "texto").');
         toast.error("A entrada não é uma string JSON válida.");
       }
     } catch (e) {
-      setError(
-        `Erro ao desescapar string: ${(
-          e as { message: string }
-        ).message.substring(0, 100)}`
-      );
+      setError(`Erro ao desescapar: ${(e as Error).message}`);
       toast.error("Erro ao desescapar string.");
     }
   };
@@ -272,16 +205,16 @@ function JSONToolsComponent() {
     <div className="flex flex-col h-full w-full p-3 md:p-4 gap-3 md:gap-4 bg-card text-card-foreground border-t overflow-auto">
       <div className="flex items-center gap-2 md:gap-3 flex-wrap border-b pb-3 md:pb-4">
         <Button
-          onClick={handleFormatValidate}
+          onClick={() => handleParseAndSetOutput(inputValue, "format")}
           size="sm"
-          disabled={!isValidJson && inputValue.length > 0}
+          disabled={!isValidJson}
         >
           <Sparkles className="mr-1.5 h-4 w-4" /> Formatar
         </Button>
         <Button
-          onClick={handleMinify}
+          onClick={() => handleParseAndSetOutput(inputValue, "minify")}
           size="sm"
-          disabled={!isValidJson && inputValue.length > 0}
+          disabled={!isValidJson}
         >
           <Minimize2 className="mr-1.5 h-4 w-4" /> Minificar
         </Button>
@@ -292,7 +225,9 @@ function JSONToolsComponent() {
           <Select
             value={String(indentSpace)}
             onValueChange={(value) =>
-              setIndentSpace(value === "\t" ? "\t" : parseInt(value, 10))
+              setState({
+                indentSpace: value === "\t" ? "\t" : parseInt(value, 10),
+              })
             }
           >
             <SelectTrigger className="w-[110px] md:w-[120px] h-9 text-xs">
@@ -371,7 +306,9 @@ function JSONToolsComponent() {
         <span className="text-muted-foreground">Ver Saída:</span>
         <Select
           value={outputViewMode}
-          onValueChange={(v) => setOutputViewMode(v as "text" | "tree")}
+          onValueChange={(v) =>
+            setState({ outputViewMode: v as "text" | "tree" })
+          }
         >
           <SelectTrigger className="w-[120px] h-8 text-xs">
             <SelectValue />
@@ -441,17 +378,12 @@ function JSONToolsComponent() {
             <Textarea
               id="json-input"
               value={inputValue}
-              onChange={(e) => {
-                setInputValue(e.target.value);
-                if (error) setError(null);
-                if (isValidJson !== null) setIsValidJson(null);
-              }}
+              onChange={(e) => setState({ inputValue: e.target.value })}
               placeholder="Cole seu JSON aqui..."
               className="w-full h-full overflow-auto resize-none p-2 font-mono text-sm border focus:ring-0 bg-background"
             />
           </div>
         </div>
-
         <div className="flex flex-col gap-1 h-full overflow-auto">
           <div className="flex justify-between items-center mb-1">
             <label className="text-sm font-medium">Saída</label>
@@ -467,7 +399,6 @@ function JSONToolsComponent() {
               <Copy className="h-3.5 w-3.5" />
             </Button>
           </div>
-
           {outputViewMode === "text" ? (
             <div className="w-full h-full overflow-auto bg-muted/20">
               <Textarea
@@ -494,9 +425,7 @@ function JSONToolsComponent() {
             <div className="p-4 text-sm text-muted-foreground bg-muted/40 rounded-lg h-full flex items-center justify-center">
               {inputValue.trim() === ""
                 ? "A saída aparecerá aqui."
-                : isValidJson === false
-                ? "JSON de entrada inválido para visualização em árvore."
-                : "Formate ou minifique um JSON válido para ver em árvore."}
+                : "JSON de entrada inválido para visualização em árvore."}
             </div>
           )}
         </div>
@@ -506,4 +435,7 @@ function JSONToolsComponent() {
 }
 
 const MemoizedJSONTools = React.memo(JSONToolsComponent);
-export { MemoizedJSONTools as JSONTools };
+
+export function JSONTools({ instanceId }: { instanceId: string }) {
+  return <MemoizedJSONTools instanceId={instanceId} />;
+}

@@ -353,7 +353,7 @@ export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
               className="w-full"
               onClick={() => setIsLibraryOpen(true)}
             >
-              <Library className="h-4 w-4" /> Adicionar{" "}
+              <Library className="h-4 w-4" /> Adicionar
               <span className="hidden @md:inline-block">
                 Campo da Biblioteca
               </span>
