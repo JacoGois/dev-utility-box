@@ -57,6 +57,8 @@ const AVAILABLE_FAKER_FIELDS: Record<string, Record<string, string>> = {
     "Descrição do Cargo": "person.jobDescriptor",
     "Tipo de Cargo": "person.jobType",
     "Signo do Zodíaco": "person.zodiacSign",
+    CPF: "br.cpf",
+    CNPJ: "br.cnpj",
   },
   Internet: {
     "E-mail": "internet.email",

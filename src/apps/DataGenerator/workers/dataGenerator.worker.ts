@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-
+import * as fakerBr from "faker-br";
 type GeneratedRecord = Record<string, string | number>;
 
 interface MessageData {
@@ -11,6 +11,11 @@ interface MessageData {
 
 function getFakerMethod(path: string): () => string | number {
   try {
+    if (path.startsWith("br.")) {
+      const methodName = path.split(".");
+      return fakerBr[methodName[0]][methodName[1]];
+    }
+
     const parts = path.split(".");
 
     let current: unknown = faker;
