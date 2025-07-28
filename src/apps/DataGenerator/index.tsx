@@ -153,6 +153,14 @@ const AVAILABLE_FAKER_FIELDS: Record<string, Record<string, string>> = {
     "Dia da Semana": "date.weekday",
     Mês: "date.month",
   },
+  "Tipos Primitivos": {
+    "String (UUID)": "string.uuid",
+    "String (Alfanumérica)": "string.alphanumeric",
+    "String (Letras)": "string.alpha",
+    "Número Inteiro": "number.int",
+    "Número Decimal": "number.float",
+    "Booleano (true/false)": "datatype.boolean",
+  },
   "Texto Lorem": {
     "Palavra (Lorem)": "lorem.word",
     "Palavras (Lorem)": "lorem.words",
