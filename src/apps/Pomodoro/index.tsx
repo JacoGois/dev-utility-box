@@ -21,20 +21,18 @@ export const defaultState = {
   sessionHistory: [] as Session[],
   notificationDenied: false,
   scrollPosition: 0,
-
+  endTime: 0,
   pomodoroTime: 25,
   shortBreakTime: 5,
   longBreakTime: 15,
   longBreakInterval: 4,
   autoStartBreaks: false,
   autoStartPomodoros: false,
-
   alarmSound: "kitchen",
   alarmVolume: [50],
   alarmRepeat: 1,
   tickingSound: "none",
   tickingVolume: [50],
-
   secondsLeft: 25 * 60,
 };
 
@@ -49,11 +47,14 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
   );
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const durationsInMinutes = {
-    pomodoro: state.pomodoroTime,
-    shortBreak: state.shortBreakTime,
-    longBreak: state.longBreakTime,
-  };
+  const durationsInMinutes = useMemo(
+    () => ({
+      pomodoro: state.pomodoroTime,
+      shortBreak: state.shortBreakTime,
+      longBreak: state.longBreakTime,
+    }),
+    [state.pomodoroTime, state.shortBreakTime, state.longBreakTime]
+  );
 
   const handleSessionEnd = useCallback(() => {
     setState((prevState) => {
@@ -67,7 +68,6 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
           });
         }
       }
-
       const nextPomodoros =
         prevState.mode === "pomodoro"
           ? prevState.completedPomodoros + 1
@@ -78,11 +78,10 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
             ? "longBreak"
             : "shortBreak"
           : "pomodoro";
-
       const shouldAutoStart =
         (nextMode.includes("Break") && prevState.autoStartBreaks) ||
         (nextMode === "pomodoro" && prevState.autoStartPomodoros);
-
+      const newDuration = (durationsInMinutes[nextMode] || 25) * 60;
       return {
         isRunning: shouldAutoStart,
         sessionHistory: [
@@ -91,33 +90,30 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
         ],
         completedPomodoros: nextPomodoros,
         mode: nextMode,
-        secondsLeft: (durationsInMinutes[nextMode] || 25) * 60,
+        secondsLeft: newDuration,
+        endTime: shouldAutoStart ? Date.now() + newDuration * 1000 : 0,
       };
     });
-  }, [durationsInMinutes]);
+  }, [durationsInMinutes, setState]);
 
   useEffect(() => {
     if (!state.isRunning) return;
-
-    if (state.secondsLeft <= 0) {
-      handleSessionEnd();
-      return;
-    }
-
     const interval = setInterval(() => {
-      setState((prevState) => ({
-        secondsLeft: Math.max(0, prevState.secondsLeft - 1),
-      }));
-    }, 1000);
-
+      const remaining = state.endTime - Date.now();
+      const secondsLeft = Math.round(remaining / 1000);
+      if (secondsLeft < 0) {
+        handleSessionEnd();
+      } else {
+        setState({ secondsLeft });
+      }
+    }, 200);
     return () => clearInterval(interval);
-  }, [state.isRunning, state.secondsLeft, handleSessionEnd, setState]);
+  }, [state.isRunning, state.endTime, handleSessionEnd, setState]);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = state.scrollPosition;
     }
-
     if (typeof window !== "undefined" && "Notification" in window) {
       if (Notification.permission === "default") {
         Notification.requestPermission().then((permission) => {
@@ -125,13 +121,24 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
         });
       }
     }
-  }, []);
+  }, [state.scrollPosition, setState]);
 
   const handleTogglePlayPause = useCallback(() => {
-    setState({
-      isRunning: !state.isRunning,
+    setState((prevState) => {
+      const newIsRunning = !prevState.isRunning;
+      if (newIsRunning) {
+        return {
+          isRunning: true,
+          endTime: Date.now() + prevState.secondsLeft * 1000,
+        };
+      } else {
+        return {
+          isRunning: false,
+          endTime: 0,
+        };
+      }
     });
-  }, [state.isRunning]);
+  }, [setState]);
 
   const handleChangeMode = useCallback(
     (newMode: keyof typeof MODES) => {
@@ -139,17 +146,19 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
         mode: newMode,
         secondsLeft: (durationsInMinutes[newMode] || 25) * 60,
         isRunning: false,
+        endTime: 0,
       });
     },
-    [durationsInMinutes]
+    [durationsInMinutes, setState]
   );
 
   const handleResetTimerCurrentMode = useCallback(() => {
     setState({
       secondsLeft: (durationsInMinutes[state.mode] || 25) * 60,
       isRunning: false,
+      endTime: 0,
     });
-  }, [state.mode, durationsInMinutes]);
+  }, [state.mode, durationsInMinutes, setState]);
 
   const handleScroll = useMemo(
     () =>
@@ -157,8 +166,8 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
         if (scrollRef.current) {
           setState({ scrollPosition: scrollRef.current.scrollTop });
         }
-      }, 5000),
-    []
+      }, 2000),
+    [setState]
   );
 
   const sessionsTodayCount = useMemo(() => {

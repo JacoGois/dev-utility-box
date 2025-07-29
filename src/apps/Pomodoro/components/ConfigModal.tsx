@@ -73,6 +73,7 @@ export function ConfigModal({
         alarmRepeat,
         tickingSound,
         tickingVolume,
+        endTime,
       } = globalState;
       setLocalSettings({
         pomodoroTime,
@@ -86,6 +87,7 @@ export function ConfigModal({
         alarmRepeat,
         tickingSound,
         tickingVolume,
+        endTime,
       });
     } else {
       setLocalSettings(null);
@@ -110,6 +112,7 @@ export function ConfigModal({
       if (oldDuration !== newDuration) {
         newState.secondsLeft = Number(newDuration) * 60;
         newState.isRunning = false;
+        newState.endTime = 0;
       }
 
       return newState;
