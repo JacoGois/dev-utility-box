@@ -22,6 +22,7 @@ export const apps = {
     maxInstances: 1,
     maxWidth: undefined,
     maxHeight: undefined,
+    minHeight: undefined,
   },
   JSONTools: {
     name: "Ferramentas JSON",
@@ -31,6 +32,7 @@ export const apps = {
     maxInstances: 4,
     maxWidth: undefined,
     maxHeight: undefined,
+    minHeight: undefined,
   },
   DataGenerator: {
     name: "Gerador de Dados",
@@ -40,6 +42,7 @@ export const apps = {
     maxInstances: 4,
     maxWidth: undefined,
     maxHeight: undefined,
+    minHeight: undefined,
   },
   EncodersDecoders: {
     name: "Encoders / Decoders",
@@ -47,6 +50,9 @@ export const apps = {
     icon: Combine,
     component: EncodersDecoders,
     maxInstances: 4,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: 500,
   },
   // Todo: {
   //   name: "To Do List",

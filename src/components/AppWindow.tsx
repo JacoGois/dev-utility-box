@@ -41,6 +41,7 @@ function AppWindow({ instance }: Props) {
       id={id}
       maxWidth={app.maxWidth}
       maxHeight={app.maxHeight}
+      minHeight={app.minHeight}
       isMaximized={isMaximized}
       isMinimized={isMinimized}
       zIndex={zIndex}
@@ -126,6 +127,7 @@ function WindowShell({
   children,
   maxWidth,
   maxHeight,
+  minHeight,
 }: {
   id: string;
   isMaximized: boolean;
@@ -137,6 +139,7 @@ function WindowShell({
   children: React.ReactNode;
   maxWidth?: number;
   maxHeight?: number;
+  minHeight?: number;
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const setShellRef = useWindowShellStore((state) => state.setShellRef);
@@ -200,7 +203,7 @@ function WindowShell({
         <ResizableBox
           width={size.width}
           height={size.height}
-          minConstraints={[300, 200]}
+          minConstraints={[300, minHeight || 200]}
           maxConstraints={[
             maxWidth || window.innerWidth,
             maxHeight || window.innerHeight,

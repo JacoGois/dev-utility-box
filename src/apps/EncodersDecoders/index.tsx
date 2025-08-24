@@ -221,7 +221,7 @@ const JWTToolLayout: FC<{ instanceId: string }> = ({ instanceId }) => {
   }, [tokenToDecode, secret]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-grow min-h-0 h-full overflow-y-auto">
+    <div className="grid grid-cols-1 @lg:grid-cols-3 gap-4 flex-grow min-h-0 h-full overflow-y-auto">
       <div className="flex flex-col gap-4">
         <Card className="flex-grow flex flex-col min-h-0 py-0 gap-0">
           <CardHeader className="pt-3 pb-2">
@@ -337,23 +337,26 @@ const JWTToolLayout: FC<{ instanceId: string }> = ({ instanceId }) => {
                 payload: { field: "tokenToDecode", value: e.target.value },
               })
             }
-            className="h-24 resize-none font-mono text-xs bg-background"
+            className="min-h-24 resize-none font-mono text-xs bg-background"
           />
         </div>
-        <div className="mt-2 h-6">
-          {verification.status === "verified" && (
-            <Badge className="bg-green-600 hover:bg-green-700">
-              <CheckCircle className="h-4 w-4 mr-2" />
-              Assinatura Verificada
-            </Badge>
-          )}
-          {verification.status === "invalid" && (
-            <Badge variant="destructive">
-              <XCircle className="h-4 w-4 mr-2" />
-              Assinatura Inválida
-            </Badge>
-          )}
-        </div>
+        {(verification.status === "verified" ||
+          verification.status === "invalid") && (
+          <div className="mt-2 h-6">
+            {verification.status === "verified" && (
+              <Badge className="bg-green-600 hover:bg-green-700">
+                <CheckCircle className="h-4 w-4 mr-2" />
+                Assinatura Verificada
+              </Badge>
+            )}
+            {verification.status === "invalid" && (
+              <Badge variant="destructive">
+                <XCircle className="h-4 w-4 mr-2" />
+                Assinatura Inválida
+              </Badge>
+            )}
+          </div>
+        )}
         <div className="grid grid-rows-2 gap-4 flex-grow min-h-0">
           <Card className="flex flex-col py-0 gap-0">
             <CardHeader className="flex flex-row items-center justify-between py-2 px-4 w-full">
@@ -437,7 +440,7 @@ const TextToTextLayout: FC<{
   }, [inputValue, mode, processor]);
 
   return (
-    <div className="grid md:grid-cols-2 gap-4 flex-grow min-h-0 overflow-y-auto">
+    <div className="grid @md:grid-cols-2 gap-4 flex-grow min-h-0 overflow-y-auto">
       <div className="flex flex-col gap-2">
         <Label>Entrada</Label>
         <Textarea
@@ -475,7 +478,7 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
   const [urlMode, setUrlMode] = useState<"encode" | "decode">("encode");
 
   return (
-    <div className="flex flex-col h-full w-full p-4 gap-4 bg-card text-card-foreground border-t">
+    <div className="flex flex-col h-full w-full p-4 gap-4 bg-card text-card-foreground border-t @container stable-scrollbar-container">
       <div className="flex items-center gap-4 flex-wrap">
         <Label className="flex-shrink-0">Ferramenta:</Label>
         <Select
@@ -484,7 +487,7 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
             setState({ selectedTool: value as ToolKey })
           }
         >
-          <SelectTrigger className="w-full sm:w-[280px]">
+          <SelectTrigger className="w-full @sm:w-[280px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="z-[999999999]">
