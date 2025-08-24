@@ -121,7 +121,7 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
         });
       }
     }
-  }, [state.scrollPosition, setState]);
+  }, [state.scrollPosition]);
 
   const handleTogglePlayPause = useCallback(() => {
     setState((prevState) => {

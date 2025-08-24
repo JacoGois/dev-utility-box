@@ -1,19 +1,18 @@
-import { Auth } from "@/apps/Auth";
 import { DataGenerator } from "@/apps/DataGenerator";
 import { JSONTools } from "@/apps/JSONTools";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { Braces, FileJson, Timer, User } from "lucide-react";
+import { Braces, FileJson, Timer } from "lucide-react";
 
 export const apps = {
-  Auth: {
-    name: "Autenticação",
-    shortName: "Autenticação",
-    icon: User,
-    component: Auth,
-    maxInstances: 2,
-    maxWidth: 550,
-    maxHeight: 850,
-  },
+  // Auth: {
+  //   name: "Autenticação",
+  //   shortName: "Autenticação",
+  //   icon: User,
+  //   component: Auth,
+  //   maxInstances: 2,
+  //   maxWidth: 550,
+  //   maxHeight: 850,
+  // },
   Pomodoro: {
     name: "Pomodoro",
     shortName: "Pomodoro",
