@@ -1,7 +1,8 @@
 import { DataGenerator } from "@/apps/DataGenerator";
+import { EncodersDecoders } from "@/apps/EncodersDecoders";
 import { JSONTools } from "@/apps/JSONTools";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { Braces, FileJson, Timer } from "lucide-react";
+import { Braces, Combine, FileJson, Timer } from "lucide-react";
 
 export const apps = {
   // Auth: {
@@ -39,6 +40,13 @@ export const apps = {
     maxInstances: 4,
     maxWidth: undefined,
     maxHeight: undefined,
+  },
+  EncodersDecoders: {
+    name: "Encoders / Decoders",
+    shortName: "Codificadores",
+    icon: Combine,
+    component: EncodersDecoders,
+    maxInstances: 4,
   },
   // Todo: {
   //   name: "To Do List",
