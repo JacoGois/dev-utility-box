@@ -244,7 +244,7 @@ const JWTToolLayout = forwardRef<{ reset: () => void }, { instanceId: string }>(
     }, [tokenToDecode, secret]);
 
     return (
-      <div className="grid grid-cols-1 @lg:grid-cols-3 gap-4 flex-grow min-h-0 h-full overflow-y-auto">
+      <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-4 flex-grow min-h-0 h-full overflow-y-auto">
         <div className="flex flex-col gap-4">
           <Card className="flex-grow flex flex-col min-h-0 py-0 gap-0">
             <CardHeader className="pt-3 pb-2">
