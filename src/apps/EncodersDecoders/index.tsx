@@ -25,11 +25,12 @@ import React, { FC, useEffect, useMemo, useReducer, useState } from "react";
 import { toast } from "sonner";
 
 const toolOptions = [
-  { value: "jwt", label: "JWT Encoder / Decoder" },
   { value: "base64", label: "Base64 Encoder / Decoder" },
   { value: "url", label: "URL Encoder / Decoder" },
+  { value: "jwt", label: "JWT Encoder / Decoder" },
 ];
 type ToolKey = "base64" | "url" | "jwt";
+
 export const defaultState = {
   selectedTool: "jwt" as ToolKey,
   base64Input: "",
@@ -37,29 +38,30 @@ export const defaultState = {
 };
 
 interface JWTToolState {
-  encodedToken: string;
   headerStr: string;
   payloadStr: string;
   secret: string;
   algorithm: "HS256" | "HS384" | "HS512";
+  generatedToken: string;
+
+  tokenToDecode: string;
   verification: {
     status: "idle" | "verified" | "invalid";
     error: string | null;
   };
 }
+
 type JWTToolAction =
   | {
       type: "UPDATE_FIELD";
       payload: {
-        field: keyof Omit<JWTToolState, "verification">;
-        value: string;
+        field: keyof JWTToolState;
+        value: string | JWTToolState["verification"];
       };
     }
-  | { type: "SET_VERIFICATION"; payload: JWTToolState["verification"] }
   | { type: "RESET" };
 
 const jwtInitialState: JWTToolState = {
-  encodedToken: "",
   headerStr: JSON.stringify({ alg: "HS256", typ: "JWT" }, null, 2),
   payloadStr: JSON.stringify(
     { sub: "1234567890", name: "John Doe", iat: Math.floor(Date.now() / 1000) },
@@ -68,6 +70,8 @@ const jwtInitialState: JWTToolState = {
   ),
   secret: "your-super-secret-key-that-is-at-least-32-bytes-long",
   algorithm: "HS256",
+  generatedToken: "",
+  tokenToDecode: "",
   verification: { status: "idle", error: null },
 };
 
@@ -104,10 +108,12 @@ function jwtReducer(state: JWTToolState, action: JWTToolAction): JWTToolState {
         }
       }
       return { ...state, [action.payload.field]: action.payload.value };
-    case "SET_VERIFICATION":
-      return { ...state, verification: action.payload };
     case "RESET":
-      return { ...jwtInitialState, secret: state.secret };
+      return {
+        ...jwtInitialState,
+        secret: state.secret,
+        tokenToDecode: state.tokenToDecode,
+      };
     default:
       return state;
   }
@@ -120,11 +126,12 @@ const JWTToolLayout: FC<{ instanceId: string }> = ({ instanceId }) => {
   );
   const [state, dispatch] = useReducer(jwtReducer, persistedState.jwtState);
   const {
-    encodedToken,
     headerStr,
     payloadStr,
     secret,
     algorithm,
+    generatedToken,
+    tokenToDecode,
     verification,
   } = state;
 
@@ -143,49 +150,62 @@ const JWTToolLayout: FC<{ instanceId: string }> = ({ instanceId }) => {
           .sign(secretKey);
         dispatch({
           type: "UPDATE_FIELD",
-          payload: { field: "encodedToken", value: newEncodedToken },
+          payload: { field: "generatedToken", value: newEncodedToken },
         });
-      } catch {}
+      } catch {
+        dispatch({
+          type: "UPDATE_FIELD",
+          payload: {
+            field: "generatedToken",
+            value: "Erro no JSON do Header ou Payload para assinar.",
+          },
+        });
+      }
     };
     const debouncedSign = _.debounce(signToken, 300);
     debouncedSign();
     return () => debouncedSign.cancel();
   }, [headerStr, payloadStr, secret, algorithm]);
 
-  useEffect(() => {
-    if (!encodedToken.trim()) {
+  const decodedParts = useMemo(() => {
+    if (!tokenToDecode.trim()) {
       dispatch({
-        type: "SET_VERIFICATION",
-        payload: { status: "idle", error: null },
+        type: "UPDATE_FIELD",
+        payload: {
+          field: "verification",
+          value: { status: "idle", error: null },
+        },
       });
-      return;
+      return { header: null, payload: null, error: null };
     }
-    const verifyToken = async () => {
+
+    const verify = async () => {
       try {
         const secretKey = new TextEncoder().encode(secret);
-        await jwtVerify(encodedToken, secretKey);
+        await jwtVerify(tokenToDecode, secretKey);
         dispatch({
-          type: "SET_VERIFICATION",
-          payload: { status: "verified", error: null },
+          type: "UPDATE_FIELD",
+          payload: {
+            field: "verification",
+            value: { status: "verified", error: null },
+          },
         });
       } catch (e) {
         dispatch({
-          type: "SET_VERIFICATION",
-          payload: { status: "invalid", error: (e as Error).message },
+          type: "UPDATE_FIELD",
+          payload: {
+            field: "verification",
+            value: { status: "invalid", error: (e as Error).message },
+          },
         });
       }
     };
-    const debouncedVerify = _.debounce(verifyToken, 300);
-    debouncedVerify();
-    return () => debouncedVerify.cancel();
-  }, [encodedToken, secret]);
+    verify();
 
-  const decodedParts = useMemo(() => {
-    if (!encodedToken.trim()) return { header: null, payload: null };
     try {
-      const header = jwtDecode(encodedToken, { header: true });
+      const header = jwtDecode(tokenToDecode, { header: true });
       const payload: DecodedJwtPayload & Record<string, unknown> =
-        jwtDecode(encodedToken);
+        jwtDecode(tokenToDecode);
       for (const key of ["iat", "exp", "nbf"]) {
         if (payload[key] && typeof payload[key] === "number") {
           payload[`${key}_iso`] = `${format(
@@ -194,18 +214,20 @@ const JWTToolLayout: FC<{ instanceId: string }> = ({ instanceId }) => {
           )} UTC`;
         }
       }
-      return { header, payload };
-    } catch {
-      return { header: null, payload: null };
+      return { header, payload, error: null };
+    } catch (e) {
+      return { header: null, payload: null, error: (e as Error).message };
     }
-  }, [encodedToken]);
+  }, [tokenToDecode, secret]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 flex-grow min-h-0">
-      <div className="lg:col-span-4 flex flex-col gap-4">
-        <Card className="flex-grow flex flex-col min-h-0">
-          <CardHeader>
-            <CardTitle className="text-base text-rose-400">HEADER</CardTitle>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-grow min-h-0 h-full overflow-y-auto">
+      <div className="flex flex-col gap-4">
+        <Card className="flex-grow flex flex-col min-h-0 py-0 gap-0">
+          <CardHeader className="pt-3 pb-2">
+            <CardTitle className="text-base text-rose-400">
+              HEADER (Editável)
+            </CardTitle>
           </CardHeader>
           <CardContent className="flex-grow p-0">
             <Textarea
@@ -216,13 +238,15 @@ const JWTToolLayout: FC<{ instanceId: string }> = ({ instanceId }) => {
                   payload: { field: "headerStr", value: e.target.value },
                 })
               }
-              className="h-full w-full resize-none border-0 rounded-none font-mono text-xs bg-background"
+              className="h-full w-full resize-none border-0 rounded-xl font-mono text-xs bg-background"
             />
           </CardContent>
         </Card>
-        <Card className="flex-grow flex flex-col min-h-0">
-          <CardHeader>
-            <CardTitle className="text-base text-violet-400">PAYLOAD</CardTitle>
+        <Card className="flex-grow flex flex-col min-h-0 py-0 gap-0">
+          <CardHeader className="pt-3 pb-2">
+            <CardTitle className="text-base text-violet-400">
+              PAYLOAD (Editável)
+            </CardTitle>
           </CardHeader>
           <CardContent className="flex-grow p-0">
             <Textarea
@@ -233,86 +257,30 @@ const JWTToolLayout: FC<{ instanceId: string }> = ({ instanceId }) => {
                   payload: { field: "payloadStr", value: e.target.value },
                 })
               }
-              className="h-full w-full resize-none border-0 rounded-none font-mono text-xs bg-background"
+              className="h-full w-full resize-none border-0 rounded-xl font-mono text-xs bg-background"
             />
           </CardContent>
         </Card>
       </div>
-      <div className="lg:col-span-6 flex flex-col gap-4">
+
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 flex-grow min-h-0">
           <div className="flex justify-between items-center">
-            <Label>Token Codificado / Decodificado</Label>
+            <Label>Token Gerado (Encoder)</Label>
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => handleCopyToClipboard(encodedToken)}
+              onClick={() => handleCopyToClipboard(generatedToken)}
               title="Copiar Token"
             >
               <Copy className="h-4 w-4" />
             </Button>
           </div>
-          <div className="grid grid-rows-2 gap-4 flex-grow min-h-0">
-            <Card className="flex flex-col">
-              <CardHeader className="flex-row items-center justify-between py-2 px-4">
-                <CardTitle className="text-base">
-                  Header (Decodificado)
-                </CardTitle>
-                {decodedParts.header && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleCopyToClipboard(decodedParts.header)}
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                )}
-              </CardHeader>
-              <CardContent className="flex-grow overflow-auto p-0">
-                {decodedParts.header ? (
-                  <JsonView
-                    value={decodedParts.header}
-                    style={vscodeTheme}
-                    displayDataTypes={false}
-                    enableClipboard={false}
-                  />
-                ) : (
-                  <div className="p-4 text-sm text-muted-foreground">
-                    Aguardando...
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-            <Card className="flex flex-col">
-              <CardHeader className="flex-row items-center justify-between py-2 px-4">
-                <CardTitle className="text-base">
-                  Payload (Decodificado)
-                </CardTitle>
-                {decodedParts.payload && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleCopyToClipboard(decodedParts.payload)}
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                )}
-              </CardHeader>
-              <CardContent className="flex-grow overflow-auto p-0">
-                {decodedParts.payload ? (
-                  <JsonView
-                    value={decodedParts.payload}
-                    style={vscodeTheme}
-                    displayDataTypes={false}
-                    enableClipboard={false}
-                  />
-                ) : (
-                  <div className="p-4 text-sm text-muted-foreground">
-                    Aguardando...
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+          <Textarea
+            readOnly
+            value={generatedToken}
+            className="h-full resize-none font-mono text-xs bg-muted/50"
+          />
         </div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-4">
@@ -352,20 +320,101 @@ const JWTToolLayout: FC<{ instanceId: string }> = ({ instanceId }) => {
               </Select>
             </div>
           </div>
-          <div className="mt-2 h-6">
-            {verification.status === "verified" && (
-              <Badge className="bg-green-600 hover:bg-green-700">
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Assinatura Verificada
-              </Badge>
-            )}
-            {verification.status === "invalid" && (
-              <Badge variant="destructive">
-                <XCircle className="h-4 w-4 mr-2" />
-                Assinatura Inválida
-              </Badge>
-            )}
-          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="jwt-decode-input">
+            Cole um Token para Decodificar
+          </Label>
+          <Textarea
+            id="jwt-decode-input"
+            value={tokenToDecode}
+            onChange={(e) =>
+              dispatch({
+                type: "UPDATE_FIELD",
+                payload: { field: "tokenToDecode", value: e.target.value },
+              })
+            }
+            className="h-24 resize-none font-mono text-xs bg-background"
+          />
+        </div>
+        <div className="mt-2 h-6">
+          {verification.status === "verified" && (
+            <Badge className="bg-green-600 hover:bg-green-700">
+              <CheckCircle className="h-4 w-4 mr-2" />
+              Assinatura Verificada
+            </Badge>
+          )}
+          {verification.status === "invalid" && (
+            <Badge variant="destructive">
+              <XCircle className="h-4 w-4 mr-2" />
+              Assinatura Inválida
+            </Badge>
+          )}
+        </div>
+        <div className="grid grid-rows-2 gap-4 flex-grow min-h-0">
+          <Card className="flex flex-col py-0 gap-0">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-4 w-full">
+              <CardTitle className="text-base flex items-center w-full justify-between">
+                Header (Decodificado)
+                {decodedParts.header && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleCopyToClipboard(decodedParts.header)}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-grow overflow-auto p-0">
+              {decodedParts.header ? (
+                <JsonView
+                  value={decodedParts.header}
+                  style={vscodeTheme}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                />
+              ) : (
+                <div className="p-4 text-sm text-muted-foreground">
+                  {decodedParts.error || "Aguardando..."}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          <Card className="flex flex-col py-0 gap-0">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-4 w-full">
+              <CardTitle className="text-base flex items-center w-full justify-between">
+                Payload (Decodificado)
+                {decodedParts.payload && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleCopyToClipboard(decodedParts.payload)}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-grow overflow-auto p-0">
+              {decodedParts.payload ? (
+                <JsonView
+                  value={decodedParts.payload}
+                  style={vscodeTheme}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                />
+              ) : (
+                <div className="p-4 text-sm text-muted-foreground">
+                  {decodedParts.error || "Aguardando..."}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
@@ -388,7 +437,7 @@ const TextToTextLayout: FC<{
   }, [inputValue, mode, processor]);
 
   return (
-    <div className="grid md:grid-cols-2 gap-4 flex-grow min-h-0">
+    <div className="grid md:grid-cols-2 gap-4 flex-grow min-h-0 overflow-y-auto">
       <div className="flex flex-col gap-2">
         <Label>Entrada</Label>
         <Textarea
@@ -448,7 +497,11 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
         </Select>
         <div className="flex-grow" />
         <Button
-          onClick={() => setState({ [`${selectedTool}Input`]: "" })}
+          onClick={() => {
+            if (selectedTool !== "jwt") {
+              setState({ [`${selectedTool}Input`]: "" });
+            }
+          }}
           variant="ghost"
           size="sm"
         >
@@ -464,6 +517,7 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
           </span>
         </div>
       )}
+
       {selectedTool === "base64" && (
         <div className="flex items-center justify-center gap-4">
           <Button
