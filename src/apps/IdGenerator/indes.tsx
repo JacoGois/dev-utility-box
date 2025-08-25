@@ -12,9 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/form/SelectCore";
+import { Textarea } from "@/components/ui/form/Textarea";
 import { ScrollArea } from "@/components/ui/ScrollArea";
+import { Slider } from "@/components/ui/Slider";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import CryptoJS from "crypto-js";
 import { Copy, RefreshCw } from "lucide-react";
+import { nanoid } from "nanoid";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -29,7 +33,15 @@ import {
   validate as uuidValidate,
 } from "uuid";
 
-const toolOptions = [{ value: "uuid", label: "Gerador de UUID" }];
+const toolOptions = [
+  { value: "uuid", label: "Gerador de UUID" },
+  { value: "nanoid", label: "Gerador de NanoID" },
+  { value: "hash", label: "Gerador de Hash (MD5, SHA)" },
+  { value: "password", label: "Gerador de Senhas Seguras" },
+];
+
+const hashAlgorithms = ["MD5", "SHA1", "SHA256", "SHA512"] as const;
+type HashAlgorithm = (typeof hashAlgorithms)[number];
 
 type UuidVersion = "v1" | "v3" | "v4" | "v5" | "v6" | "v7" | "nil" | "max";
 
@@ -43,6 +55,20 @@ export const defaultState = {
     v3v5_name: "example.com",
     v3v5_namespace: "1b671a64-40d5-491e-99b0-da01ff1f3341",
   },
+  nanoidConfig: {
+    quantity: 5,
+    size: 21,
+  },
+  hashConfig: {
+    input: "Olá, mundo!",
+  },
+  passwordConfig: {
+    length: 16,
+    uppercase: true,
+    lowercase: true,
+    numbers: true,
+    symbols: true,
+  },
 };
 
 type IdGeneratorProps = {
@@ -54,46 +80,55 @@ const UUID_NAMESPACES = {
   URL: "6ba7b811-9dad-11d1-80b4-00c04fd430c8",
 };
 
+// MUDANÇA: Mapa de funções de hash para garantir a segurança de tipos
+const hashFunctionMap: Record<HashAlgorithm, (message: string) => void> = {
+  MD5: CryptoJS.MD5,
+  SHA1: CryptoJS.SHA1,
+  SHA256: CryptoJS.SHA256,
+  SHA512: CryptoJS.SHA512,
+};
+
+type ConfigObjectKeys = keyof Omit<typeof defaultState, "selectedTool">;
+
 function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
-  const { selectedTool, uuidConfig } = state;
+  const { selectedTool, uuidConfig, nanoidConfig, hashConfig, passwordConfig } =
+    state;
 
   const [generatedIds, setGeneratedIds] = useState<string[]>([]);
+  const [generatedPassword, setGeneratedPassword] = useState<string>("");
 
-  const handleUuidConfigChange = (
-    key: keyof typeof uuidConfig,
-    value: number | boolean | string
+  // MUDANÇA: handleConfigChange agora é totalmente type-safe com genéricos
+  const handleConfigChange = <T extends ConfigObjectKeys>(
+    tool: T,
+    key: keyof (typeof defaultState)[T],
+    value: (typeof defaultState)[T][keyof (typeof defaultState)[T]]
   ) => {
-    setState({
-      uuidConfig: { ...uuidConfig, [key]: value },
-    });
+    setState((currentState) => ({
+      ...currentState,
+      [tool]: {
+        ...currentState[tool],
+        [key]: value,
+      },
+    }));
   };
 
-  const generateIds = useCallback(() => {
+  const generateUuids = useCallback(() => {
     const { quantity, version, v3v5_name, v3v5_namespace } = uuidConfig;
     let newIds: string[] = [];
-
     try {
       switch (version) {
         case "v1":
           newIds = Array.from({ length: quantity }, () => uuidv1());
           break;
         case "v3":
-          if (!v3v5_name)
-            throw new Error("O campo 'Nome' é obrigatório para UUID v3.");
-          if (!uuidValidate(v3v5_namespace))
-            throw new Error(
-              "O campo 'Namespace' deve ser um UUID válido para v3."
-            );
+          if (!v3v5_name || !uuidValidate(v3v5_namespace))
+            throw new Error("Nome e Namespace UUID válido são obrigatórios.");
           newIds = [uuidv3(v3v5_name, v3v5_namespace)];
           break;
         case "v5":
-          if (!v3v5_name)
-            throw new Error("O campo 'Nome' é obrigatório para UUID v5.");
-          if (!uuidValidate(v3v5_namespace))
-            throw new Error(
-              "O campo 'Namespace' deve ser um UUID válido para v5."
-            );
+          if (!v3v5_name || !uuidValidate(v3v5_namespace))
+            throw new Error("Nome e Namespace UUID válido são obrigatórios.");
           newIds = [uuidv5(v3v5_name, v3v5_namespace)];
           break;
         case "v6":
@@ -119,25 +154,80 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
     }
   }, [uuidConfig]);
 
+  const generateNanoIds = useCallback(() => {
+    const { quantity, size } = nanoidConfig;
+    const newIds = Array.from({ length: quantity }, () => nanoid(size));
+    setGeneratedIds(newIds);
+    toast.success(`${quantity} NanoID(s) gerados!`);
+  }, [nanoidConfig]);
+
+  const generatePassword = useCallback(() => {
+    const { length, uppercase, lowercase, numbers, symbols } = passwordConfig;
+    const charSets = {
+      uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      lowercase: "abcdefghijklmnopqrstuvwxyz",
+      numbers: "0123456789",
+      symbols: "!@#$%^&*()_+-=[]{}|;:,.<>?",
+    };
+    let charset = "";
+    if (uppercase) charset += charSets.uppercase;
+    if (lowercase) charset += charSets.lowercase;
+    if (numbers) charset += charSets.numbers;
+    if (symbols) charset += charSets.symbols;
+    if (!charset) {
+      toast.error("Selecione ao menos um tipo de caractere para a senha.");
+      setGeneratedPassword("");
+      return;
+    }
+    let newPassword = "";
+    for (let i = 0, n = charset.length; i < length; ++i) {
+      newPassword += charset.charAt(Math.floor(Math.random() * n));
+    }
+    setGeneratedPassword(newPassword);
+    toast.success("Nova senha gerada!");
+  }, [passwordConfig]);
+
   useEffect(() => {
-    generateIds();
-  }, [uuidConfig]);
+    switch (selectedTool) {
+      case "uuid":
+        generateUuids();
+        break;
+      case "nanoid":
+        generateNanoIds();
+        break;
+      case "password":
+        generatePassword();
+        break;
+    }
+  }, [selectedTool, generateUuids, generateNanoIds, generatePassword]);
 
   const formattedIds = useMemo(() => {
     return generatedIds.map((id) => {
       let formattedId = id;
-      if (uuidConfig.noHyphens) formattedId = formattedId.replace(/-/g, "");
-      if (uuidConfig.uppercase) formattedId = formattedId.toUpperCase();
+      if (selectedTool === "uuid" && uuidConfig.noHyphens)
+        formattedId = formattedId.replace(/-/g, "");
+      if (selectedTool === "uuid" && uuidConfig.uppercase)
+        formattedId = formattedId.toUpperCase();
       return formattedId;
     });
-  }, [generatedIds, uuidConfig]);
+  }, [generatedIds, uuidConfig, selectedTool]);
+
+  const calculatedHashes = useMemo(() => {
+    if (!hashConfig.input) return {};
+    const hashes: Partial<Record<HashAlgorithm, string>> = {};
+    hashAlgorithms.forEach((alg) => {
+      const hashFunction = hashFunctionMap[alg];
+      hashes[alg] = (
+        hashFunction(hashConfig.input) as unknown as string
+      ).toString();
+    });
+    return hashes;
+  }, [hashConfig.input]);
 
   const handleCopyToClipboard = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => toast.success("ID copiado!"));
+    navigator.clipboard.writeText(text).then(() => toast.success("Copiado!"));
   };
-  const handleCopyAll = () => {
+  const handleCopyAllIds = () => {
     if (formattedIds.length === 0) return;
     const allIds = formattedIds.join("\n");
     navigator.clipboard
@@ -187,7 +277,11 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                   <Select
                     value={uuidConfig.version}
                     onValueChange={(v) =>
-                      handleUuidConfigChange("version", v as UuidVersion)
+                      handleConfigChange(
+                        "uuidConfig",
+                        "version",
+                        v as UuidVersion
+                      )
                     }
                   >
                     <SelectTrigger
@@ -220,7 +314,6 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                     </SelectContent>
                   </Select>
                 </div>
-
                 {isNameBasedVersion && (
                   <div className="space-y-4 border-t pt-4">
                     <div>
@@ -230,9 +323,12 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                         type="text"
                         value={uuidConfig.v3v5_name}
                         onChange={(e) =>
-                          handleUuidConfigChange("v3v5_name", e.target.value)
+                          handleConfigChange(
+                            "uuidConfig",
+                            "v3v5_name",
+                            e.target.value
+                          )
                         }
-                        placeholder="ex: example.com"
                         className="mt-1"
                       />
                     </div>
@@ -245,7 +341,8 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                         type="text"
                         value={uuidConfig.v3v5_namespace}
                         onChange={(e) =>
-                          handleUuidConfigChange(
+                          handleConfigChange(
+                            "uuidConfig",
                             "v3v5_namespace",
                             e.target.value
                           )
@@ -256,7 +353,8 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                         <Button
                           variant="outline"
                           onClick={() =>
-                            handleUuidConfigChange(
+                            handleConfigChange(
+                              "uuidConfig",
                               "v3v5_namespace",
                               UUID_NAMESPACES.DNS
                             )
@@ -267,7 +365,8 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                         <Button
                           variant="outline"
                           onClick={() =>
-                            handleUuidConfigChange(
+                            handleConfigChange(
+                              "uuidConfig",
                               "v3v5_namespace",
                               UUID_NAMESPACES.URL
                             )
@@ -279,7 +378,6 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                     </div>
                   </div>
                 )}
-
                 {!isConstantVersion && (
                   <div className="space-y-4 border-t pt-4">
                     {isBulkGeneratable && (
@@ -290,7 +388,8 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                           type="number"
                           value={uuidConfig.quantity}
                           onChange={(e) =>
-                            handleUuidConfigChange(
+                            handleConfigChange(
+                              "uuidConfig",
                               "quantity",
                               Math.max(1, Number(e.target.value))
                             )
@@ -306,7 +405,11 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                         id="no-hyphens"
                         checked={uuidConfig.noHyphens}
                         onCheckedChange={(checked) =>
-                          handleUuidConfigChange("noHyphens", !!checked)
+                          handleConfigChange(
+                            "uuidConfig",
+                            "noHyphens",
+                            !!checked
+                          )
                         }
                       />
                       <Label htmlFor="no-hyphens" className="cursor-pointer">
@@ -318,7 +421,11 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                         id="uppercase"
                         checked={uuidConfig.uppercase}
                         onCheckedChange={(checked) =>
-                          handleUuidConfigChange("uppercase", !!checked)
+                          handleConfigChange(
+                            "uuidConfig",
+                            "uppercase",
+                            !!checked
+                          )
                         }
                       />
                       <Label htmlFor="uppercase" className="cursor-pointer">
@@ -329,17 +436,15 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
                 )}
               </CardContent>
             </Card>
-
             {isBulkGeneratable && (
-              <Button onClick={generateIds} size="lg">
+              <Button onClick={generateUuids} size="lg">
                 <RefreshCw className="mr-2 h-4 w-4" /> Gerar Novos
               </Button>
             )}
-            <Button onClick={handleCopyAll} variant="outline">
+            <Button onClick={handleCopyAllIds} variant="outline">
               <Copy className="mr-2 h-4 w-4" /> Copiar Todos
             </Button>
           </div>
-
           <div className="@4xl:col-span-2">
             <Card className="h-full">
               <CardHeader>
@@ -371,12 +476,247 @@ function IdGeneratorComponent({ instanceId }: IdGeneratorProps) {
           </div>
         </div>
       )}
+
+      {/* RENDERIZADOR DE FERRAMENTA NANOID */}
+      {selectedTool === "nanoid" && (
+        <div className="grid grid-cols-1 @4xl:grid-cols-3 gap-4 flex-grow min-h-0 overflow-y-auto">
+          <div className="@4xl:col-span-1 flex flex-col gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">
+                  Configurações do NanoID
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="nanoid-quantity">Quantidade</Label>
+                  <Input
+                    id="nanoid-quantity"
+                    type="number"
+                    value={nanoidConfig.quantity}
+                    onChange={(e) =>
+                      handleConfigChange(
+                        "nanoidConfig",
+                        "quantity",
+                        Math.max(1, Number(e.target.value))
+                      )
+                    }
+                    min="1"
+                    max="1000"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="nanoid-size">Tamanho do ID</Label>
+                  <Input
+                    id="nanoid-size"
+                    type="number"
+                    value={nanoidConfig.size}
+                    onChange={(e) =>
+                      handleConfigChange(
+                        "nanoidConfig",
+                        "size",
+                        Math.max(1, Number(e.target.value))
+                      )
+                    }
+                    min="1"
+                    max="100"
+                    className="mt-1"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            <Button onClick={generateNanoIds} size="lg">
+              <RefreshCw className="mr-2 h-4 w-4" /> Gerar Novos
+            </Button>
+            <Button onClick={handleCopyAllIds} variant="outline">
+              <Copy className="mr-2 h-4 w-4" /> Copiar Todos
+            </Button>
+          </div>
+          <div className="@4xl:col-span-2">
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle className="text-base">NanoIDs Gerados</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-fit max-h-[calc(100vh-20rem)]">
+                  <div className="space-y-2">
+                    {formattedIds.map((id, index) => (
+                      <div
+                        key={`${id}-${index}`}
+                        className="flex items-center gap-2 font-mono text-sm p-2 bg-muted/50 rounded"
+                      >
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-6 w-6"
+                          onClick={() => handleCopyToClipboard(id)}
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                        </Button>
+                        <span className="flex-grow truncate">{id}</span>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
+
+      {/* RENDERIZADOR DE FERRAMENTA HASH */}
+      {selectedTool === "hash" && (
+        <div className="flex flex-col gap-4 flex-grow min-h-0">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Gerador de Hash</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Label htmlFor="hash-input">Texto de Entrada</Label>
+              <Textarea
+                id="hash-input"
+                value={hashConfig.input}
+                onChange={(e) =>
+                  handleConfigChange("hashConfig", "input", e.target.value)
+                }
+                className="mt-1 font-mono text-sm h-32"
+              />
+            </CardContent>
+          </Card>
+          <Card className="flex-grow">
+            <CardHeader>
+              <CardTitle className="text-base">Hashes Gerados</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <ScrollArea className="h-fit max-h-[calc(100vh-25rem)]">
+                {hashAlgorithms.map((alg) => (
+                  <div key={alg} className="mb-3">
+                    <Label>{alg}</Label>
+                    <div className="flex items-center gap-2 font-mono text-sm p-2 bg-muted/50 rounded mt-1">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-6 w-6"
+                        onClick={() =>
+                          handleCopyToClipboard(calculatedHashes[alg] || "")
+                        }
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                      <span className="flex-grow truncate text-xs">
+                        {calculatedHashes[alg]}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* RENDERIZADOR DE FERRAMENTA SENHA */}
+      {selectedTool === "password" && (
+        <div className="flex flex-col items-center gap-4 flex-grow">
+          <Card className="w-full max-w-lg">
+            <CardHeader>
+              <CardTitle className="text-base">Senha Segura Gerada</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2 font-mono text-lg p-3 bg-primary/10 rounded">
+                <span className="flex-grow truncate">{generatedPassword}</span>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() => handleCopyToClipboard(generatedPassword)}
+                >
+                  <Copy className="h-5 w-5" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="w-full max-w-lg">
+            <CardHeader>
+              <CardTitle className="text-base">
+                Configurações da Senha
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <Label>Tamanho:</Label>
+                  <span>{passwordConfig.length}</span>
+                </div>
+                <Slider
+                  value={[passwordConfig.length]}
+                  onValueChange={(v) =>
+                    handleConfigChange("passwordConfig", "length", v[0])
+                  }
+                  min={4}
+                  max={64}
+                  step={1}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="uppercase"
+                    checked={passwordConfig.uppercase}
+                    onCheckedChange={(c) =>
+                      handleConfigChange("passwordConfig", "uppercase", !!c)
+                    }
+                  />
+                  <Label htmlFor="uppercase">Maiúsculas (A-Z)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="lowercase"
+                    checked={passwordConfig.lowercase}
+                    onCheckedChange={(c) =>
+                      handleConfigChange("passwordConfig", "lowercase", !!c)
+                    }
+                  />
+                  <Label htmlFor="lowercase">Minúsculas (a-z)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="numbers"
+                    checked={passwordConfig.numbers}
+                    onCheckedChange={(c) =>
+                      handleConfigChange("passwordConfig", "numbers", !!c)
+                    }
+                  />
+                  <Label htmlFor="numbers">Números (0-9)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="symbols"
+                    checked={passwordConfig.symbols}
+                    onCheckedChange={(c) =>
+                      handleConfigChange("passwordConfig", "symbols", !!c)
+                    }
+                  />
+                  <Label htmlFor="symbols">Símbolos (!@#)</Label>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Button
+            onClick={generatePassword}
+            size="lg"
+            className="w-full max-w-lg"
+          >
+            <RefreshCw className="mr-2 h-4 w-4" /> Gerar Nova Senha
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
 
 const MemoizedIdGenerator = React.memo(IdGeneratorComponent);
-
 export function IdGenerator({ instanceId }: { instanceId: string }) {
   return <MemoizedIdGenerator instanceId={instanceId} />;
 }
