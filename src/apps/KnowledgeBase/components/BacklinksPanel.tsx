@@ -1,7 +1,5 @@
-// src/apps/KnowledgeBase/components/BacklinksPanel.tsx
 "use client";
 
-import { Button } from "@/components/ui/Button"; // Para os links
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { FileText, Link2 } from "lucide-react";
 import { useMemo } from "react";
@@ -13,7 +11,6 @@ interface BacklinksPanelProps {
   onSelectEntry: (entryId: string) => void;
 }
 
-// Função helper para encontrar títulos de notas linkados no conteúdo via [[Título]]
 const getReferencedTitlesFromContent = (content: string): string[] => {
   if (!content) return [];
   const internalLinkRegex = /\[\[(.*?)\]\]/g;
@@ -25,7 +22,6 @@ const getReferencedTitlesFromContent = (content: string): string[] => {
   return matches;
 };
 
-// Função helper para encontrar uma nota pelo título (case-insensitive)
 const findNoteByTitle = (
   title: string,
   entries: KnowledgeEntry[]
@@ -45,10 +41,6 @@ export function BacklinksPanel({
     if (!selectedEntry) return [];
 
     const linkingEntries: KnowledgeEntry[] = [];
-    // Não precisamos do título da nota selecionada se os links internos usam IDs.
-    // Se usarmos [[Título]], precisaremos do selectedEntry.title.
-    // Assumindo que os links gerados por preprocessMarkdownContent são [TextoVisivel](#entry-ID_ALVO)
-    // e que getReferencedTitlesFromContent extrai o "Título" de [[Título]].
 
     allEntries.forEach((entry) => {
       if (entry.id === selectedEntry.id) return;
@@ -58,10 +50,9 @@ export function BacklinksPanel({
         const linkedToEntry = findNoteByTitle(title, allEntries);
         if (linkedToEntry && linkedToEntry.id === selectedEntry.id) {
           if (!linkingEntries.some((e) => e.id === entry.id)) {
-            // Evitar duplicados se linkar múltiplas vezes
             linkingEntries.push(entry);
           }
-          break; // Encontrou um link para a nota selecionada nesta entrada, pode parar de checar os outros links dela
+          break;
         }
       }
     });
@@ -71,7 +62,7 @@ export function BacklinksPanel({
   if (!selectedEntry) {
     return (
       <div className="p-3 text-sm text-muted-foreground italic">
-        Selecione uma entrada para ver os backlinks.
+        Selecione um bloco para ver os backlinks.
       </div>
     );
   }
@@ -91,18 +82,16 @@ export function BacklinksPanel({
           <ul className="p-1">
             {backlinks.map((entry) => (
               <li key={entry.id} className="mb-0.5">
-                <Button
-                  variant="link"
-                  size="sm"
+                <button
                   onClick={() => onSelectEntry(entry.id)}
-                  className="text-primary hover:underline text-left w-full h-auto py-1 px-2 justify-start text-xs"
+                  className="text-primary hover:underline  text-left w-full h-auto py-1 px-2 justify-start text-xs flex items-center gap-1"
                   title={entry.title}
                 >
                   <FileText className="w-3.5 h-3.5 mr-1.5 flex-shrink-0 opacity-70" />
                   <span className="truncate">
-                    {entry.title || "Entrada sem título"}
+                    {entry.title || "Bloco sem título"}
                   </span>
-                </Button>
+                </button>
               </li>
             ))}
           </ul>

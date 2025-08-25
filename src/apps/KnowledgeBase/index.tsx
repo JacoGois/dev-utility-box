@@ -177,7 +177,7 @@ function KnowledgeBaseComponent() {
             : e
         )
       );
-      toast.success("Entrada atualizada!");
+      toast.success("Bloco atualizado!");
     } else {
       const newEntryId = nanoid();
       const newEntry: KnowledgeEntry = {
@@ -192,7 +192,7 @@ function KnowledgeBaseComponent() {
       };
       setEntries((prev) => [newEntry, ...prev]);
       setSelectedEntryId(newEntryId);
-      toast.success("Entrada criada!");
+      toast.success("Bloco criado!");
     }
     setIsEditing(false);
     setIsPreviewingMarkdown(true);
@@ -209,7 +209,7 @@ function KnowledgeBaseComponent() {
     if (currentSelectedEntry) {
       setShowDeleteDialog(true);
     } else {
-      toast.error("Nenhuma entrada selecionada para excluir.");
+      toast.error("Nenhum bloco selecionado para excluir.");
     }
   }, [currentSelectedEntry]);
 
@@ -219,7 +219,7 @@ function KnowledgeBaseComponent() {
     resetAndClearForm();
     setSelectedEntryId(null);
     setIsEditing(false);
-    toast.info("Entrada excluída.");
+    toast.info("Bloco excluído.");
   }, [selectedEntryId, entries, resetAndClearForm]);
 
   useEffect(() => {
@@ -353,18 +353,18 @@ function KnowledgeBaseComponent() {
         onOpenChange={setShowDeleteDialog}
         onConfirm={confirmActualDelete}
         title="Confirmar Exclusão"
-        itemName={currentSelectedEntry?.title || "esta entrada"}
+        itemName={currentSelectedEntry?.title || "este bloco"}
         confirmButtonVariant="destructive"
       />
 
       <Dialog open={showLinkNoteDialog} onOpenChange={setShowLinkNoteDialog}>
         <DialogContent className="sm:max-w-md z-[999999]">
           <DialogHeader>
-            <DialogTitle>Linkar com outra entrada</DialogTitle>
+            <DialogTitle>Linkar com outro bloco</DialogTitle>
           </DialogHeader>
           <Input
             type="text"
-            placeholder="Buscar entrada pelo título..."
+            placeholder="Buscar bloco pelo título..."
             value={linkNoteSearchTerm}
             onChange={(e) => setLinkNoteSearchTerm(e.target.value)}
             className="my-2"
@@ -386,7 +386,7 @@ function KnowledgeBaseComponent() {
               ))
             ) : (
               <p className="p-2 text-sm text-muted-foreground">
-                Nenhuma entrada encontrada.
+                Nenhum bloco encontrado.
               </p>
             )}
           </ScrollArea>
@@ -412,12 +412,12 @@ function KnowledgeBaseComponent() {
             size="sm"
             className="w-full justify-start bg-card"
           >
-            <PlusCircle className="mr-2 h-4 w-4" /> Nova Entrada
+            <PlusCircle className="mr-2 h-4 w-4" /> Novo Bloco
           </Button>
           <div className="relative">
             <Input
               type="text"
-              placeholder="Buscar entradas..."
+              placeholder="Buscar blocos..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
@@ -441,7 +441,7 @@ function KnowledgeBaseComponent() {
                   "font-semibold text-sm truncate group-hover:text-primary-foreground"
                 )}
               >
-                {entry.title || "Entrada sem título"}
+                {entry.title || "Bloco sem título"}
               </h3>
               <div className="flex gap-1 mt-1 flex-wrap">
                 {entry.tags.slice(0, 3).map((tag, index) => (
@@ -461,14 +461,14 @@ function KnowledgeBaseComponent() {
           ))}
           {filteredEntries.length === 0 && searchTerm && (
             <p className="p-4 text-center text-sm text-muted-foreground">
-              Nenhuma entrada encontrada.
+              Nenhum bloco encontrada.
             </p>
           )}
           {filteredEntries.length === 0 &&
             !searchTerm &&
             entries.length === 0 && (
               <p className="p-4 text-center text-sm text-muted-foreground">
-                Nenhuma entrada criada.
+                Nenhum bloco criada.
               </p>
             )}
         </div>
@@ -482,7 +482,7 @@ function KnowledgeBaseComponent() {
                 <Input
                   id="kb-title-input"
                   type="text"
-                  placeholder="Título da Entrada"
+                  placeholder="Título do bloco"
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
                   className="text-xl font-semibold mb-0"
@@ -497,7 +497,7 @@ function KnowledgeBaseComponent() {
                       variant="ghost"
                       size="sm"
                       onClick={handleEditSelected}
-                      title="Editar Entrada"
+                      title="Editar bloco"
                     >
                       <Edit2 className="mr-1 h-4 w-4" /> Editar
                     </Button>
@@ -588,7 +588,7 @@ function KnowledgeBaseComponent() {
                       ref={contentTextareaRef}
                       value={formContent}
                       onChange={(e) => setFormContent(e.target.value)}
-                      placeholder="Escreva sua entrada em Markdown..."
+                      placeholder="Escreva seu bloco em Markdown..."
                       className="p-3 w-full h-[calc(100%-50px)] resize-none border rounded-md focus:ring-primary-foreground text-sm bg-transparent font-mono "
                     />
                   ) : currentSelectedEntry ||
@@ -619,19 +619,13 @@ function KnowledgeBaseComponent() {
               <div className="p-2 border-t border-border flex justify-end items-center">
                 <div className="flex gap-2">
                   {selectedEntryId && (
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={handleDeleteEntryPress}
-                    >
+                    <Button size="sm" onClick={handleDeleteEntryPress}>
                       <Trash2 className="mr-2 h-4 w-4" /> Excluir
                     </Button>
                   )}
                   <Button size="sm" onClick={handleSaveEntry}>
                     <Save className="mr-2 h-4 w-4" />
-                    {selectedEntryId
-                      ? "Atualizar Entrada"
-                      : "Salvar Nova Entrada"}
+                    {selectedEntryId ? "Atualizar Bloco" : "Salvar Novo Bloco"}
                   </Button>
                   <Button
                     variant="ghost"
@@ -657,8 +651,7 @@ function KnowledgeBaseComponent() {
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <Brain className="w-16 h-16 mb-4" />
             <p className="text-center">
-              Selecione uma entrada para visualizar ou clique em{" "}
-              {'"Nova Entrada"'}.
+              Selecione um bloco para visualizar ou clique em {'"Novo Bloco"'}.
             </p>
           </div>
         )}

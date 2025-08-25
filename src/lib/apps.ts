@@ -1,9 +1,19 @@
 import { DataGenerator } from "@/apps/DataGenerator";
 import { EncodersDecoders } from "@/apps/EncodersDecoders";
 import { JSONTools } from "@/apps/JSONTools";
+import { KnowledgeBase } from "@/apps/KnowledgeBase";
 import { MassDataGenerator } from "@/apps/MassDataGenerator";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { Braces, Combine, Database, FileJson, Timer } from "lucide-react";
+import { TodoList } from "@/apps/TodoList";
+import {
+  Braces,
+  Brain,
+  Combine,
+  Database,
+  FileJson,
+  NotebookPen,
+  Timer,
+} from "lucide-react";
 
 export const apps = {
   Pomodoro: {
@@ -15,6 +25,12 @@ export const apps = {
     maxWidth: undefined,
     maxHeight: undefined,
     minHeight: undefined,
+  },
+  Todo: {
+    name: "To Do List",
+    shortName: "To Do",
+    icon: NotebookPen,
+    component: TodoList,
   },
   JSONTools: {
     name: "Ferramentas JSON",
@@ -35,6 +51,13 @@ export const apps = {
     maxWidth: undefined,
     maxHeight: undefined,
     minHeight: 500,
+  },
+  KnowledgeBase: {
+    name: "Base de Conhecimento (BETA)",
+    shortName: "Conhecimento",
+    icon: Brain,
+    component: KnowledgeBase,
+    maxInstances: 1,
   },
   DataGenerator: {
     name: "Gerador de Dados",
@@ -75,12 +98,6 @@ export const apps = {
   //   maxHeight: undefined,
   //   minHeight: undefined,
   // },
-  // Todo: {
-  //   name: "To Do List",
-  //   shortName: "To Do",
-  //   icon: NotebookPen,
-  //   component: TodoList,
-  // },
   // CodeSnippets: {
   //   name: "Snippets de Código",
   //   shortName: "Snippets",
@@ -93,13 +110,6 @@ export const apps = {
   //   shortName: "Comandos",
   //   icon: TerminalSquare,
   //   component: CommandCenter,
-  //   maxInstances: 1,
-  // },
-  // KnowledgeBase: {
-  //   name: "Base de Conhecimento (BETA)",
-  //   shortName: "Conhecimento",
-  //   icon: Brain,
-  //   component: KnowledgeBase,
   //   maxInstances: 1,
   // },
   // KanbanBoard: {
