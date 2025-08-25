@@ -31,6 +31,10 @@ export const apps = {
     shortName: "To Do",
     icon: NotebookPen,
     component: TodoList,
+    maxInstances: 2,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: undefined,
   },
   JSONTools: {
     name: "Ferramentas JSON",
@@ -58,6 +62,9 @@ export const apps = {
     icon: Brain,
     component: KnowledgeBase,
     maxInstances: 1,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: undefined,
   },
   DataGenerator: {
     name: "Gerador de Dados",
