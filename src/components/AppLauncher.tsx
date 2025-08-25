@@ -40,7 +40,7 @@ export function AppLauncher() {
                   key={key}
                   className="flex flex-col items-center gap-2 text-center"
                 >
-                  <div
+                  <button
                     className="flex flex-col gap-2 items-center cursor-pointer hover:opacity-70"
                     onClick={() => {
                       openApp(key);
@@ -51,7 +51,7 @@ export function AppLauncher() {
                       <Icon className="w-6 h-6" />
                     </div>
                     <div className="text-xs font-medium">{app.name}</div>
-                  </div>
+                  </button>
                   <div className="flex gap-2">
                     {/* <button
                       onClick={() => addToDock(key)}

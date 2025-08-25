@@ -1,8 +1,9 @@
 import { DataGenerator } from "@/apps/DataGenerator";
 import { EncodersDecoders } from "@/apps/EncodersDecoders";
+import { IdGenerator } from "@/apps/IdGenerator/indes";
 import { JSONTools } from "@/apps/JSONTools";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { Braces, Combine, FileJson, Timer } from "lucide-react";
+import { Braces, Combine, FileJson, Fingerprint, Timer } from "lucide-react";
 
 export const apps = {
   // Auth: {
@@ -53,6 +54,16 @@ export const apps = {
     maxWidth: undefined,
     maxHeight: undefined,
     minHeight: 500,
+  },
+  IdGenerator: {
+    name: "Gerador de IDs",
+    shortName: "Gerador IDs",
+    icon: Fingerprint,
+    component: IdGenerator,
+    maxInstances: 2,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: undefined,
   },
   // RegexBuilder: {
   //   name: "Construtor de Regex",

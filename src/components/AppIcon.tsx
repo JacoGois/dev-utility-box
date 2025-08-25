@@ -3,6 +3,7 @@
 import { AppKey } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
+import { truncate } from "lodash";
 import { LucideIcon } from "lucide-react";
 import React, { useCallback } from "react";
 import {
@@ -30,13 +31,17 @@ function AppIcon({ appKey, app }: Props) {
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <button
-          className="text-center cursor-pointer hover:opacity-70"
+          className="text-center cursor-pointer hover:opacity-70 w-16"
           onClick={() => openApp(appKey)}
         >
           <div className="w-16 h-16 bg-foreground/20 rounded-lg flex items-center justify-center text-foreground">
             <Icon className="w-8 h-8" />
           </div>
-          <span className="text-foreground text-sm">{app.shortName}</span>
+          <span className="text-foreground text-sm">
+            {truncate(app.shortName, {
+              length: 10,
+            })}
+          </span>
         </button>
       </ContextMenuTrigger>
 
