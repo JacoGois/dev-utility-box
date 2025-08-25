@@ -25,7 +25,7 @@ export function AppLauncher() {
 
   return (
     <Dialog open={isAppLauncherOpen} onOpenChange={toggleLauncher}>
-      <DialogContent className="max-w-4xl z-[99999]">
+      <DialogContent className="sm:max-w-xl z-[99999]">
         <DialogHeader>
           <DialogTitle>Todos os Aplicativos</DialogTitle>
         </DialogHeader>

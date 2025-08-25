@@ -1,11 +1,5 @@
 "use client";
 
-import { faker } from "@faker-js/faker";
-import { Copy, Download, Library, Loader2, X } from "lucide-react";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
-
-import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
-
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Checkbox } from "@/components/ui/form/Checkbox";
@@ -19,223 +13,68 @@ import {
   SelectValue,
 } from "@/components/ui/form/SelectCore";
 import { Textarea } from "@/components/ui/form/Textarea";
-import { useWindowShellStore } from "@/stores/useWindowShellStore";
+import { ScrollArea } from "@/components/ui/ScrollArea";
+import { Slider } from "@/components/ui/Slider";
+import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import CryptoJS from "crypto-js";
+import { Copy, RefreshCw } from "lucide-react";
+import { nanoid } from "nanoid";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { FieldLibraryDialog } from "./components/FieldLibraryDialog";
+import {
+  MAX as UUID_MAX,
+  NIL as UUID_NIL,
+  v1 as uuidv1,
+  v3 as uuidv3,
+  v4 as uuidv4,
+  v5 as uuidv5,
+  v6 as uuidv6,
+  v7 as uuidv7,
+  validate as uuidValidate,
+} from "uuid";
 
-type SelectedField = {
-  id: string;
-  fieldName: string;
-  fakerMethod: string;
-};
+const toolOptions = [
+  { value: "uuid", label: "Gerador de UUID" },
+  { value: "nanoid", label: "Gerador de NanoID" },
+  { value: "hash", label: "Gerador de Hash (MD5, SHA)" },
+  { value: "password", label: "Gerador de Senhas Seguras" },
+];
+
+const hashAlgorithms = [
+  "MD5",
+  "SHA1",
+  "SHA256",
+  "SHA512",
+  "SHA3",
+  "RIPEMD160",
+] as const;
+type HashAlgorithm = (typeof hashAlgorithms)[number];
+
+type UuidVersion = "v1" | "v3" | "v4" | "v5" | "v6" | "v7" | "nil" | "max";
 
 export const defaultState = {
-  selectedFields: [] as SelectedField[],
-  quantity: 10,
-  outputFormat: "json" as "json" | "csv",
-  generatedData: "",
-  isLoading: false,
-  csvOptions: {
-    includeHeader: true,
-    delimiter: "," as "," | ";",
+  selectedTool: "uuid",
+  uuidConfig: {
+    quantity: 5,
+    noHyphens: false,
+    uppercase: false,
+    version: "v7" as UuidVersion,
+    v3v5_name: "example.com",
+    v3v5_namespace: "1b671a64-40d5-491e-99b0-da01ff1f3341",
   },
-};
-
-const AVAILABLE_FAKER_FIELDS: Record<string, Record<string, string>> = {
-  Pessoa: {
-    "Nome Completo": "person.fullName",
-    "Primeiro Nome": "person.firstName",
-    Sobrenome: "person.lastName",
-    "Nome do Meio": "person.middleName",
-    "Prefixo (Sr., Dr.)": "person.prefix",
-    "Sufixo (Jr., PhD)": "person.suffix",
-    "Sexo Biológico": "person.sex",
-    Gênero: "person.gender",
-    Bio: "person.bio",
-    "Área de Trabalho": "person.jobArea",
-    Cargo: "person.jobTitle",
-    "Descrição do Cargo": "person.jobDescriptor",
-    "Tipo de Cargo": "person.jobType",
-    "Signo do Zodíaco": "person.zodiacSign",
-    CPF: "br.cpf",
-    CNPJ: "br.cnpj",
+  nanoidConfig: {
+    quantity: 5,
+    size: 21,
   },
-  Internet: {
-    "E-mail": "internet.email",
-    "Nome de Usuário": "internet.userName",
-    URL: "internet.url",
-    Domínio: "internet.domainName",
-    "Endereço IP": "internet.ip",
-    "Endereço IPv6": "internet.ipv6",
-    "Endereço MAC": "internet.mac",
-    "Cor (Hex)": "internet.color",
-    Senha: "internet.password",
-    Protocolo: "internet.protocol",
-    "User Agent": "internet.userAgent",
-    "Método HTTP": "internet.httpMethod",
+  hashConfig: {
+    input: "Olá, mundo!",
   },
-  Finanças: {
-    "Nº da Conta": "finance.accountNumber",
-    "Nome da Conta": "finance.accountName",
-    "Nome da Moeda": "finance.currencyName",
-    "Código da Moeda": "finance.currencyCode",
-    "Símbolo da Moeda": "finance.currencySymbol",
-    "Nº Cartão de Crédito": "finance.creditCardNumber",
-    "CVV do Cartão": "finance.creditCardCVV",
-    IBAN: "finance.iban",
-    BIC: "finance.bic",
-    "Endereço Bitcoin": "finance.bitcoinAddress",
-    "Endereço Ethereum": "finance.ethereumAddress",
-  },
-  Localização: {
-    Endereço: "location.streetAddress",
-    Cidade: "location.city",
-    "Estado (Abrev.)": "location.state",
-    País: "location.country",
-    "Código do País": "location.countryCode",
-    CEP: "location.zipCode",
-    Latitude: "location.latitude",
-    Longitude: "location.longitude",
-    Direção: "location.direction",
-    "Fuso Horário": "location.timeZone",
-  },
-  Animal: {
-    Cachorro: "animal.dog",
-    Gato: "animal.cat",
-    Pássaro: "animal.bird",
-    Peixe: "animal.fish",
-    Inseto: "animal.insect",
-    "Tipo de Animal": "animal.type",
-    Urso: "animal.bear",
-    Vaca: "animal.cow",
-    Leão: "animal.lion",
-  },
-  Comércio: {
-    "Nome do Produto": "commerce.productName",
-    Preço: "commerce.price",
-    Departamento: "commerce.department",
-    SKU: "commerce.sku",
-    "Descrição do Produto": "commerce.productDescription",
-    "Adjetivo do Produto": "commerce.productAdjective",
-    "Material do Produto": "commerce.productMaterial",
-  },
-  Sistema: {
-    "Nome de Arquivo": "system.fileName",
-    "Extensão de Arquivo": "system.fileExt",
-    "Tipo de Arquivo": "system.fileType",
-    "MIME Type": "system.mimeType",
-    "Caminho de Diretório": "system.directoryPath",
-    "Caminho de Arquivo": "system.filePath",
-    "Versão Semântica": "system.semver",
-  },
-  String: {
-    UUID: "string.uuid",
-    "Alfanumérico (String)": "string.alphanumeric",
-    "Numérico (String)": "string.numeric",
-    "Hexadecimal (String)": "string.hexadecimal",
-    "Binário (String)": "string.binary",
-    "Octal (String)": "string.octal",
-  },
-  Veículo: {
-    Veículo: "vehicle.vehicle",
-    Fabricante: "vehicle.manufacturer",
-    Modelo: "vehicle.model",
-    "Tipo de Veículo": "vehicle.type",
-    "VIN (Chassi)": "vehicle.vin",
-    "Cor do Veículo": "vehicle.color",
-  },
-  Data: {
-    "Data no Passado": "date.past",
-    "Data no Futuro": "date.future",
-    "Data Recente": "date.recent",
-    "Data de Aniversário": "date.birthdate",
-    "Data Entre...": "date.between",
-    "Dia da Semana": "date.weekday",
-    Mês: "date.month",
-  },
-  "Tipos Primitivos": {
-    "String (UUID)": "string.uuid",
-    "String (Alfanumérica)": "string.alphanumeric",
-    "String (Letras)": "string.alpha",
-    "Número Inteiro": "number.int",
-    "Número Decimal": "number.float",
-    "Booleano (true/false)": "datatype.boolean",
-  },
-  "Texto Lorem": {
-    "Palavra (Lorem)": "lorem.word",
-    "Palavras (Lorem)": "lorem.words",
-    "Sentença (Lorem)": "lorem.sentence",
-    "Parágrafo (Lorem)": "lorem.paragraph",
-    "Linhas de Texto (Lorem)": "lorem.lines",
-    "Slug (Lorem)": "lorem.slug",
-  },
-  Número: {
-    "Inteiro (Numérico)": "number.int",
-    "Decimal (Numérico)": "number.float",
-    "Hexadecimal (Numérico)": "number.hex",
-    "Binário (Numérico)": "number.binary",
-    "Octal (Numérico)": "number.octal",
-  },
-  "Companhia Aérea": {
-    "Companhia Aérea": "airline.airline",
-    Aeronave: "airline.airplane",
-    Aeroporto: "airline.airport",
-    "Nº do Voo": "airline.flightNumber",
-    Assento: "airline.seat",
-  },
-  Hacker: {
-    Abreviação: "hacker.abbreviation",
-    Adjetivo: "hacker.adjective",
-    Substantivo: "hacker.noun",
-    Verbo: "hacker.verb",
-    "Frase Hacker": "hacker.phrase",
-  },
-  Palavra: {
-    "Substantivo (Dicionário)": "word.noun",
-    "Verbo (Dicionário)": "word.verb",
-    "Adjetivo (Dicionário)": "word.adjective",
-    "Preposição (Dicionário)": "word.preposition",
-    "Palavra (Dicionário)": "word.sample",
-  },
-  Empresa: {
-    "Nome da Empresa": "company.name",
-    "Slogan (Buzz)": "company.buzzPhrase",
-    "Frase de Efeito": "company.catchPhrase",
-    "Jargão de Negócios": "company.bs",
-  },
-  Database: {
-    "Nome da Coluna": "database.column",
-    "Tipo de Coluna": "database.type",
-    Engine: "database.engine",
-    "ID MongoDB": "database.mongodbObjectId",
-  },
-  Git: {
-    Branch: "git.branch",
-    "SHA do Commit": "git.commitSha",
-    "SHA Curto do Commit": "git.shortSha",
-    "Mensagem do Commit": "git.commitMessage",
-  },
-  Imagem: {
-    "URL de Imagem": "image.url",
-    Avatar: "image.avatar",
-    "Data URI da Imagem": "image.dataUri",
-  },
-  Cor: {
-    "Nome da Cor": "color.human",
-    "Espaço de Cor": "color.space",
-    "Cor RGB": "color.rgb",
-  },
-  Música: {
-    "Gênero Musical": "music.genre",
-    "Nome da Música": "music.songName",
-  },
-  Telefone: {
-    "Número de Telefone": "phone.number",
-    IMEI: "phone.imei",
-  },
-  Ciência: {
-    "Elemento Químico": "science.chemicalElement",
-    "Unidade de Medida": "science.unit",
+  passwordConfig: {
+    length: 16,
+    uppercase: true,
+    lowercase: true,
+    numbers: true,
+    symbols: true,
   },
 };
 
@@ -243,293 +82,645 @@ type DataGeneratorProps = {
   instanceId: string;
 };
 
-export const DataGenerator: FC<DataGeneratorProps> = ({ instanceId }) => {
-  const parentModalContainerRef = useWindowShellStore(
-    (state) => state.refs[instanceId]
-  );
-  const [state, setState] = usePersistentAppStore(instanceId, defaultState);
-  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+const UUID_NAMESPACES = {
+  DNS: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+  URL: "6ba7b811-9dad-11d1-80b4-00c04fd430c8",
+};
 
-  const workerRef = useRef<Worker | null>(null);
+const hashFunctionMap: Record<HashAlgorithm, (message: string) => void> = {
+  MD5: CryptoJS.MD5,
+  SHA1: CryptoJS.SHA1,
+  SHA256: CryptoJS.SHA256,
+  SHA512: CryptoJS.SHA512,
+  SHA3: CryptoJS.SHA3,
+  RIPEMD160: CryptoJS.RIPEMD160,
+};
+
+type ConfigObjectKeys = keyof Omit<typeof defaultState, "selectedTool">;
+
+function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
+  const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const { selectedTool, uuidConfig, nanoidConfig, hashConfig, passwordConfig } =
+    state;
+
+  const [generatedIds, setGeneratedIds] = useState<string[]>([]);
+  const [generatedPassword, setGeneratedPassword] = useState<string>("");
+
+  const handleConfigChange = <T extends ConfigObjectKeys>(
+    tool: T,
+    key: keyof (typeof defaultState)[T],
+    value: (typeof defaultState)[T][keyof (typeof defaultState)[T]]
+  ) => {
+    setState((currentState) => ({
+      ...currentState,
+      [tool]: {
+        ...currentState[tool],
+        [key]: value,
+      },
+    }));
+  };
+
+  const generateUuids = useCallback(() => {
+    const { quantity, version, v3v5_name, v3v5_namespace } = uuidConfig;
+    let newIds: string[] = [];
+    try {
+      switch (version) {
+        case "v1":
+          newIds = Array.from({ length: quantity }, () => uuidv1());
+          break;
+        case "v3":
+          if (!v3v5_name || !uuidValidate(v3v5_namespace))
+            throw new Error("Nome e Namespace UUID válido são obrigatórios.");
+          newIds = [uuidv3(v3v5_name, v3v5_namespace)];
+          break;
+        case "v5":
+          if (!v3v5_name || !uuidValidate(v3v5_namespace))
+            throw new Error("Nome e Namespace UUID válido são obrigatórios.");
+          newIds = [uuidv5(v3v5_name, v3v5_namespace)];
+          break;
+        case "v6":
+          newIds = Array.from({ length: quantity }, () => uuidv6());
+          break;
+        case "v7":
+          newIds = Array.from({ length: quantity }, () => uuidv7());
+          break;
+        case "nil":
+          newIds = [UUID_NIL];
+          break;
+        case "max":
+          newIds = [UUID_MAX];
+          break;
+        case "v4":
+        default:
+          newIds = Array.from({ length: quantity }, () => uuidv4());
+          break;
+      }
+      setGeneratedIds(newIds);
+    } catch (e) {
+      toast.error("Erro ao gerar UUID", { description: (e as Error).message });
+    }
+  }, [uuidConfig]);
+
+  const generateNanoIds = useCallback(() => {
+    const { quantity, size } = nanoidConfig;
+    const newIds = Array.from({ length: quantity }, () => nanoid(size));
+    setGeneratedIds(newIds);
+    toast.success(`${quantity} NanoID(s) gerados!`);
+  }, [nanoidConfig]);
+
+  const generatePassword = useCallback(() => {
+    const { length, uppercase, lowercase, numbers, symbols } = passwordConfig;
+    const charSets = {
+      uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      lowercase: "abcdefghijklmnopqrstuvwxyz",
+      numbers: "0123456789",
+      symbols: "!@#$%^&*()_+-=[]{}|;:,.<>?",
+    };
+    let charset = "";
+    if (uppercase) charset += charSets.uppercase;
+    if (lowercase) charset += charSets.lowercase;
+    if (numbers) charset += charSets.numbers;
+    if (symbols) charset += charSets.symbols;
+    if (!charset) {
+      toast.error("Selecione ao menos um tipo de caractere para a senha.");
+      setGeneratedPassword("");
+      return;
+    }
+    let newPassword = "";
+    for (let i = 0, n = charset.length; i < length; ++i) {
+      newPassword += charset.charAt(Math.floor(Math.random() * n));
+    }
+    setGeneratedPassword(newPassword);
+    toast.success("Nova senha gerada!");
+  }, [passwordConfig]);
 
   useEffect(() => {
-    workerRef.current = new Worker(
-      new URL("./workers/dataGenerator.worker.ts", import.meta.url)
-    );
-    workerRef.current.onmessage = (
-      event: MessageEvent<{ generatedData: string }>
-    ) => {
-      setState({
-        generatedData: event.data.generatedData,
-        isLoading: false,
-      });
-    };
-    return () => {
-      workerRef.current?.terminate();
-    };
-  }, []);
+    switch (selectedTool) {
+      case "uuid":
+        generateUuids();
+        break;
+      case "nanoid":
+        generateNanoIds();
+        break;
+      case "password":
+        generatePassword();
+        break;
+    }
+  }, [selectedTool, generateUuids, generateNanoIds, generatePassword]);
 
-  const handleAddField = useCallback(
-    (fakerMethod: string) => {
-      if (!fakerMethod) return;
-      const defaultFieldName = fakerMethod.split(".").pop() || "field";
-      setState((s) => ({
-        selectedFields: [
-          ...s.selectedFields,
-          { id: faker.string.uuid(), fieldName: defaultFieldName, fakerMethod },
-        ],
-      }));
-    },
-    [setState]
-  );
-
-  const handleRemoveField = useCallback(
-    (id: string) => {
-      setState((s) => ({
-        selectedFields: s.selectedFields.filter((field) => field.id !== id),
-      }));
-    },
-    [setState]
-  );
-
-  const handleFieldNameChange = useCallback(
-    (id: string, newName: string) => {
-      setState((s) => ({
-        selectedFields: s.selectedFields.map((f) =>
-          f.id === id ? { ...f, fieldName: newName } : f
-        ),
-      }));
-    },
-    [setState]
-  );
-
-  const handleGenerateData = useCallback(() => {
-    if (!workerRef.current || state.selectedFields.length === 0) return;
-    setState({ isLoading: true, generatedData: "" });
-    workerRef.current.postMessage({
-      fields: state.selectedFields,
-      quantity: state.quantity,
-      format: state.outputFormat,
-      csvOptions: state.csvOptions,
+  const formattedIds = useMemo(() => {
+    return generatedIds.map((id) => {
+      let formattedId = id;
+      if (selectedTool === "uuid" && uuidConfig.noHyphens)
+        formattedId = formattedId.replace(/-/g, "");
+      if (selectedTool === "uuid" && uuidConfig.uppercase)
+        formattedId = formattedId.toUpperCase();
+      return formattedId;
     });
-  }, [state, setState]);
+  }, [generatedIds, uuidConfig, selectedTool]);
 
-  const handleDownload = useCallback(() => {
-    if (!state.generatedData) return;
-    const fileExtension = state.outputFormat;
-    const mimeType =
-      state.outputFormat === "json" ? "application/json" : "text/csv";
-    const blob = new Blob([state.generatedData], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `generated_data_${instanceId}.${fileExtension}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, [state.generatedData, state.outputFormat, instanceId]);
+  const calculatedHashes = useMemo(() => {
+    if (!hashConfig.input) return {};
+    const hashes: Partial<Record<HashAlgorithm, string>> = {};
+    hashAlgorithms.forEach((alg) => {
+      const hashFunction = hashFunctionMap[alg];
+      hashes[alg] = (
+        hashFunction(hashConfig.input) as unknown as string
+      ).toString();
+    });
+    return hashes;
+  }, [hashConfig.input]);
 
-  const handleCopyToClipboard = useCallback(() => {
-    if (!state.generatedData) return;
-    navigator.clipboard.writeText(state.generatedData).then(
-      () => {
-        toast.success("Dados copiados para a área de transferência!");
-      },
-      () => {
-        toast.error("Erro ao copiar dados. Tente novamente.");
-      }
-    );
-  }, [state.generatedData]);
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => toast.success("Copiado!"));
+  };
+  const handleCopyAllIds = () => {
+    if (formattedIds.length === 0) return;
+    const allIds = formattedIds.join("\n");
+    navigator.clipboard
+      .writeText(allIds)
+      .then(() => toast.success("Todos os IDs foram copiados!"));
+  };
+
+  const isNameBasedVersion =
+    uuidConfig.version === "v3" || uuidConfig.version === "v5";
+  const isConstantVersion =
+    uuidConfig.version === "nil" || uuidConfig.version === "max";
+  const isBulkGeneratable = !isNameBasedVersion && !isConstantVersion;
 
   return (
-    <div className="grid grid-cols-6 @container gap-4 h-full w-full overflow-auto p-4 bg-background">
-      <div className="col-span-6 @4xl:col-span-2 flex flex-col gap-4">
-        <FieldLibraryDialog
-          open={isLibraryOpen}
-          onOpenChange={setIsLibraryOpen}
-          onSelectField={handleAddField}
-          availableFields={AVAILABLE_FAKER_FIELDS}
-          parentModalContainerRef={parentModalContainerRef}
-        />
+    <div className="flex flex-col h-full w-full p-4 gap-4 bg-card text-card-foreground border-t @container">
+      <div className="flex items-center gap-4 border-b pb-4 flex-wrap">
+        <Label className="flex-shrink-0">Ferramenta:</Label>
+        <Select
+          value={selectedTool}
+          onValueChange={(value) => setState({ selectedTool: value })}
+        >
+          <SelectTrigger className="w-full @sm:w-[280px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="z-[999999999]">
+            {toolOptions.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Tipos de Dados</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => setIsLibraryOpen(true)}
-            >
-              <Library className="h-4 w-4" /> Adicionar
-              <span className="hidden @md:inline-block">
-                Campo da Biblioteca
-              </span>
-            </Button>
-
-            <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
-              {state.selectedFields.map((field) => (
-                <div key={field.id} className="flex items-center gap-2">
-                  <Input
-                    value={field.fieldName}
-                    onChange={(e) =>
-                      handleFieldNameChange(field.id, e.target.value)
-                    }
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemoveField(field.id)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Configurações Gerais</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="quantity">Quantidade de registros</Label>
-              <Input
-                id="quantity"
-                type="number"
-                placeholder="Ex.: 10"
-                value={state.quantity}
-                onChange={(e) => {
-                  if (
-                    e.target.value &&
-                    Math.max(1, parseInt(e.target.value) || 1) > 10000
-                  ) {
-                    toast.error("Quantidade máxima é 10.000 registros.");
-                    return;
-                  }
-                  setState({
-                    quantity:
-                      Math.max(1, parseInt(e.target.value)) || undefined,
-                  });
-                }}
-                className="mt-2"
-              />
-            </div>
-            <div>
-              <Label>Formato de saída</Label>
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                <Button
-                  variant={
-                    state.outputFormat === "json" ? "default" : "outline"
-                  }
-                  onClick={() => setState({ outputFormat: "json" })}
-                >
-                  JSON
-                </Button>
-                <Button
-                  variant={state.outputFormat === "csv" ? "default" : "outline"}
-                  onClick={() => setState({ outputFormat: "csv" })}
-                >
-                  CSV
-                </Button>
-              </div>
-            </div>
-            {state.outputFormat === "csv" && (
-              <div className="space-y-4 border-t pt-4">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="includeHeader"
-                    checked={state.csvOptions.includeHeader}
-                    onCheckedChange={(checked) =>
-                      setState((s) => ({
-                        csvOptions: {
-                          ...s.csvOptions,
-                          includeHeader: !!checked,
-                        },
-                      }))
-                    }
-                  />
-                  <Label htmlFor="includeHeader">
-                    Incluir cabeçalho no CSV
-                  </Label>
-                </div>
+      {selectedTool === "uuid" && (
+        <div className="grid grid-cols-1 @4xl:grid-cols-3 gap-4 flex-grow min-h-0 overflow-y-auto">
+          <div className="@4xl:col-span-1 flex flex-col gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">
+                  Configurações do UUID
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <div>
-                  <Label>Delimitador do CSV</Label>
+                  <Label htmlFor="uuid-version">Versão do UUID</Label>
                   <Select
-                    value={state.csvOptions.delimiter}
-                    onValueChange={(value: "," | ";") =>
-                      setState((s) => ({
-                        csvOptions: { ...s.csvOptions, delimiter: value },
-                      }))
+                    value={uuidConfig.version}
+                    onValueChange={(v) =>
+                      handleConfigChange(
+                        "uuidConfig",
+                        "version",
+                        v as UuidVersion
+                      )
                     }
                   >
-                    <SelectTrigger className="mt-2">
+                    <SelectTrigger
+                      id="uuid-version"
+                      className="mt-1 w-full @sm:w-fit"
+                    >
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="z-[9999999999]">
-                      <SelectItem value=",">Vírgula (,)</SelectItem>
-                      <SelectItem value=";">Ponto e vírgula (;)</SelectItem>
+                    <SelectContent className="z-[999999999]">
+                      <SelectItem value="v7">
+                        Versão 7 (Unix Time, Ordenável)
+                      </SelectItem>
+                      <SelectItem value="v4">Versão 4 (Aleatório)</SelectItem>
+                      <SelectItem value="v6">
+                        Versão 6 (Tempo, Ordenável)
+                      </SelectItem>
+                      <SelectItem value="v1">
+                        Versão 1 (Baseado em Tempo)
+                      </SelectItem>
+                      <SelectItem value="v5">
+                        Versão 5 (Baseado em Nome, SHA-1)
+                      </SelectItem>
+                      <SelectItem value="v3">
+                        Versão 3 (Baseado em Nome, MD5)
+                      </SelectItem>
+                      <SelectItem value="nil">
+                        NIL (UUID Vazio / Nulo)
+                      </SelectItem>
+                      <SelectItem value="max">MAX (UUID Máximo)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
+                {isNameBasedVersion && (
+                  <div className="space-y-4 border-t pt-4">
+                    <div>
+                      <Label htmlFor="v3v5-name">Nome (Name)</Label>
+                      <Input
+                        id="v3v5-name"
+                        type="text"
+                        value={uuidConfig.v3v5_name}
+                        onChange={(e) =>
+                          handleConfigChange(
+                            "uuidConfig",
+                            "v3v5_name",
+                            e.target.value
+                          )
+                        }
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="v3v5-namespace">
+                        Namespace (UUID Válido)
+                      </Label>
+                      <Input
+                        id="v3v5-namespace"
+                        type="text"
+                        value={uuidConfig.v3v5_namespace}
+                        onChange={(e) =>
+                          handleConfigChange(
+                            "uuidConfig",
+                            "v3v5_namespace",
+                            e.target.value
+                          )
+                        }
+                        className="mt-1 font-mono text-xs"
+                      />
+                      <div className="flex gap-2 mt-2">
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            handleConfigChange(
+                              "uuidConfig",
+                              "v3v5_namespace",
+                              UUID_NAMESPACES.DNS
+                            )
+                          }
+                        >
+                          DNS
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() =>
+                            handleConfigChange(
+                              "uuidConfig",
+                              "v3v5_namespace",
+                              UUID_NAMESPACES.URL
+                            )
+                          }
+                        >
+                          URL
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {!isConstantVersion && (
+                  <div className="space-y-4 border-t pt-4">
+                    {isBulkGeneratable && (
+                      <div>
+                        <Label htmlFor="uuid-quantity">Quantidade</Label>
+                        <Input
+                          id="uuid-quantity"
+                          type="number"
+                          value={uuidConfig.quantity}
+                          onChange={(e) =>
+                            handleConfigChange(
+                              "uuidConfig",
+                              "quantity",
+                              Math.max(1, Number(e.target.value))
+                            )
+                          }
+                          min="1"
+                          max="1000"
+                          className="mt-1"
+                        />
+                      </div>
+                    )}
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="no-hyphens"
+                        checked={uuidConfig.noHyphens}
+                        onCheckedChange={(checked) =>
+                          handleConfigChange(
+                            "uuidConfig",
+                            "noHyphens",
+                            !!checked
+                          )
+                        }
+                      />
+                      <Label htmlFor="no-hyphens" className="cursor-pointer">
+                        Remover Hífens
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="uppercase"
+                        checked={uuidConfig.uppercase}
+                        onCheckedChange={(checked) =>
+                          handleConfigChange(
+                            "uuidConfig",
+                            "uppercase",
+                            !!checked
+                          )
+                        }
+                      />
+                      <Label htmlFor="uppercase" className="cursor-pointer">
+                        Maiúsculas
+                      </Label>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            {isBulkGeneratable && (
+              <Button onClick={generateUuids} size="lg">
+                <RefreshCw className="mr-2 h-4 w-4" /> Gerar Novos
+              </Button>
             )}
-          </CardContent>
-        </Card>
+            <Button onClick={handleCopyAllIds} variant="outline">
+              <Copy className="mr-2 h-4 w-4" /> Copiar Todos
+            </Button>
+          </div>
+          <div className="@4xl:col-span-2">
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle className="text-base">IDs Gerados</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-fit">
+                  <div className="space-y-2">
+                    {formattedIds.map((id, index) => (
+                      <div
+                        key={`${id}-${index}`}
+                        className="flex items-center gap-2 font-mono text-sm p-2 bg-muted/50 rounded"
+                      >
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-6 w-6"
+                          onClick={() => handleCopyToClipboard(id)}
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                        </Button>
+                        <span className="flex-grow truncate">{id}</span>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
 
-        <Button
-          size="lg"
-          onClick={handleGenerateData}
-          disabled={state.isLoading || !state.selectedFields.length}
-        >
-          {state.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {state.isLoading ? "Gerando..." : "Gerar Dados Falsos"}
-        </Button>
-      </div>
+      {selectedTool === "nanoid" && (
+        <div className="grid grid-cols-1 @4xl:grid-cols-3 gap-4 flex-grow min-h-0 overflow-y-auto">
+          <div className="@4xl:col-span-1 flex flex-col gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">
+                  Configurações do NanoID
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="nanoid-quantity">Quantidade</Label>
+                  <Input
+                    id="nanoid-quantity"
+                    type="number"
+                    value={nanoidConfig.quantity}
+                    onChange={(e) =>
+                      handleConfigChange(
+                        "nanoidConfig",
+                        "quantity",
+                        Math.max(1, Number(e.target.value))
+                      )
+                    }
+                    min="1"
+                    max="1000"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="nanoid-size">Tamanho do ID</Label>
+                  <Input
+                    id="nanoid-size"
+                    type="number"
+                    value={nanoidConfig.size}
+                    onChange={(e) =>
+                      handleConfigChange(
+                        "nanoidConfig",
+                        "size",
+                        Math.max(1, Number(e.target.value))
+                      )
+                    }
+                    min="1"
+                    max="100"
+                    className="mt-1"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            <Button onClick={generateNanoIds} size="lg">
+              <RefreshCw className="mr-2 h-4 w-4" /> Gerar Novos
+            </Button>
+            <Button onClick={handleCopyAllIds} variant="outline">
+              <Copy className="mr-2 h-4 w-4" /> Copiar Todos
+            </Button>
+          </div>
+          <div className="@4xl:col-span-2">
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle className="text-base">NanoIDs Gerados</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-fit max-h-[calc(100vh-20rem)]">
+                  <div className="space-y-2">
+                    {formattedIds.map((id, index) => (
+                      <div
+                        key={`${id}-${index}`}
+                        className="flex items-center gap-2 font-mono text-sm p-2 bg-muted/50 rounded"
+                      >
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-6 w-6"
+                          onClick={() => handleCopyToClipboard(id)}
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                        </Button>
+                        <span className="flex-grow truncate">{id}</span>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
 
-      <div className="col-span-6 @4xl:col-span-4 flex flex-col">
-        <Card className="flex-grow flex flex-col">
-          <CardHeader className="grid-cols-1 @md:grid-cols-2 items-center justify-between gap-3">
-            <CardTitle className="w-fit">Dados Gerados</CardTitle>
-            <div className="flex flex-col @md:flex-row @md:justify-end items-center gap-2 w-full">
-              {state.generatedData && !state.isLoading && (
-                <>
-                  <Button
-                    className="@md:max-w-32 w-full"
-                    variant="outline"
-                    onClick={handleDownload}
-                  >
-                    <Download className="mr-2 h-4 w-4" /> Baixar
-                  </Button>
-                  <Button
-                    className="@md:max-w-32 w-full"
-                    variant="outline"
-                    onClick={handleCopyToClipboard}
-                  >
-                    <Copy className="mr-2 h-4 w-4" /> Copiar
-                  </Button>
-                </>
-              )}
-            </div>
-          </CardHeader>
-          <CardContent className="flex-grow">
-            <Textarea
-              readOnly
-              value={
-                state.isLoading
-                  ? "Gerando dados na thread de segundo plano..."
-                  : state.generatedData
-              }
-              placeholder='Configure os dados e clique em "Gerar Dados Falsos" para ver os resultados aqui.'
-              className="h-full resize-none text-xs"
-            />
-          </CardContent>
-        </Card>
-      </div>
+      {selectedTool === "hash" && (
+        <div className="flex flex-col gap-4 flex-grow min-h-0 overflow-y-auto">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Gerador de Hash</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Label htmlFor="hash-input">Texto de Entrada</Label>
+              <Textarea
+                id="hash-input"
+                value={hashConfig.input}
+                onChange={(e) =>
+                  handleConfigChange("hashConfig", "input", e.target.value)
+                }
+                className="mt-1 font-mono text-sm h-32"
+              />
+            </CardContent>
+          </Card>
+          <Card className="flex-grow">
+            <CardHeader>
+              <CardTitle className="text-base">Hashes Gerados</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <ScrollArea className="h-fit max-h-[calc(100vh-25rem)]">
+                {hashAlgorithms.map((alg) => (
+                  <div key={alg} className="mb-3">
+                    <Label>{alg}</Label>
+                    <div className="flex items-center gap-2 font-mono text-sm p-2 bg-muted/50 rounded mt-1">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-6 w-6"
+                        onClick={() =>
+                          handleCopyToClipboard(calculatedHashes[alg] || "")
+                        }
+                      >
+                        <Copy className="h-3.5 w-3.5" />
+                      </Button>
+                      <span className="flex-grow truncate text-xs">
+                        {calculatedHashes[alg]}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {selectedTool === "password" && (
+        <div className="flex flex-col items-center gap-4 flex-grow overflow-y-auto">
+          <Card className="w-full max-w-lg">
+            <CardHeader>
+              <CardTitle className="text-base">Senha Segura Gerada</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2 font-mono text-lg p-3 bg-primary/10 rounded">
+                <span className="flex-grow truncate">{generatedPassword}</span>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8"
+                  onClick={() => handleCopyToClipboard(generatedPassword)}
+                >
+                  <Copy className="h-5 w-5" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="w-full max-w-lg">
+            <CardHeader>
+              <CardTitle className="text-base">
+                Configurações da Senha
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <Label>Tamanho:</Label>
+                  <span>{passwordConfig.length}</span>
+                </div>
+                <Slider
+                  value={[passwordConfig.length]}
+                  onValueChange={(v) =>
+                    handleConfigChange("passwordConfig", "length", v[0])
+                  }
+                  min={4}
+                  max={64}
+                  step={1}
+                />
+              </div>
+              <div className="grid @md:grid-cols-2 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="uppercase"
+                    checked={passwordConfig.uppercase}
+                    onCheckedChange={(c) =>
+                      handleConfigChange("passwordConfig", "uppercase", !!c)
+                    }
+                  />
+                  <Label htmlFor="uppercase">Maiúsculas (A-Z)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="lowercase"
+                    checked={passwordConfig.lowercase}
+                    onCheckedChange={(c) =>
+                      handleConfigChange("passwordConfig", "lowercase", !!c)
+                    }
+                  />
+                  <Label htmlFor="lowercase">Minúsculas (a-z)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="numbers"
+                    checked={passwordConfig.numbers}
+                    onCheckedChange={(c) =>
+                      handleConfigChange("passwordConfig", "numbers", !!c)
+                    }
+                  />
+                  <Label htmlFor="numbers">Números (0-9)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="symbols"
+                    checked={passwordConfig.symbols}
+                    onCheckedChange={(c) =>
+                      handleConfigChange("passwordConfig", "symbols", !!c)
+                    }
+                  />
+                  <Label htmlFor="symbols">Símbolos (!@#)</Label>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Button
+            onClick={generatePassword}
+            size="lg"
+            className="w-full max-w-lg"
+          >
+            <RefreshCw className="mr-2 h-4 w-4" /> Gerar Nova Senha
+          </Button>
+        </div>
+      )}
     </div>
   );
-};
+}
+
+const MemoizedDataGenerator = React.memo(DataGeneratorComponent);
+export function DataGenerator({ instanceId }: { instanceId: string }) {
+  return <MemoizedDataGenerator instanceId={instanceId} />;
+}

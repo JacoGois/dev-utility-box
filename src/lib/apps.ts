@@ -1,20 +1,11 @@
 import { DataGenerator } from "@/apps/DataGenerator";
 import { EncodersDecoders } from "@/apps/EncodersDecoders";
-import { IdGenerator } from "@/apps/IdGenerator/indes";
 import { JSONTools } from "@/apps/JSONTools";
+import { MassDataGenerator } from "@/apps/MassDataGenerator";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { Braces, Combine, FileJson, Fingerprint, Timer } from "lucide-react";
+import { Braces, Combine, Database, FileJson, Timer } from "lucide-react";
 
 export const apps = {
-  // Auth: {
-  //   name: "Autenticação",
-  //   shortName: "Autenticação",
-  //   icon: User,
-  //   component: Auth,
-  //   maxInstances: 2,
-  //   maxWidth: 550,
-  //   maxHeight: 850,
-  // },
   Pomodoro: {
     name: "Pomodoro",
     shortName: "Pomodoro",
@@ -35,16 +26,6 @@ export const apps = {
     maxHeight: undefined,
     minHeight: undefined,
   },
-  DataGenerator: {
-    name: "Gerador de Dados",
-    shortName: "Gerador",
-    icon: FileJson,
-    component: DataGenerator,
-    maxInstances: 4,
-    maxWidth: undefined,
-    maxHeight: undefined,
-    minHeight: undefined,
-  },
   EncodersDecoders: {
     name: "Encoders / Decoders",
     shortName: "Codificadores",
@@ -55,16 +36,35 @@ export const apps = {
     maxHeight: undefined,
     minHeight: 500,
   },
-  IdGenerator: {
-    name: "Gerador de IDs",
-    shortName: "Gerador IDs",
-    icon: Fingerprint,
-    component: IdGenerator,
+  DataGenerator: {
+    name: "Gerador de Dados",
+    shortName: "Gerador Dados",
+    icon: Database,
+    component: DataGenerator,
     maxInstances: 2,
     maxWidth: undefined,
     maxHeight: undefined,
     minHeight: undefined,
   },
+  MassDataGenerator: {
+    name: "Gerador de Dados em Massa",
+    shortName: "Gerador Dados Massa",
+    icon: FileJson,
+    component: MassDataGenerator,
+    maxInstances: 4,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: undefined,
+  },
+  // Auth: {
+  //   name: "Autenticação",
+  //   shortName: "Autenticação",
+  //   icon: User,
+  //   component: Auth,
+  //   maxInstances: 2,
+  //   maxWidth: 550,
+  //   maxHeight: 850,
+  // },
   // RegexBuilder: {
   //   name: "Construtor de Regex",
   //   shortName: "Regex",
