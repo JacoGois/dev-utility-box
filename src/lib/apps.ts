@@ -2,8 +2,7 @@ import { DataGenerator } from "@/apps/DataGenerator";
 import { EncodersDecoders } from "@/apps/EncodersDecoders";
 import { JSONTools } from "@/apps/JSONTools";
 import { Pomodoro } from "@/apps/Pomodoro";
-import { RegexBuilder } from "@/apps/RegexBuilder";
-import { Braces, Combine, FileJson, Puzzle, Timer } from "lucide-react";
+import { Braces, Combine, FileJson, Timer } from "lucide-react";
 
 export const apps = {
   // Auth: {
@@ -55,16 +54,16 @@ export const apps = {
     maxHeight: undefined,
     minHeight: 500,
   },
-  RegexBuilder: {
-    name: "Construtor de Regex",
-    shortName: "Regex",
-    icon: Puzzle,
-    component: RegexBuilder,
-    maxInstances: 2,
-    maxWidth: undefined,
-    maxHeight: undefined,
-    minHeight: undefined,
-  },
+  // RegexBuilder: {
+  //   name: "Construtor de Regex",
+  //   shortName: "Regex",
+  //   icon: Puzzle,
+  //   component: RegexBuilder,
+  //   maxInstances: 2,
+  //   maxWidth: undefined,
+  //   maxHeight: undefined,
+  //   minHeight: undefined,
+  // },
   // Todo: {
   //   name: "To Do List",
   //   shortName: "To Do",

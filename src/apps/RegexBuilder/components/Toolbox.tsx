@@ -1,13 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { useDraggable } from "@dnd-kit/core";
 import { RegexBuilderAction, RegexComponent } from "../types";
 
-const blockPrototypes: Omit<
+const blockPrototypes: (Omit<
   RegexComponent,
   "id" | "quantifier" | "parentId"
->[] = [
-  { label: "Texto...", token: "", type: "literal" },
+> & { prompt?: string })[] = [
+  {
+    label: "Texto...",
+    token: "",
+    type: "literal",
+    prompt: "Digite o texto a ser encontrado:",
+  },
   { label: "Dígito (\\d)", token: "\\d", type: "char_class" },
   { label: "Letra (A-Z)", token: "[a-zA-Z]", type: "char_class" },
   { label: "Letra ou Dígito (\\w)", token: "\\w", type: "char_class" },
@@ -18,16 +24,21 @@ const blockPrototypes: Omit<
   { label: "Fim da Linha ($)", token: "$", type: "anchor" },
 ];
 
-export function Toolbox({
-  dispatch,
+function DraggableToolboxItem({
+  block,
+  dispatch, // MUDANÇA: Recebemos o dispatch aqui
 }: {
-  dispatch: React.Dispatch<RegexBuilderAction>;
+  block: (typeof blockPrototypes)[0];
+  dispatch: React.Dispatch<RegexBuilderAction>; // E tipamos ele
 }) {
-  const handleAdd = (
-    block: Omit<RegexComponent, "id" | "quantifier" | "parentId">
-  ) => {
-    if (block.type === "literal") {
-      const value = prompt("Digite o texto a ser encontrado:");
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: `toolbox-${block.label}`,
+    data: { prototype: block },
+  });
+
+  const handleAdd = () => {
+    if (block.type === "literal" && block.prompt) {
+      const value = prompt(block.prompt);
       if (value) {
         const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         dispatch({
@@ -38,14 +49,39 @@ export function Toolbox({
               label: `Texto: "${value}"`,
               token: escapedValue,
             },
+            targetId: null,
           },
         });
       }
     } else {
-      dispatch({ type: "ADD_COMPONENT", payload: { component: block } });
+      dispatch({
+        type: "ADD_COMPONENT",
+        payload: { component: block, targetId: null },
+      });
     }
   };
 
+  return (
+    <Button
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      variant="secondary"
+      className="cursor-grab"
+      // MUDANÇA: O clique também adiciona o bloco (melhora acessibilidade)
+      onClick={handleAdd}
+    >
+      {block.label}
+    </Button>
+  );
+}
+
+// MUDANÇA: O componente Toolbox agora aceita e passa a prop 'dispatch'
+export function Toolbox({
+  dispatch,
+}: {
+  dispatch: React.Dispatch<RegexBuilderAction>;
+}) {
   return (
     <Card>
       <CardHeader>
@@ -53,13 +89,11 @@ export function Toolbox({
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-2">
         {blockPrototypes.map((block) => (
-          <Button
+          <DraggableToolboxItem
             key={block.label}
-            variant="secondary"
-            onClick={() => handleAdd(block)}
-          >
-            {block.label}
-          </Button>
+            block={block}
+            dispatch={dispatch}
+          />
         ))}
       </CardContent>
     </Card>

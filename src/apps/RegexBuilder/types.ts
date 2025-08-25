@@ -48,6 +48,10 @@ export type RegexBuilderAction =
   | { type: "SET_SELECTED_COMPONENT"; payload: { id: string | null } }
   | { type: "UPDATE_TEST_STRING"; payload: string }
   | { type: "TOGGLE_FLAG"; payload: keyof RegexBuilderState["flags"] }
+  | {
+      type: "MOVE_COMPONENT";
+      payload: { activeId: string; overId: string | null };
+    }
   | { type: "RESET" };
 
 // Tipo para um resultado de match encontrado
