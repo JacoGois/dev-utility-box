@@ -88,6 +88,32 @@ export function TaskItem({ task, dispatch }: TaskItemProps) {
           )}
         </div>
         <div className="flex items-center flex-shrink-0 transition-opacity">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 hidden group-hover:flex"
+            onClick={handleDelete}
+          >
+            <Trash2 className="h-4 w-4 hover:text-white text-foreground " />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 hidden group-hover:flex"
+            onClick={() => setIsAddingSubtask(true)}
+          >
+            <PlusCircle className="h-4 w-4 hover:text-white text-foreground" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 hidden group-hover:flex"
+            onClick={() => setIsDescriptionVisible(!isDescriptionVisible)}
+          >
+            <MessageSquare className="h-4 w-4 hover:text-white text-foreground" />
+          </Button>
+
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -120,32 +146,6 @@ export function TaskItem({ task, dispatch }: TaskItemProps) {
               })}
             </PopoverContent>
           </Popover>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 hidden group-hover:flex"
-            onClick={() => setIsDescriptionVisible(!isDescriptionVisible)}
-          >
-            <MessageSquare className="h-4 w-4 hover:text-white text-foreground" />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 hidden group-hover:flex"
-            onClick={() => setIsAddingSubtask(true)}
-          >
-            <PlusCircle className="h-4 w-4 hover:text-white text-foreground" />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 hidden group-hover:flex"
-            onClick={handleDelete}
-          >
-            <Trash2 className="h-4 w-4 hover:text-white text-foreground " />
-          </Button>
         </div>
       </div>
       <div className="pl-12">
