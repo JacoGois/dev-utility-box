@@ -18,7 +18,7 @@ import { Slider } from "@/components/ui/Slider";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
 import CryptoJS from "crypto-js";
 import { Copy, RefreshCw } from "lucide-react";
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -40,16 +40,37 @@ const toolOptions = [
   { value: "password", label: "Gerador de Senhas Seguras" },
 ];
 
+const NANOID_ALPHABETS = {
+  urlSafe: {
+    label: "URL-Safe (Padrão)",
+    value: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_",
+  },
+  numbers: { label: "Apenas Números", value: "0123456789" },
+  uppercase: {
+    label: "Apenas Maiúsculas",
+    value: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  },
+  lowercase: {
+    label: "Apenas Minúsculas",
+    value: "abcdefghijklmnopqrstuvwxyz",
+  },
+  noLookAlikes: {
+    label: "Sem Caracteres Parecidos",
+    value: "346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz",
+  },
+  custom: { label: "Customizado...", value: "custom" },
+};
+
 const hashAlgorithms = [
   "MD5",
   "SHA1",
   "SHA256",
+  "SHA384",
   "SHA512",
   "SHA3",
   "RIPEMD160",
 ] as const;
 type HashAlgorithm = (typeof hashAlgorithms)[number];
-
 type UuidVersion = "v1" | "v3" | "v4" | "v5" | "v6" | "v7" | "nil" | "max";
 
 export const defaultState = {
@@ -65,6 +86,11 @@ export const defaultState = {
   nanoidConfig: {
     quantity: 5,
     size: 21,
+    alphabetType: "urlSafe" as keyof typeof NANOID_ALPHABETS,
+    customAlphabetValue: "", // Corrigido para evitar conflito
+    customUseNumbers: true,
+    customUseLowercase: true,
+    customUseUppercase: true,
   },
   hashConfig: {
     input: "Olá, mundo!",
@@ -91,6 +117,7 @@ const hashFunctionMap: Record<HashAlgorithm, (message: string) => void> = {
   MD5: CryptoJS.MD5,
   SHA1: CryptoJS.SHA1,
   SHA256: CryptoJS.SHA256,
+  SHA384: CryptoJS.SHA384,
   SHA512: CryptoJS.SHA512,
   SHA3: CryptoJS.SHA3,
   RIPEMD160: CryptoJS.RIPEMD160,
@@ -162,10 +189,29 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
   }, [uuidConfig]);
 
   const generateNanoIds = useCallback(() => {
-    const { quantity, size } = nanoidConfig;
-    const newIds = Array.from({ length: quantity }, () => nanoid(size));
-    setGeneratedIds(newIds);
-    toast.success(`${quantity} NanoID(s) gerados!`);
+    const { quantity, size, alphabetType, customAlphabetValue } = nanoidConfig;
+    const alphabet =
+      alphabetType === "custom"
+        ? customAlphabetValue
+        : NANOID_ALPHABETS[alphabetType].value;
+    if (!alphabet || alphabet.length < 2) {
+      toast.error("Erro no Alfabeto", {
+        description:
+          "O alfabeto customizado deve conter ao menos 2 caracteres.",
+      });
+      setGeneratedIds([]);
+      return;
+    }
+    try {
+      const customNanoid = customAlphabet(alphabet, size);
+      const newIds = Array.from({ length: quantity }, () => customNanoid());
+      setGeneratedIds(newIds);
+    } catch (e) {
+      toast.error("Erro ao gerar NanoID", {
+        description: (e as Error).message,
+      });
+      setGeneratedIds([]);
+    }
   }, [nanoidConfig]);
 
   const generatePassword = useCallback(() => {
@@ -206,7 +252,15 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
         generatePassword();
         break;
     }
-  }, [selectedTool, generateUuids, generateNanoIds, generatePassword]);
+  }, [
+    selectedTool,
+    uuidConfig,
+    nanoidConfig,
+    passwordConfig,
+    generateUuids,
+    generateNanoIds,
+    generatePassword,
+  ]);
 
   const formattedIds = useMemo(() => {
     return generatedIds.map((id) => {
@@ -241,6 +295,24 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
       .writeText(allIds)
       .then(() => toast.success("Todos os IDs foram copiados!"));
   };
+
+  useEffect(() => {
+    if (nanoidConfig.alphabetType === "custom") {
+      const { customUseNumbers, customUseLowercase, customUseUppercase } =
+        nanoidConfig;
+      let newAlphabet = "";
+      if (customUseLowercase) newAlphabet += "abcdefghijklmnopqrstuvwxyz";
+      if (customUseUppercase) newAlphabet += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      if (customUseNumbers) newAlphabet += "0123456789";
+
+      handleConfigChange("nanoidConfig", "customAlphabetValue", newAlphabet);
+    }
+  }, [
+    nanoidConfig.alphabetType,
+    nanoidConfig.customUseNumbers,
+    nanoidConfig.customUseLowercase,
+    nanoidConfig.customUseUppercase,
+  ]);
 
   const isNameBasedVersion =
     uuidConfig.version === "v3" || uuidConfig.version === "v5";
@@ -291,10 +363,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                       )
                     }
                   >
-                    <SelectTrigger
-                      id="uuid-version"
-                      className="mt-1 w-full @sm:w-fit"
-                    >
+                    <SelectTrigger id="uuid-version" className="mt-1 w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="z-[999999999]">
@@ -358,6 +427,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                       />
                       <div className="flex gap-2 mt-2">
                         <Button
+                          size="sm"
                           variant="outline"
                           onClick={() =>
                             handleConfigChange(
@@ -370,6 +440,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                           DNS
                         </Button>
                         <Button
+                          size="sm"
                           variant="outline"
                           onClick={() =>
                             handleConfigChange(
@@ -458,7 +529,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                 <CardTitle className="text-base">IDs Gerados</CardTitle>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-fit">
+                <ScrollArea className="h-fit max-h-[calc(100vh-20rem)]">
                   <div className="space-y-2">
                     {formattedIds.map((id, index) => (
                       <div
@@ -530,6 +601,94 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                     className="mt-1"
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="nanoid-alphabet-type">Alfabeto</Label>
+                  <Select
+                    value={nanoidConfig.alphabetType}
+                    onValueChange={(v) =>
+                      handleConfigChange(
+                        "nanoidConfig",
+                        "alphabetType",
+                        v as keyof typeof NANOID_ALPHABETS
+                      )
+                    }
+                  >
+                    <SelectTrigger id="nanoid-alphabet-type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="z-[999999999]">
+                      {Object.entries(NANOID_ALPHABETS).map(
+                        ([key, { label }]) => (
+                          <SelectItem key={key} value={key}>
+                            {label}
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {nanoidConfig.alphabetType === "custom" && (
+                  <div className="space-y-4 border-t pt-4">
+                    <Label>Construtor de Alfabeto Customizado</Label>
+                    <div className="grid @md:grid-cols-3 gap-x-4 gap-y-2 mt-2">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="nanoid-custom-lower"
+                          checked={nanoidConfig.customUseLowercase}
+                          onCheckedChange={(c) =>
+                            handleConfigChange(
+                              "nanoidConfig",
+                              "customUseLowercase",
+                              !!c
+                            )
+                          }
+                        />
+                        <Label htmlFor="nanoid-custom-lower">Minúsculas</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="nanoid-custom-upper"
+                          checked={nanoidConfig.customUseUppercase}
+                          onCheckedChange={(c) =>
+                            handleConfigChange(
+                              "nanoidConfig",
+                              "customUseUppercase",
+                              !!c
+                            )
+                          }
+                        />
+                        <Label htmlFor="nanoid-custom-upper">Maiúsculas</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="nanoid-custom-numbers"
+                          checked={nanoidConfig.customUseNumbers}
+                          onCheckedChange={(c) =>
+                            handleConfigChange(
+                              "nanoidConfig",
+                              "customUseNumbers",
+                              !!c
+                            )
+                          }
+                        />
+                        <Label htmlFor="nanoid-custom-numbers">Números</Label>
+                      </div>
+                    </div>
+                    <Textarea
+                      id="nanoid-custom-alphabet"
+                      value={nanoidConfig.customAlphabetValue}
+                      onChange={(e) =>
+                        handleConfigChange(
+                          "nanoidConfig",
+                          "customAlphabetValue",
+                          e.target.value
+                        )
+                      }
+                      className="font-mono text-xs h-24"
+                      placeholder="Edite diretamente ou use os atalhos acima..."
+                    />
+                  </div>
+                )}
               </CardContent>
             </Card>
             <Button onClick={generateNanoIds} size="lg">
@@ -572,7 +731,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
       )}
 
       {selectedTool === "hash" && (
-        <div className="flex flex-col gap-4 flex-grow min-h-0 overflow-y-auto">
+        <div className="flex flex-col gap-4 flex-grow min-h-0">
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Gerador de Hash</CardTitle>
@@ -622,7 +781,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
       )}
 
       {selectedTool === "password" && (
-        <div className="flex flex-col items-center gap-4 flex-grow overflow-y-auto">
+        <div className="flex flex-col items-center gap-4 flex-grow">
           <Card className="w-full max-w-lg">
             <CardHeader>
               <CardTitle className="text-base">Senha Segura Gerada</CardTitle>
@@ -663,7 +822,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                   step={1}
                 />
               </div>
-              <div className="grid @md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="uppercase"
