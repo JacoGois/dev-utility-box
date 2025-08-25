@@ -34,9 +34,9 @@ import React, {
 import { toast } from "sonner";
 
 const toolOptions = [
+  { value: "jwt", label: "JWT Encoder / Decoder" },
   { value: "base64", label: "Base64 Encoder / Decoder" },
   { value: "url", label: "URL Encoder / Decoder" },
-  { value: "jwt", label: "JWT Encoder / Decoder" },
 ];
 type ToolKey = "base64" | "url" | "jwt";
 
