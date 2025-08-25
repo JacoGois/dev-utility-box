@@ -8,6 +8,7 @@ import { useWindowStore } from "@/stores/useWindowStore";
 import React, { useEffect } from "react";
 import AppIcon from "./AppIcon";
 import AppWindow from "./AppWindow";
+import { HelpTips } from "./HelpTips";
 import { SpotlightSearch } from "./SpotlightSearch";
 
 type Props = {
@@ -49,6 +50,10 @@ export default function Desktop({ children }: Props) {
       {openApps.map((instance) => (
         <AppWindow key={instance.id} instance={instance} />
       ))}
+
+      <div className="absolute bottom-4 right-4 z-2">
+        <HelpTips />
+      </div>
 
       {children}
       <SpotlightSearch />
