@@ -49,7 +49,7 @@ class ErrorBoundary extends Component<Props, State> {
             padding: "20px",
             border: "1px solid hsl(var(--destructive))",
             backgroundColor: "hsl(var(--background))",
-            color: "hsl(var(--destructive))",
+            color: "#000",
             borderRadius: "var(--radius)",
             margin: "10px",
             textAlign: "center",
