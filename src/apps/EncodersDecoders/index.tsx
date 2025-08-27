@@ -517,7 +517,7 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
   return (
     <div className="flex flex-col h-full w-full p-4 gap-4 bg-card text-card-foreground border-t @container stable-scrollbar-container">
       <div className="flex items-center gap-4 flex-wrap">
-        <Label className="flex-shrink-0">Ferramenta:</Label>
+        <Label className="flex-shrink-0 font-bold">Ferramenta:</Label>
         <Select
           value={selectedTool}
           onValueChange={(value) =>

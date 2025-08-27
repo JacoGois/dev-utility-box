@@ -237,7 +237,6 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
       newPassword += charset.charAt(Math.floor(Math.random() * n));
     }
     setGeneratedPassword(newPassword);
-    toast.success("Nova senha gerada!");
   }, [passwordConfig]);
 
   useEffect(() => {
@@ -323,7 +322,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
   return (
     <div className="flex flex-col h-full w-full p-4 gap-4 bg-card text-card-foreground border-t @container">
       <div className="flex items-center gap-4 border-b pb-4 flex-wrap">
-        <Label className="flex-shrink-0">Ferramenta:</Label>
+        <Label className="flex-shrink-0 font-bold">Ferramenta:</Label>
         <Select
           value={selectedTool}
           onValueChange={(value) => setState({ selectedTool: value })}
@@ -731,7 +730,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
       )}
 
       {selectedTool === "hash" && (
-        <div className="flex flex-col gap-4 flex-grow min-h-0">
+        <div className="flex flex-col gap-4 flex-grow min-h-0 overflow-y-auto">
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Gerador de Hash</CardTitle>
@@ -781,7 +780,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
       )}
 
       {selectedTool === "password" && (
-        <div className="flex flex-col items-center gap-4 flex-grow">
+        <div className="flex flex-col items-center gap-4 flex-grow overflow-y-auto">
           <Card className="w-full max-w-lg">
             <CardHeader>
               <CardTitle className="text-base">Senha Segura Gerada</CardTitle>

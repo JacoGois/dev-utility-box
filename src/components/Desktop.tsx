@@ -18,7 +18,7 @@ type Props = {
 export default function Desktop({ children }: Props) {
   const { background } = useDesktopStore();
   const { openApps } = useWindowStore();
-  const { desktopApps } = useDockStore();
+  const { desktopApps, toggleLauncher } = useDockStore();
   const { openSpotlight, isOpen: isSpotlightOpen } = useSpotlightStore();
 
   useEffect(() => {
@@ -26,6 +26,11 @@ export default function Desktop({ children }: Props) {
       if ((event.metaKey || event.ctrlKey) && event.key === "k") {
         event.preventDefault();
         openSpotlight();
+      }
+
+      if ((event.metaKey || event.ctrlKey) && event.key === "m") {
+        event.preventDefault();
+        toggleLauncher();
       }
     };
 
