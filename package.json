@@ -53,6 +53,7 @@
     "react-markdown": "^10.1.0",
     "react-number-format": "^5.4.4",
     "react-resizable": "^3.0.5",
+    "react-resizable-panels": "^3.0.5",
     "react-syntax-highlighter": "^15.6.1",
     "remark-gfm": "^4.0.1",
     "sonner": "^2.0.3",

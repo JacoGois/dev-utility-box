@@ -69,7 +69,7 @@ export function BacklinksPanel({
 
   return (
     <div className="h-full flex flex-col">
-      <h4 className="text-sm font-semibold mb-2 text-muted-foreground flex items-center p-3 border-b">
+      <h4 className="text-sm font-semibold mb-2 text-muted-foreground flex items-center p-3 border-b h-[50px]">
         <Link2 className="w-4 h-4 mr-2 flex-shrink-0" />
         Linkado por ({backlinks.length}):
       </h4>

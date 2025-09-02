@@ -12,6 +12,11 @@ import {
 } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/form/Input";
 import { Textarea } from "@/components/ui/form/Textarea";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/Resizable";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { cn } from "@/lib/utils";
 import {
@@ -547,64 +552,72 @@ function KnowledgeBaseComponent() {
                   </div>
                 )}
             </div>
-
-            <div className="flex-1 grid grid-rows-[auto_1fr] md:grid-rows-1 md:grid-cols-[minmax(0,_2fr)_minmax(0,_1fr)] overflow-hidden">
-              <div className="flex flex-col overflow-hidden md:border-r md:border-border">
-                {isEditing && (
-                  <div className="p-2 border-b border-border flex justify-end items-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setShowLinkNoteDialog(true)}
-                      title="Linkar com outra nota"
-                      className="mr-2"
-                    >
-                      <LinkIcon className="mr-1.5 h-4 w-4" /> Linkar
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() =>
-                        setIsPreviewingMarkdown(!isPreviewingMarkdown)
-                      }
-                      title={
-                        isPreviewingMarkdown
-                          ? "Editar Markdown"
-                          : "Visualizar Markdown"
-                      }
-                    >
-                      {isPreviewingMarkdown ? (
-                        <Edit3 className="mr-1.5 h-4 w-4" />
-                      ) : (
-                        <Eye className="mr-1.5 h-4 w-4" />
-                      )}
-                      {isPreviewingMarkdown ? "Editor" : "Preview"}
-                    </Button>
-                  </div>
-                )}
-                <div className="flex-grow h-full">
-                  {isEditing && !isPreviewingMarkdown ? (
-                    <Textarea
-                      ref={contentTextareaRef}
-                      value={formContent}
-                      onChange={(e) => setFormContent(e.target.value)}
-                      placeholder="Escreva seu bloco em Markdown..."
-                      className="p-3 w-full h-[calc(100%-50px)] resize-none border rounded-md focus:ring-primary-foreground text-sm bg-transparent font-mono "
-                    />
-                  ) : currentSelectedEntry ||
-                    (isEditing && isPreviewingMarkdown) ? (
-                    <ScrollArea className="absolute inset-1 p-3 prose prose-invert max-w-none bg-muted/50 rounded-md h-[calc(100%-50px)]">
-                      <ReactMarkdown
-                        components={markdownRenderers}
-                        remarkPlugins={[remarkGfm]}
+            <ResizablePanelGroup
+              direction="horizontal"
+              className="flex-1 overflow-hidden w-full"
+            >
+              <ResizablePanel className="w-full h-full">
+                <div className="flex flex-col overflow-hidden md:border-r md:border-border h-full">
+                  {isEditing && (
+                    <div className="p-2 border-b border-border flex justify-end items-center h-[52px]">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowLinkNoteDialog(true)}
+                        title="Linkar com outra nota"
+                        className="mr-2"
                       >
-                        {isEditing ? formContent : contentToDisplayOrEdit}
-                      </ReactMarkdown>
-                    </ScrollArea>
-                  ) : null}
+                        <LinkIcon className="mr-1.5 h-4 w-4" /> Linkar
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() =>
+                          setIsPreviewingMarkdown(!isPreviewingMarkdown)
+                        }
+                        title={
+                          isPreviewingMarkdown
+                            ? "Editar Markdown"
+                            : "Visualizar Markdown"
+                        }
+                      >
+                        {isPreviewingMarkdown ? (
+                          <Edit3 className="mr-1.5 h-4 w-4" />
+                        ) : (
+                          <Eye className="mr-1.5 h-4 w-4" />
+                        )}
+                        {isPreviewingMarkdown ? "Editor" : "Preview"}
+                      </Button>
+                    </div>
+                  )}
+                  <div className="flex-grow h-full">
+                    {isEditing && !isPreviewingMarkdown ? (
+                      <Textarea
+                        ref={contentTextareaRef}
+                        value={formContent}
+                        onChange={(e) => setFormContent(e.target.value)}
+                        placeholder="Escreva seu bloco em Markdown..."
+                        className="p-3 w-full h-full resize-none border-none rounded-none focus:ring-none text-sm bg-transparent font-mono "
+                      />
+                    ) : currentSelectedEntry ||
+                      (isEditing && isPreviewingMarkdown) ? (
+                      <ScrollArea
+                        className="absolute h-full inset-0 p-3 prose prose-invert max-w-none bg-muted/50"
+                        viewportClassName="react-markdown-container"
+                      >
+                        <ReactMarkdown
+                          components={markdownRenderers}
+                          remarkPlugins={[remarkGfm]}
+                        >
+                          {isEditing ? formContent : contentToDisplayOrEdit}
+                        </ReactMarkdown>
+                      </ScrollArea>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-              <div className="overflow-y-auto md:p-0">
+              </ResizablePanel>
+              <ResizableHandle />
+              <ResizablePanel className="w-fit">
                 {currentSelectedEntry && (
                   <BacklinksPanel
                     selectedEntry={currentSelectedEntry}
@@ -612,8 +625,8 @@ function KnowledgeBaseComponent() {
                     onSelectEntry={handleSelectEntry}
                   />
                 )}
-              </div>
-            </div>
+              </ResizablePanel>
+            </ResizablePanelGroup>
 
             {isEditing && (
               <div className="p-2 border-t border-border flex justify-end items-center">

@@ -287,3 +287,7 @@ body.theme-ubuntu input[type="number"]::-webkit-inner-spin-button:hover,
 body.theme-ubuntu input[type="number"]::-webkit-outer-spin-button:hover {
   opacity: 1;
 }
+
+.react-markdown-container > :first-child {
+  display: block !important;
+}
