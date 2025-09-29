@@ -3,6 +3,8 @@
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/form/Input";
 import { ScrollArea } from "@/components/ui/ScrollArea";
+import { useDesktopTranslations } from "@/hooks/useTranslations";
+import { createApps } from "@/lib/apps";
 import { cn } from "@/lib/utils";
 import { useSpotlightStore } from "@/stores/useSpotlightStore";
 import { useWindowStore } from "@/stores/useWindowStore";
@@ -23,6 +25,8 @@ export function SpotlightSearch() {
     executeSelected,
   } = useSpotlightStore();
   const { openApp } = useWindowStore();
+  const t = useDesktopTranslations();
+  const apps = createApps(t);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -31,14 +35,14 @@ export function SpotlightSearch() {
         inputRef.current?.focus();
       }, 100);
 
-      performSearch(query, openApp);
+      performSearch(query, openApp, apps);
     }
   }, [isOpen]);
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = event.target.value;
     setQuery(newQuery);
-    performSearch(newQuery, openApp);
+    performSearch(newQuery, openApp, apps);
   };
 
   const handleKeyDown = useCallback(
@@ -86,13 +90,13 @@ export function SpotlightSearch() {
         onKeyDown={handleKeyDown}
       >
         <DialogHeader className="sr-only">
-          <DialogTitle>Pesquisa Rápida de Aplicativos</DialogTitle>{" "}
+          <DialogTitle>{t("spotlight.title")}</DialogTitle>{" "}
         </DialogHeader>
         <div className="flex flex-col">
           <Input
             ref={inputRef}
             type="text"
-            placeholder="Pesquisar aplicativos..."
+            placeholder={t("spotlight.placeholder")}
             value={query}
             onChange={handleQueryChange}
             className="w-full p-4 text-lg border-0 focus-visible:ring-0 shadow-none rounded-t-lg"
@@ -134,7 +138,7 @@ export function SpotlightSearch() {
           )}
           {query && results.length === 0 && (
             <p className="p-4 text-center text-sm text-muted-foreground">
-              Nenhum resultado encontrado.
+              {t("spotlight.noResults")}
             </p>
           )}
         </div>

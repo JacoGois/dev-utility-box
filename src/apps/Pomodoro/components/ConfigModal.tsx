@@ -23,6 +23,7 @@ import { Slider } from "@/components/ui/Slider";
 import { Switch } from "@/components/ui/Switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { BarChart3, Settings, Volume2 } from "lucide-react";
 import { RefObject, useEffect, useState } from "react";
@@ -53,6 +54,7 @@ export function ConfigModal({
     instanceId,
     defaultState
   );
+  const t = useAppTranslations("pomodoro");
 
   const [localSettings, setLocalSettings] = useState<PomodoroSettings | null>(
     null
@@ -118,7 +120,7 @@ export function ConfigModal({
       return newState;
     });
 
-    toast.success("Configurações salvas!");
+    toast.success(t("config.saved"));
     setIsOpen(false);
   };
 
@@ -155,9 +157,9 @@ export function ConfigModal({
         noCloseIcon
       >
         <DialogHeader>
-          <DialogTitle>Configurações</DialogTitle>
+          <DialogTitle>{t("config.title")}</DialogTitle>
           <DialogDescription className="sr-only">
-            Ajuste as configurações do timer Pomodoro, pausas e sons.
+            {t("config.description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -165,7 +167,7 @@ export function ConfigModal({
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="timer" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
-              Timer
+              {t("config.timer")}
             </TabsTrigger>
             <TabsTrigger
               disabled
@@ -173,19 +175,19 @@ export function ConfigModal({
               className="flex items-center gap-2"
             >
               <Volume2 className="h-4 w-4" />
-              Som
+              {t("config.sound")}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="timer" className="space-y-6 mt-6 mb-3">
             <div>
               <Label className="text-base font-medium mb-4 block">
-                Tempo (minutos)
+                {t("config.timeMinutes")}
               </Label>
               <div className="grid grid-cols-3 gap-3">
                 <div className="text-center">
                   <Label className="text-sm text-muted-foreground">
-                    Pomodoro
+                    {t("modes.pomodoro")}
                   </Label>
                   <Input
                     type="number"
@@ -201,7 +203,7 @@ export function ConfigModal({
                 </div>
                 <div className="text-center">
                   <Label className="text-sm text-muted-foreground">
-                    Short Break
+                    {t("modes.shortBreak")}
                   </Label>
                   <Input
                     type="number"
@@ -217,7 +219,7 @@ export function ConfigModal({
                 </div>
                 <div className="text-center">
                   <Label className="text-sm text-muted-foreground">
-                    Long Break
+                    {t("modes.longBreak")}
                   </Label>
                   <Input
                     type="number"
@@ -235,7 +237,7 @@ export function ConfigModal({
             </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label>Auto Start Breaks</Label>
+                <Label>{t("config.autoStartBreaks")}</Label>
                 <Switch
                   checked={localSettings.autoStartBreaks}
                   onCheckedChange={(checked) =>
@@ -247,7 +249,7 @@ export function ConfigModal({
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Label>Auto Start Pomodoros</Label>
+                <Label>{t("config.autoStartPomodoros")}</Label>
                 <Switch
                   checked={localSettings.autoStartPomodoros}
                   onCheckedChange={(checked) =>
@@ -259,7 +261,7 @@ export function ConfigModal({
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Label>Long Break interval</Label>
+                <Label>{t("config.longBreakInterval")}</Label>
                 <Input
                   type="number"
                   value={localSettings.longBreakInterval || undefined}
@@ -278,7 +280,9 @@ export function ConfigModal({
           <TabsContent value="sound" className="space-y-6 mt-6 mb-3">
             <div className="space-y-4">
               <div>
-                <Label className="text-base font-medium">Alarm Sound</Label>
+                <Label className="text-base font-medium">
+                  {t("config.alarmSound")}
+                </Label>
                 <Select
                   value={localSettings.alarmSound}
                   onValueChange={(value) =>
@@ -289,10 +293,14 @@ export function ConfigModal({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="z-[999999999]">
-                    <SelectItem value="kitchen">Kitchen</SelectItem>
-                    <SelectItem value="bell">Bell</SelectItem>
-                    <SelectItem value="digital">Digital</SelectItem>
-                    <SelectItem value="wood">Wood</SelectItem>
+                    <SelectItem value="kitchen">
+                      {t("sounds.kitchen")}
+                    </SelectItem>
+                    <SelectItem value="bell">{t("sounds.bell")}</SelectItem>
+                    <SelectItem value="digital">
+                      {t("sounds.digital")}
+                    </SelectItem>
+                    <SelectItem value="wood">{t("sounds.wood")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <div className="mt-3 space-y-2">
@@ -301,7 +309,7 @@ export function ConfigModal({
                       {localSettings.alarmVolume[0]}
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm">repeat</span>
+                      <span className="text-sm">{t("config.repeat")}</span>
                       <Input
                         type="number"
                         value={localSettings.alarmRepeat || undefined}
@@ -328,7 +336,9 @@ export function ConfigModal({
                 </div>
               </div>
               <div>
-                <Label className="text-base font-medium">Ticking Sound</Label>
+                <Label className="text-base font-medium">
+                  {t("config.tickingSound")}
+                </Label>
                 <Select
                   value={localSettings.tickingSound}
                   onValueChange={(value) =>
@@ -339,10 +349,16 @@ export function ConfigModal({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="z-[999999999]">
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="ticking">Ticking</SelectItem>
-                    <SelectItem value="white-noise">White Noise</SelectItem>
-                    <SelectItem value="brown-noise">Brown Noise</SelectItem>
+                    <SelectItem value="none">{t("sounds.none")}</SelectItem>
+                    <SelectItem value="ticking">
+                      {t("sounds.ticking")}
+                    </SelectItem>
+                    <SelectItem value="white-noise">
+                      {t("sounds.whiteNoise")}
+                    </SelectItem>
+                    <SelectItem value="brown-noise">
+                      {t("sounds.brownNoise")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <div className="mt-3">
@@ -372,11 +388,11 @@ export function ConfigModal({
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" variant="outline">
-              Cancelar
+              {t("config.cancel")}
             </Button>
           </DialogClose>
           <Button type="button" onClick={handleSave}>
-            Salvar Alterações
+            {t("config.saveChanges")}
           </Button>
         </DialogFooter>
       </DialogContent>

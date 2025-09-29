@@ -8,6 +8,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/Command";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { RefObject } from "react";
 
 type FieldLibraryDialogProps = {
@@ -25,6 +26,8 @@ export function FieldLibraryDialog({
   availableFields,
   parentModalContainerRef,
 }: FieldLibraryDialogProps) {
+  const t = useAppTranslations("massDataGenerator");
+
   const handleSelect = (fakerMethod: string) => {
     onSelectField(fakerMethod);
     onOpenChange(false);
@@ -37,9 +40,9 @@ export function FieldLibraryDialog({
       className="sm:max-w-3xl z-[99999999]"
       portalContainer={parentModalContainerRef?.current ?? undefined}
     >
-      <CommandInput placeholder="Buscar por qualquer tipo de dado..." />
+      <CommandInput placeholder={t("placeholders.searchDataTypes")} />
       <CommandList className="max-h-[60vh] overflow-y-auto">
-        <CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
+        <CommandEmpty>{t("messages.noResultsFound")}</CommandEmpty>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 p-2">
           {Object.entries(availableFields).map(([groupName, fields]) => (
             <CommandGroup

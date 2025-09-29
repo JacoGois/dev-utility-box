@@ -11,6 +11,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/AlertDialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
+import { useCommonTranslations } from "@/hooks/useTranslations";
 import { cn } from "@/lib/utils";
 import React from "react";
 
@@ -38,20 +39,26 @@ export function DeleteConfirmDialog({
   isOpen,
   onOpenChange,
   onConfirm,
-  title = "Tem certeza?",
+  title,
   description,
   itemName,
-  confirmText = "Sim, excluir",
-  cancelText = "Cancelar",
+  confirmText,
+  cancelText,
   confirmButtonVariant = "destructive",
 }: DeleteConfirmDialogProps) {
+  const t = useCommonTranslations();
+
+  const finalTitle = title || t("deleteDialog.title");
+  const finalConfirmText = confirmText || t("deleteDialog.confirm");
+  const finalCancelText = cancelText || t("cancel");
+
   const finalDescription = description || (
     <>
-      Esta ação não pode ser desfeita. Isso excluirá permanentemente
+      {t("deleteDialog.description")}
       {itemName ? (
         <span className="font-semibold"> {`"${itemName}"`}</span>
       ) : (
-        " o item selecionado"
+        ` ${t("deleteDialog.selectedItem")}`
       )}
       .
     </>
@@ -66,7 +73,7 @@ export function DeleteConfirmDialog({
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent className="z-[9999999999]">
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogTitle>{finalTitle}</AlertDialogTitle>
           {finalDescription && (
             <AlertDialogDescription>{finalDescription}</AlertDialogDescription>
           )}
@@ -74,7 +81,7 @@ export function DeleteConfirmDialog({
         <AlertDialogFooter>
           <AlertDialogCancel asChild>
             <Button variant="outline" onClick={() => onOpenChange(false)}>
-              {cancelText}
+              {finalCancelText}
             </Button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
@@ -82,7 +89,7 @@ export function DeleteConfirmDialog({
               className={cn(buttonVariants({ variant: confirmButtonVariant }))}
               onClick={handleConfirm}
             >
-              {confirmText}
+              {finalConfirmText}
             </Button>
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -1,6 +1,7 @@
 "use client";
 
-import { apps } from "@/lib/apps";
+import { useDesktopTranslations } from "@/hooks/useTranslations";
+import { createApps } from "@/lib/apps";
 import { cn } from "@/lib/utils";
 import { AppWindow, Clock, Volume2 } from "lucide-react";
 import { DockThemeProps } from "./types";
@@ -11,6 +12,8 @@ export function DockWindowsXP({
   onToggleLauncher,
   onAppClick,
 }: DockThemeProps) {
+  const t = useDesktopTranslations();
+  const apps = createApps(t);
   const focusedAppId = focusStack[focusStack.length - 1];
 
   return (

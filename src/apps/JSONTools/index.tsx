@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form/SelectCore";
 import { Textarea } from "@/components/ui/form/Textarea";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import JsonView from "@uiw/react-json-view";
 import { vscodeTheme } from "@uiw/react-json-view/vscode";
 import {
@@ -29,10 +30,10 @@ import {
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
-const indentOptions = [
-  { label: "2 Espaços", value: 2 },
-  { label: "4 Espaços", value: 4 },
-  { label: "Tabulação", value: "\t" },
+const createIndentOptions = (t: (key: string) => string) => [
+  { label: t("indentOptions.twoSpaces"), value: 2 },
+  { label: t("indentOptions.fourSpaces"), value: 4 },
+  { label: t("indentOptions.tab"), value: "\t" },
 ];
 
 export const defaultState = {
@@ -48,6 +49,7 @@ type JSONToolsProps = {
 
 function JSONToolsComponent({ instanceId }: JSONToolsProps) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const t = useAppTranslations("jsonTools");
   const { inputValue, outputValue, indentSpace, outputViewMode } = state;
 
   const [error, setError] = useState<string | null>(null);
@@ -77,9 +79,9 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
     (input: string, operation: "format" | "minify") => {
       if (!isValidJson) {
         setState({ outputValue: "" });
-        const errorMessage = `JSON de entrada inválido.`;
+        const errorMessage = t("messages.invalidJsonError");
         setError(errorMessage);
-        toast.error("Erro ao processar JSON.");
+        toast.error(t("messages.processingError"));
         return false;
       }
       try {
@@ -90,19 +92,21 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
             null,
             indentSpace
           );
-          toast.success("JSON formatado!");
+          toast.success(t("messages.jsonFormatted"));
         } else {
           resultJsonString = JSON.stringify(parsedJsonForTree);
-          toast.success("JSON minificado!");
+          toast.success(t("messages.jsonMinified"));
         }
         setState({ outputValue: resultJsonString });
         setError(null);
         return true;
       } catch (e) {
         setState({ outputValue: "" });
-        const errorMessage = `Erro inesperado: ${(e as Error).message}`;
+        const errorMessage = t("messages.unexpectedError", {
+          error: (e as Error).message,
+        });
         setError(errorMessage);
-        toast.error("Erro ao processar JSON.");
+        toast.error(t("messages.processingError"));
         return false;
       }
     },
@@ -115,16 +119,19 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleCopyToClipboard = useCallback((text: string, type: string) => {
-    if (typeof text !== "string" || !text.trim()) {
-      toast.error(`Nenhum ${type} para copiar.`);
-      return;
-    }
-    navigator.clipboard
-      .writeText(text)
-      .then(() => toast.success(`${type} copiado!`))
-      .catch(() => toast.error(`Falha ao copiar ${type}.`));
-  }, []);
+  const handleCopyToClipboard = useCallback(
+    (text: string, type: string) => {
+      if (typeof text !== "string" || !text.trim()) {
+        toast.error(t("messages.noContentToCopy", { type }));
+        return;
+      }
+      navigator.clipboard
+        .writeText(text)
+        .then(() => toast.success(t("messages.copySuccess", { type })))
+        .catch(() => toast.error(t("messages.copyError", { type })));
+    },
+    [t]
+  );
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -133,11 +140,11 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
       reader.onload = (e) => {
         const text = e.target?.result as string;
         setState({ inputValue: text, outputValue: "" });
-        toast.success(`Arquivo "${file.name}" carregado.`);
+        toast.success(t("messages.fileLoaded", { fileName: file.name }));
       };
       reader.onerror = () => {
-        setError("Não foi possível ler o arquivo.");
-        toast.error("Erro ao ler arquivo.");
+        setError(t("messages.fileReadError"));
+        toast.error(t("messages.fileReadError"));
       };
       reader.readAsText(file);
     }
@@ -150,7 +157,7 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
       contentToDownload = JSON.stringify(parsedJsonForTree, null, indentSpace);
     }
     if (!contentToDownload.trim()) {
-      toast.error("Nenhum conteúdo na saída para baixar.");
+      toast.error(t("messages.noContentToDownload"));
       return;
     }
     const blob = new Blob([contentToDownload], {
@@ -164,12 +171,12 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toast.success("JSON baixado!");
+    toast.success(t("messages.jsonDownloaded"));
   };
 
   const handleEscapeString = () => {
     if (!inputValue.trim()) {
-      toast.info("Entrada vazia para escapar.");
+      toast.info(t("messages.emptyInputEscape"));
       return;
     }
     setState({
@@ -177,12 +184,12 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
       outputValue: JSON.stringify(inputValue),
     });
     setError(null);
-    toast.success("String escapada para valor JSON.");
+    toast.success(t("messages.stringEscaped"));
   };
 
   const handleUnescapeString = () => {
     if (!inputValue.trim()) {
-      toast.info("Entrada vazia para desescapar.");
+      toast.info(t("messages.emptyInputUnescape"));
       return;
     }
     try {
@@ -190,14 +197,14 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
       if (typeof unescaped === "string") {
         setState({ outputViewMode: "text", outputValue: unescaped });
         setError(null);
-        toast.success("String desescapada.");
+        toast.success(t("messages.stringUnescaped"));
       } else {
-        setError('A entrada não é uma string JSON válida (ex: "texto").');
-        toast.error("A entrada não é uma string JSON válida.");
+        setError(t("messages.invalidStringError"));
+        toast.error(t("messages.invalidStringError"));
       }
     } catch (e) {
-      setError(`Erro ao desescapar: ${(e as Error).message}`);
-      toast.error("Erro ao desescapar string.");
+      setError(t("messages.unescapeError", { error: (e as Error).message }));
+      toast.error(t("messages.unescapeStringError"));
     }
   };
 
@@ -209,18 +216,18 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
           size="sm"
           disabled={!isValidJson}
         >
-          <Sparkles className="mr-1.5 h-4 w-4" /> Formatar
+          <Sparkles className="mr-1.5 h-4 w-4" /> {t("buttons.format")}
         </Button>
         <Button
           onClick={() => handleParseAndSetOutput(inputValue, "minify")}
           size="sm"
           disabled={!isValidJson}
         >
-          <Minimize2 className="mr-1.5 h-4 w-4" /> Minificar
+          <Minimize2 className="mr-1.5 h-4 w-4" /> {t("buttons.minify")}
         </Button>
         <div className="flex items-center gap-2">
           <span className="text-xs md:text-sm text-muted-foreground">
-            Indentação:
+            {t("labels.indentation")}
           </span>
           <Select
             value={String(indentSpace)}
@@ -234,7 +241,7 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="z-[999999999]">
-              {indentOptions.map((opt) => (
+              {createIndentOptions(t).map((opt) => (
                 <SelectItem
                   key={String(opt.value)}
                   value={String(opt.value)}
@@ -260,7 +267,7 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
           className="bg-transparent"
           size="sm"
         >
-          <Upload className="mr-1.5 h-4 w-4" /> Carregar
+          <Upload className="mr-1.5 h-4 w-4" /> {t("buttons.load")}
         </Button>
         <Button
           className="bg-transparent"
@@ -268,7 +275,7 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
           variant="outline"
           size="sm"
         >
-          <Download className="mr-1.5 h-4 w-4" /> Baixar
+          <Download className="mr-1.5 h-4 w-4" /> {t("buttons.download")}
         </Button>
         <div className="flex-grow" />
         <Button
@@ -277,33 +284,36 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
           size="sm"
           className="text-muted-foreground hover:text-primary-foreground"
         >
-          <Eraser className="mr-1.5 h-4 w-4" /> Limpar
+          <Eraser className="mr-1.5 h-4 w-4" /> {t("buttons.clear")}
         </Button>
       </div>
 
       <div className="flex items-center gap-2 md:gap-3 flex-wrap text-xs md:text-sm">
-        <span className="text-muted-foreground">Transformar String:</span>
+        <span className="text-muted-foreground">
+          {t("labels.transformString")}
+        </span>
         <Button
           onClick={handleEscapeString}
           variant="outline"
           className="bg-transparent"
           size="sm"
-          title="Escapar string para ser um valor JSON"
+          title={t("titles.escapeString")}
         >
           <MessageSquareQuote className="mr-1.5 h-4 w-4 transform rotate-90" />{" "}
-          Escapar
+          {t("buttons.escape")}
         </Button>
         <Button
           onClick={handleUnescapeString}
           variant="outline"
           className="bg-transparent"
           size="sm"
-          title="Desescapar uma string que é um valor JSON (ex: com aspas e escapes)"
+          title={t("titles.unescapeString")}
         >
-          <MessageSquareQuote className="mr-1.5 h-4 w-4" /> Desescapar
+          <MessageSquareQuote className="mr-1.5 h-4 w-4" />{" "}
+          {t("buttons.unescape")}
         </Button>
         <div className="flex-grow" />
-        <span className="text-muted-foreground">Ver Saída:</span>
+        <span className="text-muted-foreground">{t("labels.viewOutput")}</span>
         <Select
           value={outputViewMode}
           onValueChange={(v) =>
@@ -316,11 +326,11 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
           <SelectContent className="z-[999999999]">
             <SelectItem value="text" className="text-xs group">
               <FileTextIcon className="mr-1.5 h-3.5 w-3.5 inline-block text-foreground group-hover:text-primary-foreground" />
-              Texto
+              {t("viewModes.text")}
             </SelectItem>
             <SelectItem value="tree" className="text-xs group">
               <FileJson2 className="mr-1.5 h-3.5 w-3.5 inline-block text-foreground group-hover:text-primary-foreground" />
-              Árvore
+              {t("viewModes.tree")}
             </SelectItem>
           </SelectContent>
         </Select>
@@ -337,7 +347,7 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
           <div className="flex justify-between items-center mb-1">
             <div className="flex items-center gap-2">
               <label htmlFor="json-input" className="text-sm font-medium">
-                Entrada
+                {t("labels.input")}
               </label>
               {isValidJson === true && (
                 <Badge
@@ -345,13 +355,13 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
                   className="bg-green-500 hover:bg-green-600 text-white text-xs"
                 >
                   <CheckCircle className="h-3 w-3 mr-1" />
-                  Válido
+                  {t("badges.valid")}
                 </Badge>
               )}
               {isValidJson === false && inputValue.trim() !== "" && (
                 <Badge variant="destructive" className="text-xs">
                   <XCircle className="h-3 w-3 mr-1" />
-                  Inválido
+                  {t("badges.invalid")}
                 </Badge>
               )}
             </div>
@@ -360,18 +370,24 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
               size="icon"
               className="h-7 w-7"
               onClick={() =>
-                handleCopyToClipboard(inputValue, "JSON de entrada")
+                handleCopyToClipboard(inputValue, t("labels.input"))
               }
-              title="Copiar entrada"
+              title={t("titles.copyInput")}
             >
               <Copy className="h-3.5 w-3.5" />
             </Button>
           </div>
           {jsonStats && (
             <div className="text-xs text-muted-foreground flex gap-x-3 gap-y-1 flex-wrap mb-1">
-              <span>Linhas: {jsonStats.lines}</span>
-              <span>Caracteres: {jsonStats.chars}</span>
-              <span>Tamanho: {jsonStats.sizeKB}</span>
+              <span>
+                {t("stats.lines")}: {jsonStats.lines}
+              </span>
+              <span>
+                {t("stats.characters")}: {jsonStats.chars}
+              </span>
+              <span>
+                {t("stats.size")}: {jsonStats.sizeKB}
+              </span>
             </div>
           )}
           <div className="w-full h-full overflow-auto">
@@ -379,22 +395,22 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
               id="json-input"
               value={inputValue}
               onChange={(e) => setState({ inputValue: e.target.value })}
-              placeholder="Cole seu JSON aqui..."
+              placeholder={t("placeholders.pasteJson")}
               className="w-full h-full overflow-auto resize-none p-2 font-mono text-sm border focus:ring-0 bg-background"
             />
           </div>
         </div>
         <div className="flex flex-col gap-1 h-full overflow-auto">
           <div className="flex justify-between items-center mb-1">
-            <label className="text-sm font-medium">Saída</label>
+            <label className="text-sm font-medium">{t("labels.output")}</label>
             <Button
               variant="ghost"
               size="icon"
               className="h-7 w-7"
               onClick={() =>
-                handleCopyToClipboard(outputValue, "JSON de saída")
+                handleCopyToClipboard(outputValue, t("labels.output"))
               }
-              title="Copiar saída"
+              title={t("titles.copyOutput")}
             >
               <Copy className="h-3.5 w-3.5" />
             </Button>
@@ -405,7 +421,7 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
                 id="json-output"
                 value={outputValue}
                 readOnly
-                placeholder="Resultado aparecerá aqui..."
+                placeholder={t("placeholders.resultHere")}
                 className="w-full h-full resize-none p-2 font-mono text-sm border-0 focus:ring-0 bg-transparent"
               />
             </div>
@@ -424,8 +440,8 @@ function JSONToolsComponent({ instanceId }: JSONToolsProps) {
           ) : (
             <div className="p-4 text-sm text-muted-foreground bg-muted/40 rounded-lg h-full flex items-center justify-center">
               {inputValue.trim() === ""
-                ? "A saída aparecerá aqui."
-                : "JSON de entrada inválido para visualização em árvore."}
+                ? t("placeholders.outputHere")
+                : t("messages.invalidJsonForTree")}
             </div>
           )}
         </div>

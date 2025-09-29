@@ -1,6 +1,7 @@
 "use client";
 
-import { apps } from "@/lib/apps";
+import { useDesktopTranslations } from "@/hooks/useTranslations";
+import { createApps } from "@/lib/apps";
 import { AppWindowIcon } from "lucide-react";
 import { DockThemeProps } from "./types";
 
@@ -10,6 +11,8 @@ export function DockUbuntu({
   onToggleLauncher,
   onAppClick,
 }: DockThemeProps) {
+  const t = useDesktopTranslations();
+  const apps = createApps(t);
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-background backdrop-blur-md px-4 py-2 rounded-2xl flex gap-4 items-center z-50 shadow-lg border border-white/10">
       <button onClick={onToggleLauncher}>

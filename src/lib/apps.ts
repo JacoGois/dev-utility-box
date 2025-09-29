@@ -15,10 +15,10 @@ import {
   Timer,
 } from "lucide-react";
 
-export const apps = {
+export const createApps = (t: (key: string) => string) => ({
   Pomodoro: {
-    name: "Pomodoro",
-    shortName: "Pomodoro",
+    name: t("apps.pomodoro.name"),
+    shortName: t("apps.pomodoro.shortName"),
     icon: Timer,
     component: Pomodoro,
     maxInstances: 1,
@@ -27,8 +27,8 @@ export const apps = {
     minHeight: undefined,
   },
   Todo: {
-    name: "To Do List",
-    shortName: "To Do",
+    name: t("apps.todo.name"),
+    shortName: t("apps.todo.shortName"),
     icon: NotebookPen,
     component: TodoList,
     maxInstances: 2,
@@ -37,8 +37,8 @@ export const apps = {
     minHeight: undefined,
   },
   JSONTools: {
-    name: "Ferramentas JSON",
-    shortName: "JSON",
+    name: t("apps.jsonTools.name"),
+    shortName: t("apps.jsonTools.shortName"),
     icon: Braces,
     component: JSONTools,
     maxInstances: 4,
@@ -47,8 +47,8 @@ export const apps = {
     minHeight: undefined,
   },
   EncodersDecoders: {
-    name: "Encoders / Decoders",
-    shortName: "Codificadores",
+    name: t("apps.encoders.name"),
+    shortName: t("apps.encoders.shortName"),
     icon: Combine,
     component: EncodersDecoders,
     maxInstances: 4,
@@ -57,8 +57,8 @@ export const apps = {
     minHeight: 500,
   },
   KnowledgeBase: {
-    name: "Base de Conhecimento (BETA)",
-    shortName: "Conhecimento",
+    name: t("apps.knowledgeBase.name"),
+    shortName: t("apps.knowledgeBase.shortName"),
     icon: Brain,
     component: KnowledgeBase,
     maxInstances: 1,
@@ -67,8 +67,8 @@ export const apps = {
     minHeight: undefined,
   },
   DataGenerator: {
-    name: "Gerador de Dados",
-    shortName: "Gerador Dados",
+    name: t("apps.dataGenerator.name"),
+    shortName: t("apps.dataGenerator.shortName"),
     icon: Database,
     component: DataGenerator,
     maxInstances: 2,
@@ -77,8 +77,8 @@ export const apps = {
     minHeight: undefined,
   },
   MassDataGenerator: {
-    name: "Gerador de Dados em Massa",
-    shortName: "Gerador Dados Massa",
+    name: t("apps.massDataGenerator.name"),
+    shortName: t("apps.massDataGenerator.shortName"),
     icon: FileJson,
     component: MassDataGenerator,
     maxInstances: 4,
@@ -86,48 +86,9 @@ export const apps = {
     maxHeight: undefined,
     minHeight: undefined,
   },
-  // Auth: {
-  //   name: "Autenticação",
-  //   shortName: "Autenticação",
-  //   icon: User,
-  //   component: Auth,
-  //   maxInstances: 2,
-  //   maxWidth: 550,
-  //   maxHeight: 850,
-  // },
-  // RegexBuilder: {
-  //   name: "Construtor de Regex",
-  //   shortName: "Regex",
-  //   icon: Puzzle,
-  //   component: RegexBuilder,
-  //   maxInstances: 2,
-  //   maxWidth: undefined,
-  //   maxHeight: undefined,
-  //   minHeight: undefined,
-  // },
-  // CodeSnippets: {
-  //   name: "Snippets de Código",
-  //   shortName: "Snippets",
-  //   icon: Code2,
-  //   component: CodeSnippets,
-  //   maxInstances: 1,
-  // },
-  // CommandCenter: {
-  //   name: "Central de Comandos",
-  //   shortName: "Comandos",
-  //   icon: TerminalSquare,
-  //   component: CommandCenter,
-  //   maxInstances: 1,
-  // },
-  // KanbanBoard: {
-  //   name: "Quadro Kanban (Em construção)",
-  //   icon: Kanban,
-  //   shortName: "Kanban",
-  //   component: KanbanBoard,
-  //   maxInstances: 1,
-  // },
-} as const;
+});
 
-export type appsType = typeof apps;
+export const apps = createApps(() => "");
 
+export type appsType = ReturnType<typeof createApps>;
 export type AppKey = keyof appsType;

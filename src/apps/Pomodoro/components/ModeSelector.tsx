@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import React from "react";
-import { MODES } from "../shared";
+import { createModes, MODES } from "../shared";
 
 interface ModeSelectorProps {
   currentMode: keyof typeof MODES;
   onModeChange: (modeKey: keyof typeof MODES) => void;
-
-  modesData: typeof MODES;
+  modesData: ReturnType<typeof createModes>;
 }
 
 const ModeSelector = React.memo(

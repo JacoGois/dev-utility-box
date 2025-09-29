@@ -18,6 +18,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/Resizable";
 import { ScrollArea } from "@/components/ui/ScrollArea";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { cn } from "@/lib/utils";
 import {
   Brain,
@@ -60,6 +61,7 @@ const findNoteByTitle = (
 function KnowledgeBaseComponent() {
   const [entries, setEntries] = useState<KnowledgeEntry[]>([]);
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
+  const t = useAppTranslations("knowledgeBase");
 
   const [formTitle, setFormTitle] = useState("");
   const [formContent, setFormContent] = useState("");
@@ -90,7 +92,7 @@ function KnowledgeBaseComponent() {
             setIsPreviewingMarkdown(true);
           }
         } catch (e) {
-          console.error("Erro ao carregar Base de Conhecimento:", e);
+          console.error(t("messages.loadingError"), e);
         }
       }
     }
@@ -159,7 +161,7 @@ function KnowledgeBaseComponent() {
 
   const handleSaveEntry = useCallback(() => {
     if (!formTitle.trim()) {
-      toast.error("Título é obrigatório!");
+      toast.error(t("messages.titleRequired"));
       return;
     }
     const tagsArray = formTags
@@ -182,7 +184,7 @@ function KnowledgeBaseComponent() {
             : e
         )
       );
-      toast.success("Bloco atualizado!");
+      toast.success(t("messages.blockUpdated"));
     } else {
       const newEntryId = nanoid();
       const newEntry: KnowledgeEntry = {
@@ -197,7 +199,7 @@ function KnowledgeBaseComponent() {
       };
       setEntries((prev) => [newEntry, ...prev]);
       setSelectedEntryId(newEntryId);
-      toast.success("Bloco criado!");
+      toast.success(t("messages.blockCreated"));
     }
     setIsEditing(false);
     setIsPreviewingMarkdown(true);
@@ -214,9 +216,9 @@ function KnowledgeBaseComponent() {
     if (currentSelectedEntry) {
       setShowDeleteDialog(true);
     } else {
-      toast.error("Nenhum bloco selecionado para excluir.");
+      toast.error(t("messages.noBlockSelected"));
     }
-  }, [currentSelectedEntry]);
+  }, [currentSelectedEntry, t]);
 
   const confirmActualDelete = useCallback(() => {
     if (!selectedEntryId) return;
@@ -224,8 +226,8 @@ function KnowledgeBaseComponent() {
     resetAndClearForm();
     setSelectedEntryId(null);
     setIsEditing(false);
-    toast.info("Bloco excluído.");
-  }, [selectedEntryId, entries, resetAndClearForm]);
+    toast.info(t("messages.blockDeleted"));
+  }, [selectedEntryId, entries, resetAndClearForm, t]);
 
   useEffect(() => {
     if (currentSelectedEntry) {
@@ -357,19 +359,19 @@ function KnowledgeBaseComponent() {
         isOpen={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
         onConfirm={confirmActualDelete}
-        title="Confirmar Exclusão"
-        itemName={currentSelectedEntry?.title || "este bloco"}
+        title={t("deleteDialog.title")}
+        itemName={currentSelectedEntry?.title || t("deleteDialog.itemName")}
         confirmButtonVariant="destructive"
       />
 
       <Dialog open={showLinkNoteDialog} onOpenChange={setShowLinkNoteDialog}>
         <DialogContent className="sm:max-w-md z-[999999]">
           <DialogHeader>
-            <DialogTitle>Linkar com outro bloco</DialogTitle>
+            <DialogTitle>{t("linkDialog.title")}</DialogTitle>
           </DialogHeader>
           <Input
             type="text"
-            placeholder="Buscar bloco pelo título..."
+            placeholder={t("placeholders.linkSearch")}
             value={linkNoteSearchTerm}
             onChange={(e) => setLinkNoteSearchTerm(e.target.value)}
             className="my-2"
@@ -391,7 +393,7 @@ function KnowledgeBaseComponent() {
               ))
             ) : (
               <p className="p-2 text-sm text-muted-foreground">
-                Nenhum bloco encontrado.
+                {t("messages.noBlocksFound")}
               </p>
             )}
           </ScrollArea>
@@ -403,7 +405,7 @@ function KnowledgeBaseComponent() {
                 setLinkNoteSearchTerm("");
               }}
             >
-              Cancelar
+              {t("buttons.cancel")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -417,12 +419,12 @@ function KnowledgeBaseComponent() {
             size="sm"
             className="w-full justify-start bg-card"
           >
-            <PlusCircle className="mr-2 h-4 w-4" /> Novo Bloco
+            <PlusCircle className="mr-2 h-4 w-4" /> {t("buttons.newBlock")}
           </Button>
           <div className="relative">
             <Input
               type="text"
-              placeholder="Buscar blocos..."
+              placeholder={t("placeholders.search")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
@@ -446,7 +448,7 @@ function KnowledgeBaseComponent() {
                   "font-semibold text-sm truncate group-hover:text-primary-foreground"
                 )}
               >
-                {entry.title || "Bloco sem título"}
+                {entry.title || t("fallbacks.untitledBlock")}
               </h3>
               <div className="flex gap-1 mt-1 flex-wrap">
                 {entry.tags.slice(0, 3).map((tag, index) => (
@@ -466,14 +468,14 @@ function KnowledgeBaseComponent() {
           ))}
           {filteredEntries.length === 0 && searchTerm && (
             <p className="p-4 text-center text-sm text-muted-foreground">
-              Nenhum bloco encontrada.
+              {t("messages.noBlocksFound")}
             </p>
           )}
           {filteredEntries.length === 0 &&
             !searchTerm &&
             entries.length === 0 && (
               <p className="p-4 text-center text-sm text-muted-foreground">
-                Nenhum bloco criada.
+                {t("messages.noBlocksCreated")}
               </p>
             )}
         </div>
@@ -487,7 +489,7 @@ function KnowledgeBaseComponent() {
                 <Input
                   id="kb-title-input"
                   type="text"
-                  placeholder="Título do bloco"
+                  placeholder={t("placeholders.blockTitle")}
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
                   className="text-xl font-semibold mb-0"
@@ -502,9 +504,9 @@ function KnowledgeBaseComponent() {
                       variant="ghost"
                       size="sm"
                       onClick={handleEditSelected}
-                      title="Editar bloco"
+                      title={t("buttons.edit")}
                     >
-                      <Edit2 className="mr-1 h-4 w-4" /> Editar
+                      <Edit2 className="mr-1 h-4 w-4" /> {t("buttons.edit")}
                     </Button>
                   )}
                 </div>
@@ -513,14 +515,14 @@ function KnowledgeBaseComponent() {
                 <div className="space-y-2">
                   <Input
                     type="text"
-                    placeholder="Tags (separadas por vírgula)"
+                    placeholder={t("placeholders.tags")}
                     value={formTags}
                     onChange={(e) => setFormTags(e.target.value)}
                     className="h-9 text-sm"
                   />
                   <Input
                     type="url"
-                    placeholder="URL da Fonte (opcional)"
+                    placeholder={t("placeholders.sourceUrl")}
                     value={formSourceUrl}
                     onChange={(e) => setFormSourceUrl(e.target.value)}
                     className="h-9 text-sm"
@@ -564,10 +566,11 @@ function KnowledgeBaseComponent() {
                         variant="outline"
                         size="sm"
                         onClick={() => setShowLinkNoteDialog(true)}
-                        title="Linkar com outra nota"
+                        title={t("buttons.link")}
                         className="mr-2"
                       >
-                        <LinkIcon className="mr-1.5 h-4 w-4" /> Linkar
+                        <LinkIcon className="mr-1.5 h-4 w-4" />{" "}
+                        {t("buttons.link")}
                       </Button>
                       <Button
                         variant="ghost"
@@ -577,8 +580,8 @@ function KnowledgeBaseComponent() {
                         }
                         title={
                           isPreviewingMarkdown
-                            ? "Editar Markdown"
-                            : "Visualizar Markdown"
+                            ? t("buttons.editor")
+                            : t("buttons.preview")
                         }
                       >
                         {isPreviewingMarkdown ? (
@@ -586,7 +589,9 @@ function KnowledgeBaseComponent() {
                         ) : (
                           <Eye className="mr-1.5 h-4 w-4" />
                         )}
-                        {isPreviewingMarkdown ? "Editor" : "Preview"}
+                        {isPreviewingMarkdown
+                          ? t("buttons.editor")
+                          : t("buttons.preview")}
                       </Button>
                     </div>
                   )}
@@ -596,7 +601,7 @@ function KnowledgeBaseComponent() {
                         ref={contentTextareaRef}
                         value={formContent}
                         onChange={(e) => setFormContent(e.target.value)}
-                        placeholder="Escreva seu bloco em Markdown..."
+                        placeholder={t("placeholders.content")}
                         className="p-3 w-full h-full resize-none border-none rounded-none focus:ring-none text-sm bg-transparent font-mono "
                       />
                     ) : currentSelectedEntry ||
@@ -616,7 +621,7 @@ function KnowledgeBaseComponent() {
                   </div>
                 </div>
               </ResizablePanel>
-              <ResizableHandle />
+              <ResizableHandle withHandle />
               <ResizablePanel className="w-fit">
                 {currentSelectedEntry && (
                   <BacklinksPanel
@@ -633,12 +638,14 @@ function KnowledgeBaseComponent() {
                 <div className="flex gap-2">
                   {selectedEntryId && (
                     <Button size="sm" onClick={handleDeleteEntryPress}>
-                      <Trash2 className="mr-2 h-4 w-4" /> Excluir
+                      <Trash2 className="mr-2 h-4 w-4" /> {t("buttons.delete")}
                     </Button>
                   )}
                   <Button size="sm" onClick={handleSaveEntry}>
                     <Save className="mr-2 h-4 w-4" />
-                    {selectedEntryId ? "Atualizar Bloco" : "Salvar Novo Bloco"}
+                    {selectedEntryId
+                      ? t("buttons.updateBlock")
+                      : t("buttons.saveNewBlock")}
                   </Button>
                   <Button
                     variant="ghost"
@@ -654,7 +661,7 @@ function KnowledgeBaseComponent() {
                       }
                     }}
                   >
-                    <XCircle className="mr-2 h-4 w-4" /> Cancelar
+                    <XCircle className="mr-2 h-4 w-4" /> {t("buttons.cancel")}
                   </Button>
                 </div>
               </div>
@@ -663,9 +670,7 @@ function KnowledgeBaseComponent() {
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <Brain className="w-16 h-16 mb-4" />
-            <p className="text-center">
-              Selecione um bloco para visualizar ou clique em {'"Novo Bloco"'}.
-            </p>
+            <p className="text-center">{t("labels.selectBlock")}</p>
           </div>
         )}
       </div>

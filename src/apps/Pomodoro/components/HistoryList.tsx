@@ -1,16 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { cn } from "@/lib/utils";
 import { History } from "lucide-react";
 import React from "react";
-import { MODES, Session } from "../shared";
+import { createModes, Session } from "../shared";
 
 interface HistoryListProps {
   sessionHistory: Session[];
-  modesData: typeof MODES;
+  modesData: ReturnType<typeof createModes>;
 }
 
 const HistoryList = React.memo(
   ({ sessionHistory, modesData }: HistoryListProps) => {
+    const t = useAppTranslations("pomodoro");
+
     if (sessionHistory.length === 0) {
       return null;
     }
@@ -20,7 +23,7 @@ const HistoryList = React.memo(
         <CardHeader>
           <CardTitle className="flex items-center text-sm @sm:text-base @lg:text-lg">
             <History className="w-4 h-4 @sm:w-5 @sm:h-5 mr-2 text-primary" />
-            Histórico Recente
+            {t("history.recent")}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-1 overflow-hidden">

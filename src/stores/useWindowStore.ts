@@ -1,4 +1,4 @@
-import { apps, type AppKey } from "@/lib/apps";
+import type { AppKey } from "@/lib/apps";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -21,7 +21,7 @@ type WindowStore = {
   positions: Record<string, Position>;
   sizes: Record<string, Size>;
 
-  openApp: (appKey: AppKey) => void;
+  openApp: (appKey: AppKey, maxInstances?: number) => void;
   closeApp: (id: string) => void;
   focusApp: (id: string) => void;
   minimizeApp: (id: string) => void;
@@ -41,14 +41,16 @@ export const useWindowStore = create<WindowStore>()(
       positions: {},
       sizes: {},
 
-      openApp: (appKey: AppKey) => {
+      openApp: (appKey: AppKey, maxInstances: number = Infinity) => {
         const currentCount = get().openApps.filter(
           (app) => app.appKey === appKey
         ).length;
-        const maxAllowed = apps[appKey].maxInstances ?? Infinity;
 
-        if (currentCount >= maxAllowed) {
-          toast("Você já abriu o número máximo de janelas deste aplicativo.");
+        if (currentCount >= maxInstances) {
+          // Note: This will be updated to use translated messages
+          toast(
+            "You have already opened the maximum number of windows for this application."
+          );
           return;
         }
 

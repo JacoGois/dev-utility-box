@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/form/Input";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import { TodoListAction } from "../types";
@@ -18,6 +19,7 @@ export function AddTaskForm({
   onTaskAdded,
 }: AddTaskFormProps) {
   const [title, setTitle] = useState("");
+  const t = useAppTranslations('todo');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ export function AddTaskForm({
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder={
-          parentId ? "Adicionar subtarefa..." : "Adicionar nova tarefa..."
+          parentId ? t("addSubtask") : t("placeholder")
         }
         autoFocus
       />

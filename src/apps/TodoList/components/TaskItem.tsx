@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/Popover";
-
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { cn } from "@/lib/utils";
 import {
   ChevronDown,
@@ -46,6 +46,7 @@ export function TaskItem({ task, dispatch }: TaskItemProps) {
   );
 
   const [isAddingSubtask, setIsAddingSubtask] = useState(false);
+  const t = useAppTranslations("todo");
 
   const handleUpdate = (updates: Partial<Omit<Task, "id">>) => {
     dispatch({ type: "UPDATE_TASK", payload: { id: task.id, updates } });
@@ -80,7 +81,7 @@ export function TaskItem({ task, dispatch }: TaskItemProps) {
           />
           {isDescriptionVisible && (
             <Textarea
-              placeholder="Adicionar descrição..."
+              placeholder={t("addDescription")}
               value={task.description}
               onChange={(e) => handleUpdate({ description: e.target.value })}
               className="text-sm text-muted-foreground bg-transparent border-dashed"
@@ -140,7 +141,7 @@ export function TaskItem({ task, dispatch }: TaskItemProps) {
                         priorityMap[priority].color
                       )}
                     />
-                    {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                    {t(`priorities.${priority}`)}
                   </Button>
                 );
               })}

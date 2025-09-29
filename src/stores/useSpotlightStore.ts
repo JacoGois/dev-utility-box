@@ -1,4 +1,4 @@
-import { AppKey, apps, appsType } from "@/lib/apps";
+import { AppKey, appsType } from "@/lib/apps";
 import { create } from "zustand";
 
 export type SearchResultItem = {
@@ -19,7 +19,8 @@ type SpotlightStore = {
   setQuery: (query: string) => void;
   performSearch: (
     query: string,
-    openAppCallback: (appKey: AppKey) => void
+    openAppCallback: (appKey: AppKey, maxInstances: number) => void,
+    apps: appsType
   ) => void;
   selectNext: () => void;
   selectPrevious: () => void;
@@ -37,7 +38,7 @@ export const useSpotlightStore = create<SpotlightStore>((set, get) => ({
   closeSpotlight: () => set({ isOpen: false }),
   setQuery: (query) => set({ query }),
 
-  performSearch: (query, openAppCallback) => {
+  performSearch: (query, openAppCallback, apps) => {
     if (!query.trim()) {
       set({ results: [], selectedIndex: -1 });
       return;
@@ -53,7 +54,7 @@ export const useSpotlightStore = create<SpotlightStore>((set, get) => ({
           name: appConfig.name,
           icon: appConfig.icon,
           action: () => {
-            openAppCallback(key);
+            openAppCallback(key, appConfig.maxInstances);
             get().closeSpotlight();
           },
         })

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form/SelectCore";
 import { Textarea } from "@/components/ui/form/Textarea";
 import { ScrollArea } from "@/components/ui/ScrollArea";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { cn } from "@/lib/utils";
 import {
   Code2,
@@ -34,20 +35,21 @@ import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const SNIPPETS_STORAGE_KEY = "code-snippets-all";
 
-const supportedLanguages: Language[] = [
-  "Javascript",
-  "Typescript",
-  "Python",
-  "HTML",
-  "CSS",
-  "JSON",
-  "Markdown",
-  "Bash",
-  "SQL",
-  "Outro",
-];
-
 const CodeSnippetsComponent = () => {
+  const t = useAppTranslations("codeSnippets");
+
+  const supportedLanguages: Language[] = [
+    "Javascript",
+    "Typescript",
+    "Python",
+    "HTML",
+    "CSS",
+    "JSON",
+    "Markdown",
+    "Bash",
+    "SQL",
+    "Outro",
+  ];
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [selectedSnippetId, setSelectedSnippetId] = useState<string | null>(
     null
@@ -134,7 +136,7 @@ const CodeSnippetsComponent = () => {
 
   const handleSaveSnippet = useCallback(() => {
     if (!formTitle.trim() || !formCode.trim()) {
-      toast.error("Título e Código são obrigatórios!");
+      toast.error(t("messages.titleRequired"));
       return;
     }
     const tagsArray = formTags
@@ -159,7 +161,7 @@ const CodeSnippetsComponent = () => {
             : s
         )
       );
-      toast.success("Snippet atualizado!");
+      toast.success(t("messages.snippetUpdated"));
     } else {
       const newSnippetId = nanoid();
       savedSnippetId = newSnippetId;
@@ -176,7 +178,7 @@ const CodeSnippetsComponent = () => {
       };
       setSnippets((prev) => [newSnippet, ...prev]);
       setSelectedSnippetId(newSnippetId);
-      toast.success("Snippet criado!");
+      toast.success(t("messages.snippetCreated"));
     }
     setIsEditing(false);
 
@@ -200,9 +202,9 @@ const CodeSnippetsComponent = () => {
     if (currentSelectedSnippetObject) {
       setShowDeleteDialog(true);
     } else {
-      toast.error("Nenhum snippet selecionado para excluir.");
+      toast.error(t("messages.noSnippetsFound"));
     }
-  }, [currentSelectedSnippetObject]);
+  }, [currentSelectedSnippetObject, t]);
 
   const confirmActualDelete = useCallback(() => {
     if (!selectedSnippetId) return;
@@ -210,19 +212,22 @@ const CodeSnippetsComponent = () => {
     resetAndClearForm();
     setSelectedSnippetId(null);
     setIsEditing(false);
-    toast.info("Snippet excluído.");
-  }, [selectedSnippetId, snippets, resetAndClearForm]);
+    toast.info(t("messages.snippetUpdated"));
+  }, [selectedSnippetId, snippets, resetAndClearForm, t]);
 
-  const handleCopyToClipboard = useCallback((code: string | undefined) => {
-    if (typeof code !== "string") {
-      toast.error("Nenhum código para copiar.");
-      return;
-    }
-    navigator.clipboard
-      .writeText(code)
-      .then(() => toast.success("Código copiado!"))
-      .catch(() => toast.error("Falha ao copiar o código."));
-  }, []);
+  const handleCopyToClipboard = useCallback(
+    (code: string | undefined) => {
+      if (typeof code !== "string") {
+        toast.error(t("messages.noCodeToCopy"));
+        return;
+      }
+      navigator.clipboard
+        .writeText(code)
+        .then(() => toast.success(t("messages.codeCopied")))
+        .catch(() => toast.error(t("messages.copyFailed")));
+    },
+    [t]
+  );
 
   const filteredSnippets = useMemo(() => {
     return snippets
@@ -260,8 +265,10 @@ const CodeSnippetsComponent = () => {
         isOpen={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
         onConfirm={confirmActualDelete}
-        title="Confirmar Exclusão de Snippet"
-        itemName={currentSelectedSnippetObject?.title || "este snippet"}
+        title={t("deleteDialog.title")}
+        itemName={
+          currentSelectedSnippetObject?.title || t("deleteDialog.itemName")
+        }
         confirmButtonVariant="destructive"
       />
       <div className="w-1/3 min-w-[250px] max-w-[350px] border-r border-border flex flex-col">
@@ -272,12 +279,12 @@ const CodeSnippetsComponent = () => {
             size="sm"
             className="w-full justify-start bg-card"
           >
-            <PlusCircle className="mr-2 h-4 w-4" /> Novo Snippet
+            <PlusCircle className="mr-2 h-4 w-4" /> {t("buttons.newSnippet")}
           </Button>
           <div className="relative">
             <Input
               type="text"
-              placeholder="Buscar snippets..."
+              placeholder={t("placeholders.searchSnippets")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
@@ -305,7 +312,7 @@ const CodeSnippetsComponent = () => {
               </h3>
               <div className="flex gap-1 mt-1 flex-wrap group-hover:text-primary-foreground">
                 <Badge variant="secondary" className="text-xs">
-                  {snippet.language}
+                  {t(`languages.${snippet.language.toLowerCase()}`)}
                 </Badge>
                 {snippet.tags.slice(0, 3).map((tag, index) => (
                   <Badge
@@ -325,14 +332,14 @@ const CodeSnippetsComponent = () => {
           ))}
           {filteredSnippets.length === 0 && searchTerm && (
             <p className="p-4 text-center text-sm text-muted-foreground">
-              Nenhum snippet encontrado.
+              {t("messages.noSnippetsFound")}
             </p>
           )}
           {filteredSnippets.length === 0 &&
             !searchTerm &&
             snippets.length === 0 && (
               <p className="p-4 text-center text-sm w-full text-muted-foreground">
-                Nenhum snippet criado ainda. Clique em {'"Novo Snippet"'}.
+                {t("messages.noSnippetsCreated")}
               </p>
             )}
         </ScrollArea>
@@ -346,7 +353,7 @@ const CodeSnippetsComponent = () => {
                 <Input
                   id="snippet-title-input"
                   type="text"
-                  placeholder="Título do Snippet"
+                  placeholder={t("placeholders.snippetTitle")}
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
                   className="text-lg font-semibold"
@@ -360,7 +367,7 @@ const CodeSnippetsComponent = () => {
                     variant="ghost"
                     size="sm"
                     onClick={handleEditSelected}
-                    title="Editar Snippet"
+                    title={t("buttons.edit")}
                   >
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -376,7 +383,7 @@ const CodeSnippetsComponent = () => {
                       }
                     >
                       <SelectTrigger className="w-[180px] h-8 text-xs">
-                        <SelectValue placeholder="Linguagem" />
+                        <SelectValue placeholder={t("placeholders.language")} />
                       </SelectTrigger>
                       <SelectContent className="z-[9999999999]">
                         {supportedLanguages.map((lang) => (
@@ -385,21 +392,21 @@ const CodeSnippetsComponent = () => {
                             value={lang}
                             className="text-xs"
                           >
-                            {lang}
+                            {t(`languages.${lang.toLowerCase()}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                     <Input
                       type="text"
-                      placeholder="Tags (separadas por vírgula)"
+                      placeholder={t("placeholders.tagsCommaSeparated")}
                       value={formTags}
                       onChange={(e) => setFormTags(e.target.value)}
                       className="h-8 text-xs flex-grow"
                     />
                   </div>
                   <Textarea
-                    placeholder="Descrição (opcional)"
+                    placeholder={t("placeholders.descriptionOptional")}
                     value={formDescription}
                     onChange={(e) => setFormDescription(e.target.value)}
                     className="h-20 text-xs resize-none"
@@ -414,7 +421,9 @@ const CodeSnippetsComponent = () => {
               {!isEditing && currentSelectedSnippetObject && (
                 <div className="px-1 flex gap-2 mt-1 flex-wrap items-center">
                   <Badge variant="secondary" className="text-xs">
-                    {currentSelectedSnippetObject.language}
+                    {t(
+                      `languages.${currentSelectedSnippetObject.language.toLowerCase()}`
+                    )}
                   </Badge>
                   {currentSelectedSnippetObject.tags.map((tag, index) => (
                     <Badge key={index} variant="outline" className="text-xs">
@@ -430,7 +439,7 @@ const CodeSnippetsComponent = () => {
                 <Textarea
                   value={formCode}
                   onChange={(e) => setFormCode(e.target.value)}
-                  placeholder="Seu código aqui..."
+                  placeholder={t("placeholders.yourCodeHere")}
                   className="p-4 w-full h-full resize-none border-0 focus:ring-0 text-sm bg-background font-mono absolute inset-0"
                 />
               ) : currentSelectedSnippetObject ? (
@@ -465,7 +474,7 @@ const CodeSnippetsComponent = () => {
                       handleCopyToClipboard(currentSelectedSnippetObject.code)
                     }
                   >
-                    <Copy className="mr-2 h-4 w-4" /> Copiar Código
+                    <Copy className="mr-2 h-4 w-4" /> {t("buttons.copyCode")}
                   </Button>
                 )}
               </div>
@@ -476,13 +485,15 @@ const CodeSnippetsComponent = () => {
                     size="sm"
                     onClick={handleDeleteSnippetPress}
                   >
-                    <Trash2 className="mr-2 h-4 w-4" /> Excluir
+                    <Trash2 className="mr-2 h-4 w-4" /> {t("buttons.delete")}
                   </Button>
                 )}
                 {isEditing && (
                   <Button size="sm" onClick={handleSaveSnippet}>
                     <Save className="mr-2 h-4 w-4" />
-                    {selectedSnippetId ? "Atualizar" : "Salvar Novo"}
+                    {selectedSnippetId
+                      ? t("buttons.update")
+                      : t("buttons.saveNew")}
                   </Button>
                 )}
                 {isEditing && (
@@ -500,7 +511,7 @@ const CodeSnippetsComponent = () => {
                       }
                     }}
                   >
-                    <XCircle className="mr-2 h-4 w-4" /> Cancelar
+                    <XCircle className="mr-2 h-4 w-4" /> {t("buttons.cancel")}
                   </Button>
                 )}
               </div>
@@ -510,8 +521,7 @@ const CodeSnippetsComponent = () => {
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <Code2 className="w-16 h-16 mb-4" />
             <p className="text-center w-9/10">
-              Selecione um snippet para visualizar ou clique em{" "}
-              {'"Novo Snippet"'}.
+              {t("messages.selectSnippetToView")}
             </p>
           </div>
         )}

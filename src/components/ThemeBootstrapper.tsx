@@ -1,16 +1,18 @@
 "use client";
 
 import { useThemeStore } from "@/stores/useThemeStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function ThemeBootstrapper() {
-  const { hydrateTheme, currentTheme } = useThemeStore();
+  const { hydrateTheme } = useThemeStore();
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     hydrateTheme();
+    setIsHydrated(true);
   }, [hydrateTheme]);
 
-  if (!currentTheme) {
+  if (!isHydrated) {
     return null;
   }
 

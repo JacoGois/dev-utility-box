@@ -1,0 +1,878 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "confirm": "确认",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭",
+    "open": "打开",
+    "search": "搜索",
+    "filter": "筛选",
+    "sort": "排序",
+    "refresh": "刷新",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "finish": "完成",
+    "start": "开始",
+    "stop": "停止",
+    "pause": "暂停",
+    "resume": "恢复",
+    "copy": "复制",
+    "clear": "清除",
+    "reset": "重置",
+    "yes": "是",
+    "no": "否",
+    "ok": "确定",
+    "warning": "警告",
+    "info": "信息",
+    "deleteDialog": {
+      "title": "确定要删除吗？",
+      "description": "此操作无法撤销。这将永久删除",
+      "selectedItem": "选中的项目",
+      "confirm": "是的，删除"
+    }
+  },
+  "desktop": {
+    "title": "Dev Utility Box",
+    "description": "通过实用高效的实用工具简化您的工作流程。专注于编码和构建。",
+    "open": "打开",
+    "removeFromDesktop": "从桌面移除",
+    "spotlight": {
+      "title": "快速应用搜索",
+      "placeholder": "搜索应用...",
+      "noResults": "未找到结果。",
+      "shortcut": "按 Ctrl+K 或 Cmd+K"
+    },
+    "dock": {
+      "launcher": "应用启动器",
+      "allApps": "所有应用程序"
+    },
+    "help": {
+      "title": "键盘快捷键",
+      "description": "使用这些快捷键进行导航。",
+      "spotlight": "打开聚光灯搜索",
+      "launcher": "打开应用启动器",
+      "language": "更改语言",
+      "resizeWindow": "通过点击并拖拽右边缘中间、底边缘中间或右下角来调整窗口大小。"
+    },
+    "shortcuts": {
+      "openQuickSearch": "打开快速搜索",
+      "openAppLauncher": "打开应用启动器",
+      "resizeWindow": "调整窗口大小"
+    },
+    "apps": {
+      "auth": {
+        "name": "身份验证",
+        "shortName": "验证"
+      },
+      "codeSnippets": {
+        "name": "代码片段",
+        "shortName": "片段"
+      },
+      "commandCenter": {
+        "name": "命令中心",
+        "shortName": "命令"
+      },
+      "pomodoro": {
+        "name": "番茄钟",
+        "shortName": "番茄钟"
+      },
+      "todo": {
+        "name": "待办事项",
+        "shortName": "待办"
+      },
+      "jsonTools": {
+        "name": "JSON 工具",
+        "shortName": "JSON"
+      },
+      "encoders": {
+        "name": "编码器 / 解码器",
+        "shortName": "编码器"
+      },
+      "knowledgeBase": {
+        "name": "知识库（测试版）",
+        "shortName": "知识"
+      },
+      "dataGenerator": {
+        "name": "数据生成器",
+        "shortName": "数据生成"
+      },
+      "massDataGenerator": {
+        "name": "批量数据生成器",
+        "shortName": "批量生成"
+      }
+    }
+  },
+  "windows": {
+    "maxWindowsReached": "您已经打开了此应用程序的最大窗口数。",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "close": "关闭",
+    "restore": "还原"
+  },
+  "errors": {
+    "maxWindowsReached": "您已经打开了 {appName} 的最大窗口数。",
+    "generic": "发生错误。请重试。",
+    "network": "网络错误。请检查您的连接。",
+    "validation": "请检查输入的数据。"
+  },
+  "apps": {
+    "pomodoro": {
+      "name": "番茄钟",
+      "shortName": "番茄钟",
+      "title": "番茄钟计时器",
+      "description": "专注和集中注意力的生产力技巧",
+      "modes": {
+        "pomodoro": "番茄钟",
+        "shortBreak": "短休息",
+        "longBreak": "长休息"
+      },
+      "work": "工作",
+      "shortBreak": "短休息",
+      "longBreak": "长休息",
+      "start": "开始",
+      "pause": "暂停",
+      "reset": "重置",
+      "settings": "设置",
+      "workTime": "工作时间",
+      "shortBreakTime": "短休息时间",
+      "longBreakTime": "长休息时间",
+      "longBreakInterval": "长休息间隔",
+      "autoStartBreaks": "自动开始休息",
+      "autoStartPomodoros": "自动开始番茄钟",
+      "notifications": {
+        "enabled": "通知已启用",
+        "disabled": "通知已禁用",
+        "workComplete": "工作时间完成！",
+        "breakComplete": "休息完成！",
+        "timeFinished": "时间结束！",
+        "currentMode": "当前模式",
+        "enableInSettings": "在设置中启用",
+        "youWillBeNotified": "您将收到通知",
+        "permission": "需要通知权限",
+        "grant": "授予权限",
+        "denied": "通知被拒绝"
+      },
+      "config": {
+        "title": "设置",
+        "description": "调整番茄钟计时器、休息和声音设置。",
+        "timer": "计时器",
+        "sound": "声音",
+        "timeMinutes": "时间（分钟）",
+        "autoStartBreaks": "自动开始休息",
+        "autoStartPomodoros": "自动开始番茄钟",
+        "longBreakInterval": "长休息间隔",
+        "alarmSound": "闹钟声音",
+        "tickingSound": "滴答声",
+        "repeat": "重复",
+        "cancel": "取消",
+        "saveChanges": "保存更改",
+        "saved": "设置已保存！"
+      },
+      "sounds": {
+        "kitchen": "厨房",
+        "bell": "铃声",
+        "digital": "数字",
+        "wood": "木头",
+        "none": "无",
+        "ticking": "滴答声",
+        "whiteNoise": "白噪音",
+        "brownNoise": "棕噪音"
+      },
+      "history": {
+        "recent": "最近历史"
+      },
+      "stats": {
+        "title": "统计",
+        "completedPomodoros": "完成的番茄钟",
+        "sessionsToday": "今日会话"
+      },
+      "controls": {
+        "start": "开始",
+        "pause": "暂停",
+        "reset": "重置",
+        "resetShort": "重置"
+      }
+    },
+    "todo": {
+      "name": "待办事项",
+      "shortName": "待办",
+      "title": "任务管理器",
+      "addTask": "添加任务",
+      "addSubtask": "添加子任务...",
+      "placeholder": "输入新任务...",
+      "addDescription": "添加描述...",
+      "completed": "已完成",
+      "pending": "待处理",
+      "empty": "还没有任务。在上面添加一个！",
+      "priorities": {
+        "high": "高",
+        "medium": "中",
+        "low": "低",
+        "none": "无"
+      }
+    },
+    "auth": {
+      "name": "身份验证",
+      "shortName": "验证",
+      "title": "身份验证",
+      "description": "登录或注册以继续",
+      "tabs": {
+        "login": "登录",
+        "register": "注册"
+      },
+      "form": {
+        "email": "电子邮件",
+        "password": "密码",
+        "confirmPassword": "确认密码",
+        "name": "姓名",
+        "emailPlaceholder": "例如：example@email.com",
+        "namePlaceholder": "您的全名",
+        "forgotPassword": "忘记密码？"
+      },
+      "buttons": {
+        "login": "登录",
+        "createAccount": "创建账户"
+      },
+      "social": {
+        "continueWith": "或继续使用",
+        "google": "Google",
+        "github": "GitHub"
+      },
+      "terms": {
+        "agreement": "继续即表示您同意我们的",
+        "termsOfService": "服务条款",
+        "privacyPolicy": "隐私政策",
+        "and": "和"
+      },
+      "messages": {
+        "loginSuccess": "登录成功！",
+        "loginSuccessDesc": "您可以关闭此窗口。",
+        "loginError": "登录错误。请检查您的凭据。",
+        "registerSuccess": "注册成功！",
+        "registerError": "注册错误。请检查提供的数据。",
+        "titleRequired": "标题和代码是必需的！",
+        "nameRequired": "姓名和命令是必需的！"
+      },
+      "validation": {
+        "required": "必填字段。",
+        "invalidEmail": "无效的电子邮件。",
+        "passwordMismatch": "密码不匹配。"
+      }
+    },
+    "codeSnippets": {
+      "name": "代码片段",
+      "shortName": "片段",
+      "title": "代码片段管理器",
+      "description": "管理和组织您的代码片段",
+      "buttons": {
+        "newSnippet": "新建片段",
+        "copyCode": "复制代码",
+        "delete": "删除",
+        "update": "更新",
+        "saveNew": "保存新片段",
+        "cancel": "取消",
+        "edit": "编辑"
+      },
+      "placeholders": {
+        "searchSnippets": "搜索片段...",
+        "snippetTitle": "片段标题",
+        "yourCodeHere": "您的代码在这里...",
+        "tagsCommaSeparated": "标签（逗号分隔）",
+        "descriptionOptional": "描述（可选）",
+        "language": "语言"
+      },
+      "messages": {
+        "noSnippetsFound": "未找到片段。",
+        "noSnippetsCreated": "尚未创建片段。点击\"新建片段\"。",
+        "snippetCreated": "片段已创建！",
+        "snippetUpdated": "片段已更新！",
+        "codeCopied": "代码已复制！",
+        "noCodeToCopy": "没有代码可复制。",
+        "copyFailed": "复制代码失败。",
+        "selectSnippetToView": "选择一个片段查看或点击\"新建片段\"。",
+        "titleRequired": "标题和代码是必需的！"
+      },
+      "languages": {
+        "javascript": "Javascript",
+        "typescript": "Typescript",
+        "python": "Python",
+        "html": "HTML",
+        "css": "CSS",
+        "json": "JSON",
+        "markdown": "Markdown",
+        "bash": "Bash",
+        "sql": "SQL",
+        "other": "其他"
+      },
+      "deleteDialog": {
+        "title": "确认删除片段",
+        "itemName": "此片段"
+      }
+    },
+    "commandCenter": {
+      "name": "命令中心",
+      "shortName": "命令",
+      "title": "命令中心",
+      "description": "管理和组织您的 CLI 命令",
+      "buttons": {
+        "newCommand": "新建命令",
+        "copyCommand": "复制命令",
+        "delete": "删除",
+        "update": "更新",
+        "save": "保存",
+        "cancel": "取消",
+        "edit": "编辑"
+      },
+      "placeholders": {
+        "searchCommands": "搜索命令...",
+        "commandName": "友好的命令名称",
+        "yourCommandHere": "您的命令在这里...",
+        "tagsCommaSeparated": "标签（例如：git、docker、backup）",
+        "descriptionOptional": "描述（有助于解释命令）",
+        "platform": "平台/类型"
+      },
+      "messages": {
+        "noCommandsFound": "未找到命令。",
+        "noCommandsCreated": "没有保存的命令。点击\"新建命令\"。",
+        "commandCreated": "命令已创建！",
+        "commandUpdated": "命令已更新！",
+        "commandCopied": "命令已复制！",
+        "noCommandToCopy": "没有命令可复制。",
+        "copyFailed": "复制命令失败。",
+        "selectCommandToView": "选择一个命令查看或点击\"新建命令\"。",
+        "nameRequired": "姓名和命令是必需的！"
+      },
+      "platforms": {
+        "bash": "bash",
+        "powershell": "powershell",
+        "docker": "docker",
+        "git": "git",
+        "npm": "npm",
+        "yarn": "yarn",
+        "kubectl": "kubectl",
+        "other": "其他"
+      }
+    },
+    "jsonTools": {
+      "name": "JSON 工具",
+      "shortName": "JSON",
+      "title": "JSON 实用工具",
+      "description": "格式化、验证和转换 JSON 数据",
+      "buttons": {
+        "format": "格式化",
+        "minify": "压缩",
+        "load": "加载",
+        "download": "下载",
+        "clear": "清除",
+        "escape": "转义",
+        "unescape": "反转义"
+      },
+      "labels": {
+        "input": "输入",
+        "output": "输出",
+        "indentation": "缩进：",
+        "transformString": "转换字符串：",
+        "viewOutput": "查看输出："
+      },
+      "placeholders": {
+        "pasteJson": "在此粘贴您的 JSON...",
+        "resultHere": "结果将在此显示...",
+        "outputHere": "输出将在此显示。"
+      },
+      "badges": {
+        "valid": "有效",
+        "invalid": "无效"
+      },
+      "stats": {
+        "lines": "行数",
+        "characters": "字符数",
+        "size": "大小"
+      },
+      "viewModes": {
+        "text": "文本",
+        "tree": "树形"
+      },
+      "indentOptions": {
+        "twoSpaces": "2 个空格",
+        "fourSpaces": "4 个空格",
+        "tab": "制表符"
+      },
+      "messages": {
+        "jsonFormatted": "JSON 已格式化！",
+        "jsonMinified": "JSON 已压缩！",
+        "fileLoaded": "文件 \"{fileName}\" 已加载。",
+        "jsonDownloaded": "JSON 已下载！",
+        "stringEscaped": "字符串已转义为 JSON 值。",
+        "stringUnescaped": "字符串已反转义。",
+        "emptyInputEscape": "要转义的输入为空。",
+        "emptyInputUnescape": "要反转义的输入为空。",
+        "noContentToDownload": "输出中没有内容可下载。",
+        "invalidJsonError": "无效的输入 JSON。",
+        "processingError": "处理 JSON 时出错。",
+        "fileReadError": "读取文件时出错。",
+        "copyError": "复制 {type} 失败。",
+        "copySuccess": "{type} 已复制！",
+        "noContentToCopy": "没有 {type} 可复制。",
+        "unexpectedError": "意外错误：{error}",
+        "unescapeError": "反转义时出错：{error}",
+        "unescapeStringError": "反转义字符串时出错。",
+        "invalidStringError": "输入不是有效的 JSON 字符串。",
+        "invalidJsonForTree": "树形视图的输入 JSON 无效。"
+      },
+      "titles": {
+        "escapeString": "将字符串转义为 JSON 值",
+        "unescapeString": "反转义 JSON 字符串",
+        "copyInput": "复制输入 JSON",
+        "copyOutput": "复制输出 JSON"
+      }
+    },
+    "encoders": {
+      "name": "编码器 / 解码器",
+      "shortName": "编码器",
+      "title": "数据编码器和解码器",
+      "description": "使用各种算法编码和解码数据",
+      "tools": {
+        "jwt": "JWT",
+        "base64": "Base64",
+        "url": "URL"
+      },
+      "modes": {
+        "encode": "编码",
+        "decode": "解码"
+      },
+      "labels": {
+        "input": "输入",
+        "output": "输出",
+        "tool": "工具：",
+        "generatedToken": "生成的令牌（编码器）",
+        "secretKey": "密钥（HMAC）",
+        "algorithm": "算法",
+        "headerEditable": "HEADER（可编辑）",
+        "payloadEditable": "PAYLOAD（可编辑）",
+        "pasteTokenToDecode": "粘贴要解码的令牌",
+        "headerDecoded": "Header（已解码）",
+        "payloadDecoded": "Payload（已解码）"
+      },
+      "buttons": {
+        "clear": "清除",
+        "copyOutput": "复制输出",
+        "copyToken": "复制令牌",
+        "textToBase64": "文本 → Base64",
+        "base64ToText": "Base64 → 文本",
+        "encodeUrl": "编码 URL",
+        "decodeUrl": "解码 URL"
+      },
+      "badges": {
+        "signatureVerified": "签名已验证",
+        "signatureInvalid": "无效签名"
+      },
+      "placeholders": {
+        "secretKey": "您的超级密钥至少32字节长",
+        "waiting": "等待中...",
+        "pasteTokenToDecode": "粘贴要解码的令牌"
+      },
+      "messages": {
+        "copied": "已复制！",
+        "jsonError": "用于签名的 Header 或 Payload JSON 出错。",
+        "debugWarning": "调试工具。切勿使用生产密钥。"
+      },
+      "algorithms": {
+        "HS256": "HS256",
+        "HS384": "HS384",
+        "HS512": "HS512"
+      }
+    },
+    "dataGenerator": {
+      "name": "数据生成器",
+      "shortName": "数据生成",
+      "title": "测试数据生成器",
+      "tools": {
+        "uuid": "UUID 生成器",
+        "nanoid": "NanoID 生成器",
+        "hash": "哈希生成器（MD5、SHA）",
+        "password": "安全密码生成器"
+      },
+      "nanoidAlphabets": {
+        "urlSafe": "URL 安全（默认）",
+        "numbers": "仅数字",
+        "uppercase": "仅大写",
+        "lowercase": "仅小写",
+        "noLookAlikes": "无相似字符",
+        "custom": "自定义..."
+      },
+      "labels": {
+        "tool": "工具",
+        "quantity": "数量",
+        "generatedIds": "生成的 ID",
+        "generatedNanoids": "生成的 NanoID"
+      },
+      "buttons": {
+        "generateNew": "生成新的",
+        "copyAll": "复制全部",
+        "generateNewPassword": "生成新密码"
+      },
+      "errors": {
+        "nameAndNamespaceRequired": "需要有效的名称和 UUID 命名空间。",
+        "uuidGenerationError": "生成 UUID 时出错",
+        "alphabetError": "字母表错误",
+        "alphabetMinLength": "自定义字母表必须至少包含 2 个字符。",
+        "nanoidGenerationError": "生成 NanoID 时出错",
+        "selectCharacterType": "为密码选择至少一种字符类型。"
+      },
+      "messages": {
+        "copied": "已复制！",
+        "allIdsCopied": "所有 ID 已复制！"
+      },
+      "uuid": {
+        "settings": {
+          "title": "UUID 设置",
+          "version": "UUID 版本",
+          "name": "名称",
+          "namespace": "命名空间（有效 UUID）",
+          "dns": "DNS",
+          "url": "URL",
+          "removeHyphens": "移除连字符",
+          "uppercase": "大写"
+        },
+        "versions": {
+          "v7": "版本 7（Unix 时间，可排序）",
+          "v4": "版本 4（随机）",
+          "v6": "版本 6（时间，可排序）",
+          "v1": "版本 1（基于时间）",
+          "v5": "版本 5（基于名称，SHA-1）",
+          "v3": "版本 3（基于名称，MD5）",
+          "nil": "NIL（空/空 UUID）",
+          "max": "MAX（最大 UUID）"
+        }
+      },
+      "nanoid": {
+        "settings": {
+          "title": "NanoID 设置",
+          "idSize": "ID 大小",
+          "alphabet": "字母表",
+          "customAlphabetBuilder": "自定义字母表构建器",
+          "lowercase": "小写",
+          "uppercase": "大写",
+          "numbers": "数字",
+          "customAlphabetPlaceholder": "直接编辑或使用上面的快捷方式..."
+        }
+      },
+      "hash": {
+        "title": "哈希生成器",
+        "inputLabel": "输入文本",
+        "generatedTitle": "生成的哈希"
+      },
+      "password": {
+        "generatedTitle": "生成的安全密码",
+        "settings": {
+          "title": "密码设置",
+          "length": "长度",
+          "uppercase": "大写（A-Z）",
+          "lowercase": "小写（a-z）",
+          "numbers": "数字（0-9）",
+          "symbols": "符号（!@#）"
+        }
+      }
+    },
+    "massDataGenerator": {
+      "name": "批量数据生成器",
+      "shortName": "批量生成",
+      "title": "批量数据生成器",
+      "labels": {
+        "dataTypes": "数据类型",
+        "generalSettings": "常规设置",
+        "recordQuantity": "记录数量",
+        "outputFormat": "输出格式",
+        "generatedData": "生成的数据"
+      },
+      "buttons": {
+        "add": "添加",
+        "fieldFromLibrary": "从库中添加字段",
+        "generateFakeData": "生成假数据",
+        "generating": "生成中...",
+        "download": "下载",
+        "copy": "复制"
+      },
+      "formats": {
+        "json": "JSON",
+        "csv": "CSV"
+      },
+      "csv": {
+        "includeHeader": "包含 CSV 标题",
+        "delimiter": "CSV 分隔符",
+        "comma": "逗号（,）",
+        "semicolon": "分号（;）"
+      },
+      "placeholders": {
+        "quantityExample": "例如：10",
+        "searchDataTypes": "搜索任何数据类型...",
+        "configureAndGenerate": "配置数据并点击\"生成假数据\"以在此处查看结果。"
+      },
+      "messages": {
+        "dataCopied": "数据已复制到剪贴板！",
+        "generatingInBackground": "在后台线程中生成数据...",
+        "noResultsFound": "未找到结果。"
+      },
+      "errors": {
+        "maxQuantity": "最大数量为 10,000 条记录。",
+        "copyError": "复制数据时出错。请重试。"
+      },
+      "fields": {
+        "person": "人员",
+        "fullName": "全名",
+        "firstName": "名字",
+        "lastName": "姓氏",
+        "middleName": "中间名",
+        "prefix": "前缀（先生、博士）",
+        "suffix": "后缀（小、博士）",
+        "sex": "生物性别",
+        "gender": "性别",
+        "bio": "简介",
+        "jobArea": "工作领域",
+        "jobTitle": "职位",
+        "jobDescriptor": "工作描述",
+        "jobType": "工作类型",
+        "zodiacSign": "星座",
+        "cpf": "CPF",
+        "cnpj": "CNPJ",
+        "internet": "互联网",
+        "email": "电子邮件",
+        "userName": "用户名",
+        "url": "URL",
+        "domainName": "域名",
+        "ip": "IP 地址",
+        "ipv6": "IPv6 地址",
+        "mac": "MAC 地址",
+        "hexColor": "颜色（十六进制）",
+        "password": "密码",
+        "protocol": "协议",
+        "userAgent": "用户代理",
+        "httpMethod": "HTTP 方法",
+        "finance": "金融",
+        "accountNumber": "账户号码",
+        "accountName": "账户名称",
+        "currencyName": "货币名称",
+        "currencyCode": "货币代码",
+        "currencySymbol": "货币符号",
+        "creditCardNumber": "信用卡号码",
+        "creditCardCVV": "信用卡 CVV",
+        "iban": "IBAN",
+        "bic": "BIC",
+        "bitcoinAddress": "比特币地址",
+        "ethereumAddress": "以太坊地址",
+        "location": "位置",
+        "streetAddress": "街道地址",
+        "city": "城市",
+        "state": "州（缩写）",
+        "country": "国家",
+        "countryCode": "国家代码",
+        "zipCode": "邮政编码",
+        "latitude": "纬度",
+        "longitude": "经度",
+        "direction": "方向",
+        "timeZone": "时区",
+        "animal": "动物",
+        "dog": "狗",
+        "cat": "猫",
+        "bird": "鸟",
+        "fish": "鱼",
+        "insect": "昆虫",
+        "animalType": "动物类型",
+        "bear": "熊",
+        "cow": "牛",
+        "lion": "狮子",
+        "commerce": "商业",
+        "productName": "产品名称",
+        "price": "价格",
+        "department": "部门",
+        "sku": "SKU",
+        "productDescription": "产品描述",
+        "productAdjective": "产品形容词",
+        "productMaterial": "产品材料",
+        "system": "系统",
+        "fileName": "文件名",
+        "fileExt": "文件扩展名",
+        "fileType": "文件类型",
+        "mimeType": "MIME 类型",
+        "directoryPath": "目录路径",
+        "filePath": "文件路径",
+        "semver": "语义版本",
+        "string": "字符串",
+        "uuid": "UUID",
+        "alphanumeric": "字母数字（字符串）",
+        "numeric": "数字（字符串）",
+        "hexadecimal": "十六进制（字符串）",
+        "binary": "二进制（字符串）",
+        "octal": "八进制（字符串）",
+        "vehicle": "车辆",
+        "vehicleType": "车辆类型",
+        "manufacturer": "制造商",
+        "model": "型号",
+        "vin": "VIN（底盘）",
+        "vehicleColor": "车辆颜色",
+        "date": "日期",
+        "pastDate": "过去日期",
+        "futureDate": "未来日期",
+        "recentDate": "最近日期",
+        "birthdate": "出生日期",
+        "dateBetween": "日期之间...",
+        "weekday": "工作日",
+        "month": "月份",
+        "primitiveTypes": "原始类型",
+        "stringUuid": "字符串（UUID）",
+        "stringAlphanumeric": "字符串（字母数字）",
+        "stringAlpha": "字符串（字母）",
+        "intNumber": "整数",
+        "floatNumber": "小数",
+        "boolean": "布尔值（true/false）",
+        "loremText": "Lorem 文本",
+        "loremWord": "单词（Lorem）",
+        "loremWords": "单词（Lorem）",
+        "loremSentence": "句子（Lorem）",
+        "loremParagraph": "段落（Lorem）",
+        "loremLines": "文本行（Lorem）",
+        "loremSlug": "Slug（Lorem）",
+        "number": "数字",
+        "intNumeric": "整数（数字）",
+        "floatNumeric": "小数（数字）",
+        "hexNumeric": "十六进制（数字）",
+        "binaryNumeric": "二进制（数字）",
+        "octalNumeric": "八进制（数字）",
+        "airline": "航空公司",
+        "airplane": "飞机",
+        "airport": "机场",
+        "flightNumber": "航班号",
+        "seat": "座位",
+        "hacker": "黑客",
+        "abbreviation": "缩写",
+        "adjective": "形容词",
+        "noun": "名词",
+        "verb": "动词",
+        "phrase": "黑客短语",
+        "word": "单词",
+        "wordNoun": "名词（字典）",
+        "wordVerb": "动词（字典）",
+        "wordAdjective": "形容词（字典）",
+        "wordPreposition": "介词（字典）",
+        "wordSample": "单词（字典）",
+        "company": "公司",
+        "companyName": "公司名称",
+        "buzzPhrase": "流行语",
+        "catchPhrase": "口号",
+        "bs": "商业术语",
+        "database": "数据库",
+        "column": "列名",
+        "columnType": "列类型",
+        "engine": "引擎",
+        "mongodbObjectId": "MongoDB 对象 ID",
+        "git": "Git",
+        "branch": "分支",
+        "commitSha": "提交 SHA",
+        "shortSha": "短 SHA",
+        "commitMessage": "提交消息",
+        "image": "图像",
+        "imageUrl": "图像 URL",
+        "avatar": "头像",
+        "dataUri": "图像数据 URI",
+        "color": "颜色",
+        "colorName": "颜色名称",
+        "colorSpace": "颜色空间",
+        "rgbColor": "RGB 颜色",
+        "music": "音乐",
+        "genre": "音乐类型",
+        "songName": "歌曲名称",
+        "phone": "电话",
+        "phoneNumber": "电话号码",
+        "imei": "IMEI",
+        "science": "科学",
+        "chemicalElement": "化学元素",
+        "unit": "计量单位"
+      }
+    },
+    "regexBuilder": {
+      "name": "正则表达式构建器",
+      "shortName": "正则表达式",
+      "title": "可视化正则表达式构建器",
+      "build": "构建",
+      "test": "测试",
+      "clear": "清除",
+      "copy": "复制"
+    },
+    "kanbanBoard": {
+      "name": "看板",
+      "shortName": "看板",
+      "title": "看板",
+      "addColumn": "添加列",
+      "addCard": "添加卡片",
+      "edit": "编辑",
+      "delete": "删除",
+      "move": "移动"
+    },
+    "markdownNotes": {
+      "name": "Markdown 笔记",
+      "shortName": "笔记",
+      "title": "Markdown 笔记编辑器",
+      "newNote": "新建笔记",
+      "save": "保存",
+      "delete": "删除",
+      "preview": "预览"
+    },
+    "knowledgeBase": {
+      "name": "知识库",
+      "shortName": "知识",
+      "title": "知识库",
+      "description": "使用 Markdown 笔记和内部链接组织和管理您的知识",
+      "buttons": {
+        "newBlock": "新建块",
+        "edit": "编辑",
+        "save": "保存",
+        "updateBlock": "更新块",
+        "saveNewBlock": "保存新块",
+        "cancel": "取消",
+        "delete": "删除",
+        "link": "链接",
+        "editor": "编辑器",
+        "preview": "预览"
+      },
+      "placeholders": {
+        "search": "搜索块...",
+        "blockTitle": "块标题",
+        "tags": "标签（逗号分隔）",
+        "sourceUrl": "源 URL（可选）",
+        "content": "在此编写您的内容...",
+        "linkSearch": "搜索要链接的块..."
+      },
+      "labels": {
+        "linkedBy": "链接自",
+        "noBacklinks": "没有其他块链接到此块",
+        "selectBlock": "选择一个块查看或点击\"新建块\""
+      },
+      "messages": {
+        "titleRequired": "标题是必需的！",
+        "blockUpdated": "块已更新！",
+        "blockCreated": "块已创建！",
+        "blockDeleted": "块已删除。",
+        "noBlockSelected": "未选择要删除的块。",
+        "noBlocksFound": "未找到块。",
+        "noBlocksCreated": "未创建块。",
+        "loadingError": "加载知识库时出错："
+      },
+      "deleteDialog": {
+        "title": "确认删除",
+        "itemName": "此块"
+      },
+      "linkDialog": {
+        "title": "与另一个块链接"
+      },
+      "fallbacks": {
+        "untitledBlock": "无标题块"
+      }
+    }
+  }
+}

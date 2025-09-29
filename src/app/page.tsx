@@ -1,12 +1,6 @@
-import { AppLauncher } from "@/components/AppLauncher";
-import Desktop from "@/components/Desktop";
-import { Dock } from "@/components/Dock";
+import { defaultLocale } from "@/i18n/config";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return (
-    <Desktop>
-      <Dock />
-      <AppLauncher />
-    </Desktop>
-  );
+export default function RootPage() {
+  redirect(`/${defaultLocale}`);
 }

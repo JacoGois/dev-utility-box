@@ -25,7 +25,7 @@ function getFakerMethod(path: string): () => string | number {
         current = (current as Record<string, unknown>)[part];
       } else {
         throw new Error(
-          `Caminho inválido no objeto Faker: a parte "${part}" não existe.`
+          `Invalid path in Faker object: part "${part}" does not exist.`
         );
       }
     }
@@ -34,13 +34,10 @@ function getFakerMethod(path: string): () => string | number {
       return current as () => string | number;
     }
 
-    throw new Error(`O caminho "${path}" não resultou em uma função.`);
+    throw new Error(`Path "${path}" did not result in a function.`);
   } catch (error) {
-    console.error(
-      `Erro ao resolver o método Faker para o caminho "${path}":`,
-      error
-    );
-    return () => `Erro: Método inválido (${path})`;
+    console.error(`Error resolving Faker method for path "${path}":`, error);
+    return () => `Error: Invalid method (${path})`;
   }
 }
 

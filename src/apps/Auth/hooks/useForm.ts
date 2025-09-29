@@ -2,27 +2,47 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
-const loginSchema = z.object({
-  email: z
-    .email({ message: "E-mail inválido." })
-    .min(1, { message: "Campo obrigatório." }),
-  password: z.string().min(1, { message: "Campo obrigatório." }),
-});
-
-export type LoginFormValues = z.infer<typeof loginSchema>;
-
-interface UseLoginFormProps {
-  onSubmit: SubmitHandler<LoginFormValues>;
+interface UseFormProps {
+  onSubmit: SubmitHandler<any>;
+  t: (key: string) => string;
 }
 
-export const useLoginForm = ({ onSubmit }: UseLoginFormProps) => {
+const createLoginSchema = (t: (key: string) => string) =>
+  z.object({
+    email: z
+      .email({ message: t("validation.invalidEmail") })
+      .min(1, { message: t("validation.required") }),
+    password: z.string().min(1, { message: t("validation.required") }),
+  });
+
+const createRegisterSchema = (t: (key: string) => string) =>
+  z
+    .object({
+      name: z.string().min(1, { message: t("validation.required") }),
+      email: z
+        .email({ message: t("validation.invalidEmail") })
+        .min(1, { message: t("validation.required") }),
+      password: z.string().min(1, { message: t("validation.required") }),
+      confirmPassword: z.string().min(1, { message: t("validation.required") }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("validation.passwordMismatch"),
+      path: ["confirmPassword"],
+    });
+
+export type LoginFormValues = z.infer<ReturnType<typeof createLoginSchema>>;
+export type RegisterFormValues = z.infer<
+  ReturnType<typeof createRegisterSchema>
+>;
+
+export const useLoginForm = ({ onSubmit, t }: UseFormProps) => {
+  const loginSchema = createLoginSchema(t);
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
-
     mode: "onSubmit",
   });
 
@@ -32,22 +52,8 @@ export const useLoginForm = ({ onSubmit }: UseLoginFormProps) => {
   };
 };
 
-const registerSchema = z.object({
-  name: z.string().min(1, { message: "Campo obrigatório." }),
-  email: z
-    .email({ message: "E-mail inválido." })
-    .min(1, { message: "Campo obrigatório." }),
-  password: z.string().min(1, { message: "Campo obrigatório." }),
-  confirmPassword: z.string().min(1, { message: "Campo obrigatório." }),
-});
-
-export type RegisterFormValues = z.infer<typeof registerSchema>;
-
-interface UseRegisterFormProps {
-  onSubmit: SubmitHandler<RegisterFormValues>;
-}
-
-export const useRegisterForm = ({ onSubmit }: UseRegisterFormProps) => {
+export const useRegisterForm = ({ onSubmit, t }: UseFormProps) => {
+  const registerSchema = createRegisterSchema(t);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -56,7 +62,6 @@ export const useRegisterForm = ({ onSubmit }: UseRegisterFormProps) => {
       password: "",
       confirmPassword: "",
     },
-
     mode: "onSubmit",
   });
 

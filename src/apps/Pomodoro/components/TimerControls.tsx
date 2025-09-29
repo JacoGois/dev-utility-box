@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/Button";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { Pause, Play, RotateCcw } from "lucide-react";
 import React from "react";
 
@@ -10,6 +11,8 @@ interface TimerControlsProps {
 
 const TimerControls = React.memo(
   ({ isRunning, onTogglePlayPause, onResetTimer }: TimerControlsProps) => {
+    const t = useAppTranslations("pomodoro");
+
     return (
       <div className="flex gap-2 @sm:gap-3 @lg:gap-4">
         <Button
@@ -24,12 +27,12 @@ const TimerControls = React.memo(
           {isRunning ? (
             <>
               <Pause className="w-3 h-3 @sm:w-4 @sm:h-4 @lg:w-5 @lg:h-5 mr-1 @sm:mr-2" />
-              Pausar
+              {t("controls.pause")}
             </>
           ) : (
             <>
               <Play className="w-3 h-3 @sm:w-4 @sm:h-4 @lg:w-5 @lg:h-5 mr-1 @sm:mr-2" />
-              Iniciar
+              {t("controls.start")}
             </>
           )}
         </Button>
@@ -40,8 +43,8 @@ const TimerControls = React.memo(
           className="px-3 @sm:px-4 @lg:px-6 hover:scale-105 transition-all duration-200 text-xs @sm:text-sm"
         >
           <RotateCcw className="w-3 h-3 @sm:w-4 @sm:h-4 @lg:w-5 @lg:h-5 mr-1 @sm:mr-2" />
-          <span className="hidden @sm:inline">Reiniciar</span>
-          <span className="@sm:hidden">Reset</span>
+          <span className="hidden @sm:inline">{t("controls.reset")}</span>
+          <span className="@sm:hidden">{t("controls.resetShort")}</span>
         </Button>
       </div>
     );

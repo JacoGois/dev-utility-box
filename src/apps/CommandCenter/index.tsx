@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form/SelectCore";
 import { Textarea } from "@/components/ui/form/Textarea";
 import { ScrollArea } from "@/components/ui/ScrollArea";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { cn } from "@/lib/utils";
 import {
   Copy,
@@ -31,18 +32,19 @@ import { CliCommand } from "./types";
 
 const COMMANDS_STORAGE_KEY = "cli-center-commands";
 
-const commandPlatforms: Array<CliCommand["platform"]> = [
-  "bash",
-  "powershell",
-  "docker",
-  "git",
-  "npm",
-  "yarn",
-  "kubectl",
-  "other",
-];
-
 function CommandCenterComponent() {
+  const t = useAppTranslations("commandCenter");
+
+  const commandPlatforms: Array<CliCommand["platform"]> = [
+    "bash",
+    "powershell",
+    "docker",
+    "git",
+    "npm",
+    "yarn",
+    "kubectl",
+    "other",
+  ];
   const [commands, setCommands] = useState<CliCommand[]>([]);
   const [selectedCommandId, setSelectedCommandId] = useState<string | null>(
     null
@@ -132,7 +134,7 @@ function CommandCenterComponent() {
 
   const handleSaveCommand = useCallback(() => {
     if (!formName.trim() || !formCommand.trim()) {
-      toast.error("Nome e Comando são obrigatórios!");
+      toast.error(t("messages.nameRequired"));
       return;
     }
     const tagsArray = formTags
@@ -156,7 +158,7 @@ function CommandCenterComponent() {
             : c
         )
       );
-      toast.success("Comando atualizado!");
+      toast.success(t("messages.commandUpdated"));
     } else {
       const newCommandId = nanoid();
       const newCommand: CliCommand = {
@@ -171,7 +173,7 @@ function CommandCenterComponent() {
       };
       setCommands((prev) => [newCommand, ...prev]);
       setSelectedCommandId(newCommandId);
-      toast.success("Comando criado!");
+      toast.success(t("messages.commandCreated"));
     }
     setIsEditing(false);
   }, [
@@ -188,9 +190,9 @@ function CommandCenterComponent() {
     if (currentSelectedCommandObject) {
       setShowDeleteDialog(true);
     } else {
-      toast.error("Nenhum comando selecionado para excluir.");
+      toast.error(t("messages.noCommandsFound"));
     }
-  }, [currentSelectedCommandObject]);
+  }, [currentSelectedCommandObject, t]);
 
   const confirmActualDelete = useCallback(() => {
     if (!selectedCommandId) return;
@@ -198,21 +200,21 @@ function CommandCenterComponent() {
     resetAndClearForm();
     setSelectedCommandId(null);
     setIsEditing(false);
-    toast.info("Comando excluído.");
-  }, [selectedCommandId, commands, resetAndClearForm]);
+    toast.info(t("messages.commandUpdated"));
+  }, [selectedCommandId, commands, resetAndClearForm, t]);
 
   const handleCopyToClipboard = useCallback(
     (text: string | undefined, type: string = "Comando") => {
       if (typeof text !== "string" || !text.trim()) {
-        toast.error(`Nenhum ${type} para copiar.`);
+        toast.error(t("messages.noCommandToCopy"));
         return;
       }
       navigator.clipboard
         .writeText(text)
-        .then(() => toast.success(`${type} copiado!`))
-        .catch(() => toast.error(`Falha ao copiar ${type}.`));
+        .then(() => toast.success(t("messages.commandCopied")))
+        .catch(() => toast.error(t("messages.copyFailed")));
     },
-    []
+    [t]
   );
 
   const filteredCommands = useMemo(() => {
@@ -266,12 +268,12 @@ function CommandCenterComponent() {
             size="sm"
             className="w-full justify-start bg-card"
           >
-            <PlusCircle className="mr-2 h-4 w-4" /> Novo Comando
+            <PlusCircle className="mr-2 h-4 w-4" /> {t("buttons.newCommand")}
           </Button>
           <div className="relative">
             <Input
               type="text"
-              placeholder="Buscar comandos..."
+              placeholder={t("placeholders.searchCommands")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-8"
@@ -340,14 +342,14 @@ function CommandCenterComponent() {
           ))}
           {filteredCommands.length === 0 && searchTerm && (
             <p className="p-4 text-center text-sm text-muted-foreground">
-              Nenhum comando encontrado.
+              {t("messages.noCommandsFound")}
             </p>
           )}
           {filteredCommands.length === 0 &&
             !searchTerm &&
             commands.length === 0 && (
               <p className="p-4 text-center text-sm text-muted-foreground">
-                Nenhum comando salvo. Clique em {'"Novo Comando"'}.
+                {t("messages.noCommandsCreated")}
               </p>
             )}
         </ScrollArea>
@@ -361,7 +363,7 @@ function CommandCenterComponent() {
                 <Input
                   id="command-center-name-input"
                   type="text"
-                  placeholder="Nome Amigável do Comando"
+                  placeholder={t("placeholders.commandName")}
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
                   className="text-lg font-semibold"
@@ -376,9 +378,9 @@ function CommandCenterComponent() {
                       variant="ghost"
                       size="sm"
                       onClick={handleEditSelected}
-                      title="Editar Comando"
+                      title={t("buttons.edit")}
                     >
-                      <Edit2 className="mr-1 h-4 w-4" /> Editar
+                      <Edit2 className="mr-1 h-4 w-4" /> {t("buttons.edit")}
                     </Button>
                   )}
                 </div>
@@ -393,7 +395,7 @@ function CommandCenterComponent() {
                       }
                     >
                       <SelectTrigger className="w-full md:w-[200px] h-9 text-xs">
-                        <SelectValue placeholder="Plataforma/Tipo" />
+                        <SelectValue placeholder={t("placeholders.platform")} />
                       </SelectTrigger>
                       <SelectContent className="z-[999999999]">
                         {commandPlatforms.map((p) => (
@@ -402,21 +404,21 @@ function CommandCenterComponent() {
                             value={p || "other"}
                             className="text-xs"
                           >
-                            {p}
+                            {t(`platforms.${p}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                     <Input
                       type="text"
-                      placeholder="Tags (ex: git, docker, backup)"
+                      placeholder={t("placeholders.tagsCommaSeparated")}
                       value={formTags}
                       onChange={(e) => setFormTags(e.target.value)}
                       className="h-9 text-xs"
                     />
                   </div>
                   <Textarea
-                    placeholder="Descrição (útil para explicar o comando)"
+                    placeholder={t("placeholders.descriptionOptional")}
                     value={formDescription}
                     onChange={(e) => setFormDescription(e.target.value)}
                     className="h-24 text-xs resize-none"
@@ -446,13 +448,13 @@ function CommandCenterComponent() {
 
             <div className="flex-grow relative overflow-hidden p-3">
               <label className="text-xs font-medium text-muted-foreground block mb-1.5">
-                Comando:
+                {t("placeholders.yourCommandHere")}:
               </label>
               {isEditing ? (
                 <Textarea
                   value={formCommand}
                   onChange={(e) => setFormCommand(e.target.value)}
-                  placeholder="$ Seu comando aqui..."
+                  placeholder={t("placeholders.yourCommandHere")}
                   className="p-3 w-full h-[calc(100%-28px)] resize-none border bg-transparent rounded-md focus:ring-primary-foreground text-sm font-mono "
                 />
               ) : currentSelectedCommandObject ? (
@@ -477,7 +479,7 @@ function CommandCenterComponent() {
                       )
                     }
                   >
-                    <Copy className="mr-2 h-4 w-4" /> Copiar Comando
+                    <Copy className="mr-2 h-4 w-4" /> {t("buttons.copyCommand")}
                   </Button>
                 )}
               </div>
@@ -488,13 +490,15 @@ function CommandCenterComponent() {
                     size="sm"
                     onClick={handleDeleteCommandPress}
                   >
-                    <Trash2 className="mr-2 h-4 w-4" /> Excluir
+                    <Trash2 className="mr-2 h-4 w-4" /> {t("buttons.delete")}
                   </Button>
                 )}
                 {isEditing && (
                   <Button size="sm" onClick={handleSaveCommand}>
                     <Save className="mr-2 h-4 w-4" />
-                    {selectedCommandId ? "Atualizar" : "Salvar"}
+                    {selectedCommandId
+                      ? t("buttons.update")
+                      : t("buttons.save")}
                   </Button>
                 )}
                 {isEditing && (
@@ -511,7 +515,7 @@ function CommandCenterComponent() {
                       }
                     }}
                   >
-                    <XCircle className="mr-2 h-4 w-4" /> Cancelar
+                    <XCircle className="mr-2 h-4 w-4" /> {t("buttons.cancel")}
                   </Button>
                 )}
               </div>
@@ -520,10 +524,7 @@ function CommandCenterComponent() {
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <TerminalSquare className="w-16 h-16 mb-4" />
-            <p className="text-center">
-              Selecione um comando para visualizar ou clique em{" "}
-              {'"Novo Comando"'}.
-            </p>
+            <p className="text-center">{t("messages.selectCommandToView")}</p>
           </div>
         )}
       </div>

@@ -1,0 +1,878 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "open": "Abrir",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "refresh": "Actualizar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "finish": "Finalizar",
+    "start": "Iniciar",
+    "stop": "Detener",
+    "pause": "Pausa",
+    "resume": "Reanudar",
+    "copy": "Copiar",
+    "clear": "Limpiar",
+    "reset": "Restablecer",
+    "yes": "Sí",
+    "no": "No",
+    "ok": "OK",
+    "warning": "Advertencia",
+    "info": "Info",
+    "deleteDialog": {
+      "title": "¿Estás seguro?",
+      "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente",
+      "selectedItem": "el elemento seleccionado",
+      "confirm": "Sí, eliminar"
+    }
+  },
+  "desktop": {
+    "title": "Dev Utility Box",
+    "description": "Optimiza tu flujo de trabajo con utilidades prácticas y eficientes. Enfócate en programar y construir.",
+    "open": "Abrir",
+    "removeFromDesktop": "Quitar del Escritorio",
+    "spotlight": {
+      "title": "Búsqueda Rápida de Apps",
+      "placeholder": "Buscar apps...",
+      "noResults": "No se encontraron resultados.",
+      "shortcut": "Presiona Ctrl+K o Cmd+K"
+    },
+    "dock": {
+      "launcher": "Lanzador de Apps",
+      "allApps": "Todas las Aplicaciones"
+    },
+    "help": {
+      "title": "Atajos de Teclado",
+      "description": "Usa estos atajos para navegar.",
+      "spotlight": "Abrir Búsqueda Spotlight",
+      "launcher": "Abrir Lanzador de Apps",
+      "language": "Cambiar Idioma",
+      "resizeWindow": "Redimensionar ventana haciendo clic y arrastrando el medio del borde derecho, el medio del borde inferior, o la esquina inferior derecha."
+    },
+    "shortcuts": {
+      "openQuickSearch": "Abrir búsqueda rápida",
+      "openAppLauncher": "Abrir lanzador de apps",
+      "resizeWindow": "Redimensionar ventana"
+    },
+    "apps": {
+      "auth": {
+        "name": "Autenticación",
+        "shortName": "Auth"
+      },
+      "codeSnippets": {
+        "name": "Fragmentos de Código",
+        "shortName": "Fragmentos"
+      },
+      "commandCenter": {
+        "name": "Centro de Comandos",
+        "shortName": "Comandos"
+      },
+      "pomodoro": {
+        "name": "Pomodoro",
+        "shortName": "Pomodoro"
+      },
+      "todo": {
+        "name": "Lista de Tareas",
+        "shortName": "Tareas"
+      },
+      "jsonTools": {
+        "name": "Herramientas JSON",
+        "shortName": "JSON"
+      },
+      "encoders": {
+        "name": "Codificadores / Decodificadores",
+        "shortName": "Codificadores"
+      },
+      "knowledgeBase": {
+        "name": "Base de Conocimiento (BETA)",
+        "shortName": "Conocimiento"
+      },
+      "dataGenerator": {
+        "name": "Generador de Datos",
+        "shortName": "Datos Gen"
+      },
+      "massDataGenerator": {
+        "name": "Generador Masivo de Datos",
+        "shortName": "Masa Gen"
+      }
+    }
+  },
+  "windows": {
+    "maxWindowsReached": "Ya has abierto el número máximo de ventanas para esta aplicación.",
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "close": "Cerrar",
+    "restore": "Restaurar"
+  },
+  "errors": {
+    "maxWindowsReached": "Ya has abierto el número máximo de ventanas para {appName}.",
+    "generic": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+    "network": "Error de red. Por favor, verifica tu conexión.",
+    "validation": "Por favor, verifica los datos ingresados."
+  },
+  "apps": {
+    "pomodoro": {
+      "name": "Pomodoro",
+      "shortName": "Pomodoro",
+      "title": "Temporizador Pomodoro",
+      "description": "Técnica de productividad para enfoque y concentración",
+      "modes": {
+        "pomodoro": "Pomodoro",
+        "shortBreak": "Descanso Corto",
+        "longBreak": "Descanso Largo"
+      },
+      "work": "Trabajo",
+      "shortBreak": "Descanso Corto",
+      "longBreak": "Descanso Largo",
+      "start": "Iniciar",
+      "pause": "Pausa",
+      "reset": "Restablecer",
+      "settings": "Configuración",
+      "workTime": "Tiempo de Trabajo",
+      "shortBreakTime": "Tiempo de Descanso Corto",
+      "longBreakTime": "Tiempo de Descanso Largo",
+      "longBreakInterval": "Intervalo de Descanso Largo",
+      "autoStartBreaks": "Iniciar Descansos Automáticamente",
+      "autoStartPomodoros": "Iniciar Pomodoros Automáticamente",
+      "notifications": {
+        "enabled": "Notificaciones Habilitadas",
+        "disabled": "Notificaciones deshabilitadas",
+        "workComplete": "¡Tiempo de trabajo completado!",
+        "breakComplete": "¡Descanso completado!",
+        "timeFinished": "¡Tiempo terminado!",
+        "currentMode": "Modo actual",
+        "enableInSettings": "Habilitar en configuración",
+        "youWillBeNotified": "Serás notificado",
+        "permission": "Permiso de notificación requerido",
+        "grant": "Otorgar Permiso",
+        "denied": "Notificaciones denegadas"
+      },
+      "config": {
+        "title": "Configuración",
+        "description": "Ajusta el temporizador Pomodoro, descansos y configuración de sonido.",
+        "timer": "Temporizador",
+        "sound": "Sonido",
+        "timeMinutes": "Tiempo (minutos)",
+        "autoStartBreaks": "Iniciar Descansos Automáticamente",
+        "autoStartPomodoros": "Iniciar Pomodoros Automáticamente",
+        "longBreakInterval": "Intervalo de descanso largo",
+        "alarmSound": "Sonido de Alarma",
+        "tickingSound": "Sonido de Tic Tac",
+        "repeat": "repetir",
+        "cancel": "Cancelar",
+        "saveChanges": "Guardar Cambios",
+        "saved": "¡Configuración guardada!"
+      },
+      "sounds": {
+        "kitchen": "Cocina",
+        "bell": "Campana",
+        "digital": "Digital",
+        "wood": "Madera",
+        "none": "Ninguno",
+        "ticking": "Tic Tac",
+        "whiteNoise": "Ruido Blanco",
+        "brownNoise": "Ruido Marrón"
+      },
+      "history": {
+        "recent": "Historial Reciente"
+      },
+      "stats": {
+        "title": "Estadísticas",
+        "completedPomodoros": "Pomodoros Completados",
+        "sessionsToday": "Sesiones hoy"
+      },
+      "controls": {
+        "start": "Iniciar",
+        "pause": "Pausa",
+        "reset": "Restablecer",
+        "resetShort": "Reset"
+      }
+    },
+    "todo": {
+      "name": "Lista de Tareas",
+      "shortName": "Tareas",
+      "title": "Gestor de Tareas",
+      "addTask": "Agregar Tarea",
+      "addSubtask": "Agregar subtarea...",
+      "placeholder": "Ingresa una nueva tarea...",
+      "addDescription": "Agregar descripción...",
+      "completed": "Completado",
+      "pending": "Pendiente",
+      "empty": "Aún no hay tareas. ¡Agrega una arriba!",
+      "priorities": {
+        "high": "Alta",
+        "medium": "Media",
+        "low": "Baja",
+        "none": "Ninguna"
+      }
+    },
+    "auth": {
+      "name": "Autenticación",
+      "shortName": "Auth",
+      "title": "Autenticación",
+      "description": "Inicia sesión o regístrate para continuar",
+      "tabs": {
+        "login": "Iniciar Sesión",
+        "register": "Registrarse"
+      },
+      "form": {
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar Contraseña",
+        "name": "Nombre",
+        "emailPlaceholder": "Ej.: ejemplo@email.com",
+        "namePlaceholder": "Tu nombre completo",
+        "forgotPassword": "¿Olvidaste tu contraseña?"
+      },
+      "buttons": {
+        "login": "Iniciar Sesión",
+        "createAccount": "Crear Cuenta"
+      },
+      "social": {
+        "continueWith": "O continúa con",
+        "google": "Google",
+        "github": "GitHub"
+      },
+      "terms": {
+        "agreement": "Al continuar, aceptas nuestros",
+        "termsOfService": "Términos de Servicio",
+        "privacyPolicy": "Política de Privacidad",
+        "and": "y"
+      },
+      "messages": {
+        "loginSuccess": "¡Inicio de sesión exitoso!",
+        "loginSuccessDesc": "Puedes cerrar esta ventana.",
+        "loginError": "Error de inicio de sesión. Por favor, verifica tus credenciales.",
+        "registerSuccess": "¡Registro exitoso!",
+        "registerError": "Error de registro. Por favor, verifica los datos proporcionados.",
+        "titleRequired": "¡Título y Código son requeridos!",
+        "nameRequired": "¡Nombre y Comando son requeridos!"
+      },
+      "validation": {
+        "required": "Campo requerido.",
+        "invalidEmail": "Correo electrónico inválido.",
+        "passwordMismatch": "Las contraseñas no coinciden."
+      }
+    },
+    "codeSnippets": {
+      "name": "Fragmentos de Código",
+      "shortName": "Fragmentos",
+      "title": "Gestor de Fragmentos de Código",
+      "description": "Gestiona y organiza tus fragmentos de código",
+      "buttons": {
+        "newSnippet": "Nuevo Fragmento",
+        "copyCode": "Copiar Código",
+        "delete": "Eliminar",
+        "update": "Actualizar",
+        "saveNew": "Guardar Nuevo",
+        "cancel": "Cancelar",
+        "edit": "Editar"
+      },
+      "placeholders": {
+        "searchSnippets": "Buscar fragmentos...",
+        "snippetTitle": "Título del Fragmento",
+        "yourCodeHere": "Tu código aquí...",
+        "tagsCommaSeparated": "Etiquetas (separadas por comas)",
+        "descriptionOptional": "Descripción (opcional)",
+        "language": "Idioma"
+      },
+      "messages": {
+        "noSnippetsFound": "No se encontraron fragmentos.",
+        "noSnippetsCreated": "Aún no se han creado fragmentos. Haz clic en 'Nuevo Fragmento'.",
+        "snippetCreated": "¡Fragmento creado!",
+        "snippetUpdated": "¡Fragmento actualizado!",
+        "codeCopied": "¡Código copiado!",
+        "noCodeToCopy": "No hay código para copiar.",
+        "copyFailed": "Error al copiar código.",
+        "selectSnippetToView": "Selecciona un fragmento para ver o haz clic en 'Nuevo Fragmento'.",
+        "titleRequired": "¡Título y Código son requeridos!"
+      },
+      "languages": {
+        "javascript": "Javascript",
+        "typescript": "Typescript",
+        "python": "Python",
+        "html": "HTML",
+        "css": "CSS",
+        "json": "JSON",
+        "markdown": "Markdown",
+        "bash": "Bash",
+        "sql": "SQL",
+        "other": "Otro"
+      },
+      "deleteDialog": {
+        "title": "Confirmar Eliminación de Fragmento",
+        "itemName": "este fragmento"
+      }
+    },
+    "commandCenter": {
+      "name": "Centro de Comandos",
+      "shortName": "Comandos",
+      "title": "Centro de Comandos",
+      "description": "Gestiona y organiza tus comandos CLI",
+      "buttons": {
+        "newCommand": "Nuevo Comando",
+        "copyCommand": "Copiar Comando",
+        "delete": "Eliminar",
+        "update": "Actualizar",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "edit": "Editar"
+      },
+      "placeholders": {
+        "searchCommands": "Buscar comandos...",
+        "commandName": "Nombre Amigable del Comando",
+        "yourCommandHere": "Tu comando aquí...",
+        "tagsCommaSeparated": "Etiquetas (ej: git, docker, backup)",
+        "descriptionOptional": "Descripción (útil para explicar el comando)",
+        "platform": "Plataforma/Tipo"
+      },
+      "messages": {
+        "noCommandsFound": "No se encontraron comandos.",
+        "noCommandsCreated": "No hay comandos guardados. Haz clic en 'Nuevo Comando'.",
+        "commandCreated": "¡Comando creado!",
+        "commandUpdated": "¡Comando actualizado!",
+        "commandCopied": "¡Comando copiado!",
+        "noCommandToCopy": "No hay comando para copiar.",
+        "copyFailed": "Error al copiar comando.",
+        "selectCommandToView": "Selecciona un comando para ver o haz clic en 'Nuevo Comando'.",
+        "nameRequired": "¡Nombre y Comando son requeridos!"
+      },
+      "platforms": {
+        "bash": "bash",
+        "powershell": "powershell",
+        "docker": "docker",
+        "git": "git",
+        "npm": "npm",
+        "yarn": "yarn",
+        "kubectl": "kubectl",
+        "other": "otro"
+      }
+    },
+    "jsonTools": {
+      "name": "Herramientas JSON",
+      "shortName": "JSON",
+      "title": "Utilidades JSON",
+      "description": "Formatea, valida y transforma datos JSON",
+      "buttons": {
+        "format": "Formatear",
+        "minify": "Minificar",
+        "load": "Cargar",
+        "download": "Descargar",
+        "clear": "Limpiar",
+        "escape": "Escapar",
+        "unescape": "Desescapar"
+      },
+      "labels": {
+        "input": "Entrada",
+        "output": "Salida",
+        "indentation": "Indentación:",
+        "transformString": "Transformar String:",
+        "viewOutput": "Ver Salida:"
+      },
+      "placeholders": {
+        "pasteJson": "Pega tu JSON aquí...",
+        "resultHere": "El resultado aparecerá aquí...",
+        "outputHere": "La salida aparecerá aquí."
+      },
+      "badges": {
+        "valid": "Válido",
+        "invalid": "Inválido"
+      },
+      "stats": {
+        "lines": "Líneas",
+        "characters": "Caracteres",
+        "size": "Tamaño"
+      },
+      "viewModes": {
+        "text": "Texto",
+        "tree": "Árbol"
+      },
+      "indentOptions": {
+        "twoSpaces": "2 Espacios",
+        "fourSpaces": "4 Espacios",
+        "tab": "Tab"
+      },
+      "messages": {
+        "jsonFormatted": "¡JSON formateado!",
+        "jsonMinified": "¡JSON minificado!",
+        "fileLoaded": "Archivo \"{fileName}\" cargado.",
+        "jsonDownloaded": "¡JSON descargado!",
+        "stringEscaped": "String escapado a valor JSON.",
+        "stringUnescaped": "String desescapado.",
+        "emptyInputEscape": "Entrada vacía para escapar.",
+        "emptyInputUnescape": "Entrada vacía para desescapar.",
+        "noContentToDownload": "No hay contenido en la salida para descargar.",
+        "invalidJsonError": "JSON de entrada inválido.",
+        "processingError": "Error procesando JSON.",
+        "fileReadError": "Error leyendo archivo.",
+        "copyError": "Error copiando {type}.",
+        "copySuccess": "¡{type} copiado!",
+        "noContentToCopy": "No hay {type} para copiar.",
+        "unexpectedError": "Error inesperado: {error}",
+        "unescapeError": "Error desescapando: {error}",
+        "unescapeStringError": "Error desescapando string.",
+        "invalidStringError": "La entrada no es un string JSON válido.",
+        "invalidJsonForTree": "JSON de entrada inválido para vista de árbol."
+      },
+      "titles": {
+        "escapeString": "Escapar string a valor JSON",
+        "unescapeString": "Desescapar string JSON",
+        "copyInput": "Copiar JSON de entrada",
+        "copyOutput": "Copiar JSON de salida"
+      }
+    },
+    "encoders": {
+      "name": "Codificadores / Decodificadores",
+      "shortName": "Codificadores",
+      "title": "Codificadores y Decodificadores de Datos",
+      "description": "Codifica y decodifica datos usando varios algoritmos",
+      "tools": {
+        "jwt": "JWT",
+        "base64": "Base64",
+        "url": "URL"
+      },
+      "modes": {
+        "encode": "Codificar",
+        "decode": "Decodificar"
+      },
+      "labels": {
+        "input": "Entrada",
+        "output": "Salida",
+        "tool": "Herramienta:",
+        "generatedToken": "Token Generado (Codificador)",
+        "secretKey": "Clave Secreta (HMAC)",
+        "algorithm": "Algoritmo",
+        "headerEditable": "HEADER (Editable)",
+        "payloadEditable": "PAYLOAD (Editable)",
+        "pasteTokenToDecode": "Pega un token para decodificar",
+        "headerDecoded": "Header (Decodificado)",
+        "payloadDecoded": "Payload (Decodificado)"
+      },
+      "buttons": {
+        "clear": "Limpiar",
+        "copyOutput": "Copiar Salida",
+        "copyToken": "Copiar Token",
+        "textToBase64": "Texto → Base64",
+        "base64ToText": "Base64 → Texto",
+        "encodeUrl": "Codificar URL",
+        "decodeUrl": "Decodificar URL"
+      },
+      "badges": {
+        "signatureVerified": "Firma Verificada",
+        "signatureInvalid": "Firma Inválida"
+      },
+      "placeholders": {
+        "secretKey": "tu-clave-super-secreta-que-tenga-al-menos-32-bytes",
+        "waiting": "Esperando...",
+        "pasteTokenToDecode": "Pega un token para decodificar"
+      },
+      "messages": {
+        "copied": "¡Copiado!",
+        "jsonError": "Error en Header o Payload JSON para firmar.",
+        "debugWarning": "Herramienta de depuración. Nunca uses claves secretas de producción."
+      },
+      "algorithms": {
+        "HS256": "HS256",
+        "HS384": "HS384",
+        "HS512": "HS512"
+      }
+    },
+    "dataGenerator": {
+      "name": "Generador de Datos",
+      "shortName": "Datos Gen",
+      "title": "Generador de Datos de Prueba",
+      "tools": {
+        "uuid": "Generador UUID",
+        "nanoid": "Generador NanoID",
+        "hash": "Generador Hash (MD5, SHA)",
+        "password": "Generador de Contraseñas Seguras"
+      },
+      "nanoidAlphabets": {
+        "urlSafe": "URL-Seguro (Por defecto)",
+        "numbers": "Solo Números",
+        "uppercase": "Solo Mayúsculas",
+        "lowercase": "Solo Minúsculas",
+        "noLookAlikes": "Sin Caracteres Similares",
+        "custom": "Personalizado..."
+      },
+      "labels": {
+        "tool": "Herramienta",
+        "quantity": "Cantidad",
+        "generatedIds": "IDs Generados",
+        "generatedNanoids": "NanoIDs Generados"
+      },
+      "buttons": {
+        "generateNew": "Generar Nuevo",
+        "copyAll": "Copiar Todo",
+        "generateNewPassword": "Generar Nueva Contraseña"
+      },
+      "errors": {
+        "nameAndNamespaceRequired": "Se requiere nombre válido y namespace UUID.",
+        "uuidGenerationError": "Error generando UUID",
+        "alphabetError": "Error de Alfabeto",
+        "alphabetMinLength": "El alfabeto personalizado debe contener al menos 2 caracteres.",
+        "nanoidGenerationError": "Error generando NanoID",
+        "selectCharacterType": "Selecciona al menos un tipo de carácter para la contraseña."
+      },
+      "messages": {
+        "copied": "¡Copiado!",
+        "allIdsCopied": "¡Todos los IDs copiados!"
+      },
+      "uuid": {
+        "settings": {
+          "title": "Configuración UUID",
+          "version": "Versión UUID",
+          "name": "Nombre",
+          "namespace": "Namespace (UUID Válido)",
+          "dns": "DNS",
+          "url": "URL",
+          "removeHyphens": "Quitar Guiones",
+          "uppercase": "Mayúsculas"
+        },
+        "versions": {
+          "v7": "Versión 7 (Tiempo Unix, Ordenable)",
+          "v4": "Versión 4 (Aleatorio)",
+          "v6": "Versión 6 (Tiempo, Ordenable)",
+          "v1": "Versión 1 (Basado en Tiempo)",
+          "v5": "Versión 5 (Basado en Nombre, SHA-1)",
+          "v3": "Versión 3 (Basado en Nombre, MD5)",
+          "nil": "NIL (UUID Vacío/Nulo)",
+          "max": "MAX (UUID Máximo)"
+        }
+      },
+      "nanoid": {
+        "settings": {
+          "title": "Configuración NanoID",
+          "idSize": "Tamaño ID",
+          "alphabet": "Alfabeto",
+          "customAlphabetBuilder": "Constructor de Alfabeto Personalizado",
+          "lowercase": "Minúsculas",
+          "uppercase": "Mayúsculas",
+          "numbers": "Números",
+          "customAlphabetPlaceholder": "Edita directamente o usa atajos de arriba..."
+        }
+      },
+      "hash": {
+        "title": "Generador Hash",
+        "inputLabel": "Texto de Entrada",
+        "generatedTitle": "Hashes Generados"
+      },
+      "password": {
+        "generatedTitle": "Contraseña Segura Generada",
+        "settings": {
+          "title": "Configuración de Contraseña",
+          "length": "Longitud",
+          "uppercase": "Mayúsculas (A-Z)",
+          "lowercase": "Minúsculas (a-z)",
+          "numbers": "Números (0-9)",
+          "symbols": "Símbolos (!@#)"
+        }
+      }
+    },
+    "massDataGenerator": {
+      "name": "Generador Masivo de Datos",
+      "shortName": "Masa Gen",
+      "title": "Generador de Datos en Lote",
+      "labels": {
+        "dataTypes": "Tipos de Datos",
+        "generalSettings": "Configuración General",
+        "recordQuantity": "Cantidad de Registros",
+        "outputFormat": "Formato de Salida",
+        "generatedData": "Datos Generados"
+      },
+      "buttons": {
+        "add": "Agregar",
+        "fieldFromLibrary": "Campo de la Biblioteca",
+        "generateFakeData": "Generar Datos Falsos",
+        "generating": "Generando...",
+        "download": "Descargar",
+        "copy": "Copiar"
+      },
+      "formats": {
+        "json": "JSON",
+        "csv": "CSV"
+      },
+      "csv": {
+        "includeHeader": "Incluir encabezado CSV",
+        "delimiter": "Delimitador CSV",
+        "comma": "Coma (,)",
+        "semicolon": "Punto y coma (;)"
+      },
+      "placeholders": {
+        "quantityExample": "Ej.: 10",
+        "searchDataTypes": "Buscar cualquier tipo de dato...",
+        "configureAndGenerate": "Configura los datos y haz clic en 'Generar Datos Falsos' para ver los resultados aquí."
+      },
+      "messages": {
+        "dataCopied": "¡Datos copiados al portapapeles!",
+        "generatingInBackground": "Generando datos en hilo de fondo...",
+        "noResultsFound": "No se encontraron resultados."
+      },
+      "errors": {
+        "maxQuantity": "La cantidad máxima es 10,000 registros.",
+        "copyError": "Error copiando datos. Por favor, inténtalo de nuevo."
+      },
+      "fields": {
+        "person": "Persona",
+        "fullName": "Nombre Completo",
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "middleName": "Segundo Nombre",
+        "prefix": "Prefijo (Sr., Dr.)",
+        "suffix": "Sufijo (Jr., PhD)",
+        "sex": "Sexo Biológico",
+        "gender": "Género",
+        "bio": "Bio",
+        "jobArea": "Área de Trabajo",
+        "jobTitle": "Título del Trabajo",
+        "jobDescriptor": "Descripción del Trabajo",
+        "jobType": "Tipo de Trabajo",
+        "zodiacSign": "Signo Zodiacal",
+        "cpf": "CPF",
+        "cnpj": "CNPJ",
+        "internet": "Internet",
+        "email": "Correo Electrónico",
+        "userName": "Nombre de Usuario",
+        "url": "URL",
+        "domainName": "Dominio",
+        "ip": "Dirección IP",
+        "ipv6": "Dirección IPv6",
+        "mac": "Dirección MAC",
+        "hexColor": "Color (Hex)",
+        "password": "Contraseña",
+        "protocol": "Protocolo",
+        "userAgent": "User Agent",
+        "httpMethod": "Método HTTP",
+        "finance": "Finanzas",
+        "accountNumber": "Número de Cuenta",
+        "accountName": "Nombre de Cuenta",
+        "currencyName": "Nombre de Moneda",
+        "currencyCode": "Código de Moneda",
+        "currencySymbol": "Símbolo de Moneda",
+        "creditCardNumber": "Número de Tarjeta de Crédito",
+        "creditCardCVV": "CVV de Tarjeta de Crédito",
+        "iban": "IBAN",
+        "bic": "BIC",
+        "bitcoinAddress": "Dirección Bitcoin",
+        "ethereumAddress": "Dirección Ethereum",
+        "location": "Ubicación",
+        "streetAddress": "Dirección de Calle",
+        "city": "Ciudad",
+        "state": "Estado (Abrev.)",
+        "country": "País",
+        "countryCode": "Código de País",
+        "zipCode": "Código Postal",
+        "latitude": "Latitud",
+        "longitude": "Longitud",
+        "direction": "Dirección",
+        "timeZone": "Zona Horaria",
+        "animal": "Animal",
+        "dog": "Perro",
+        "cat": "Gato",
+        "bird": "Pájaro",
+        "fish": "Pez",
+        "insect": "Insecto",
+        "animalType": "Tipo de Animal",
+        "bear": "Oso",
+        "cow": "Vaca",
+        "lion": "León",
+        "commerce": "Comercio",
+        "productName": "Nombre del Producto",
+        "price": "Precio",
+        "department": "Departamento",
+        "sku": "SKU",
+        "productDescription": "Descripción del Producto",
+        "productAdjective": "Adjetivo del Producto",
+        "productMaterial": "Material del Producto",
+        "system": "Sistema",
+        "fileName": "Nombre de Archivo",
+        "fileExt": "Extensión de Archivo",
+        "fileType": "Tipo de Archivo",
+        "mimeType": "Tipo MIME",
+        "directoryPath": "Ruta de Directorio",
+        "filePath": "Ruta de Archivo",
+        "semver": "Versión Semántica",
+        "string": "String",
+        "uuid": "UUID",
+        "alphanumeric": "Alfanumérico (String)",
+        "numeric": "Numérico (String)",
+        "hexadecimal": "Hexadecimal (String)",
+        "binary": "Binario (String)",
+        "octal": "Octal (String)",
+        "vehicle": "Vehículo",
+        "vehicleType": "Tipo de Vehículo",
+        "manufacturer": "Fabricante",
+        "model": "Modelo",
+        "vin": "VIN (Chasis)",
+        "vehicleColor": "Color del Vehículo",
+        "date": "Fecha",
+        "pastDate": "Fecha Pasada",
+        "futureDate": "Fecha Futura",
+        "recentDate": "Fecha Reciente",
+        "birthdate": "Fecha de Nacimiento",
+        "dateBetween": "Fecha Entre...",
+        "weekday": "Día de la Semana",
+        "month": "Mes",
+        "primitiveTypes": "Tipos Primitivos",
+        "stringUuid": "String (UUID)",
+        "stringAlphanumeric": "String (Alfanumérico)",
+        "stringAlpha": "String (Letras)",
+        "intNumber": "Número Entero",
+        "floatNumber": "Número Decimal",
+        "boolean": "Booleano (verdadero/falso)",
+        "loremText": "Texto Lorem",
+        "loremWord": "Palabra (Lorem)",
+        "loremWords": "Palabras (Lorem)",
+        "loremSentence": "Oración (Lorem)",
+        "loremParagraph": "Párrafo (Lorem)",
+        "loremLines": "Líneas de Texto (Lorem)",
+        "loremSlug": "Slug (Lorem)",
+        "number": "Número",
+        "intNumeric": "Entero (Numérico)",
+        "floatNumeric": "Decimal (Numérico)",
+        "hexNumeric": "Hexadecimal (Numérico)",
+        "binaryNumeric": "Binario (Numérico)",
+        "octalNumeric": "Octal (Numérico)",
+        "airline": "Aerolínea",
+        "airplane": "Avión",
+        "airport": "Aeropuerto",
+        "flightNumber": "Número de Vuelo",
+        "seat": "Asiento",
+        "hacker": "Hacker",
+        "abbreviation": "Abreviatura",
+        "adjective": "Adjetivo",
+        "noun": "Sustantivo",
+        "verb": "Verbo",
+        "phrase": "Frase de Hacker",
+        "word": "Palabra",
+        "wordNoun": "Sustantivo (Diccionario)",
+        "wordVerb": "Verbo (Diccionario)",
+        "wordAdjective": "Adjetivo (Diccionario)",
+        "wordPreposition": "Preposición (Diccionario)",
+        "wordSample": "Palabra (Diccionario)",
+        "company": "Empresa",
+        "companyName": "Nombre de Empresa",
+        "buzzPhrase": "Frase de Moda",
+        "catchPhrase": "Frase Pegadiza",
+        "bs": "Jerga Empresarial",
+        "database": "Base de Datos",
+        "column": "Nombre de Columna",
+        "columnType": "Tipo de Columna",
+        "engine": "Motor",
+        "mongodbObjectId": "ID de Objeto MongoDB",
+        "git": "Git",
+        "branch": "Rama",
+        "commitSha": "SHA de Commit",
+        "shortSha": "SHA Corto",
+        "commitMessage": "Mensaje de Commit",
+        "image": "Imagen",
+        "imageUrl": "URL de Imagen",
+        "avatar": "Avatar",
+        "dataUri": "URI de Datos de Imagen",
+        "color": "Color",
+        "colorName": "Nombre de Color",
+        "colorSpace": "Espacio de Color",
+        "rgbColor": "Color RGB",
+        "music": "Música",
+        "genre": "Género Musical",
+        "songName": "Nombre de Canción",
+        "phone": "Teléfono",
+        "phoneNumber": "Número de Teléfono",
+        "imei": "IMEI",
+        "science": "Ciencia",
+        "chemicalElement": "Elemento Químico",
+        "unit": "Unidad de Medida"
+      }
+    },
+    "regexBuilder": {
+      "name": "Constructor Regex",
+      "shortName": "Regex",
+      "title": "Constructor Visual de Regex",
+      "build": "Construir",
+      "test": "Probar",
+      "clear": "Limpiar",
+      "copy": "Copiar"
+    },
+    "kanbanBoard": {
+      "name": "Tablero Kanban",
+      "shortName": "Kanban",
+      "title": "Tablero Kanban",
+      "addColumn": "Agregar Columna",
+      "addCard": "Agregar Tarjeta",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "move": "Mover"
+    },
+    "markdownNotes": {
+      "name": "Notas Markdown",
+      "shortName": "Notas",
+      "title": "Editor de Notas Markdown",
+      "newNote": "Nueva Nota",
+      "save": "Guardar",
+      "delete": "Eliminar",
+      "preview": "Vista Previa"
+    },
+    "knowledgeBase": {
+      "name": "Base de Conocimiento",
+      "shortName": "Conocimiento",
+      "title": "Base de Conocimiento",
+      "description": "Organiza y gestiona tu conocimiento con notas markdown y enlaces internos",
+      "buttons": {
+        "newBlock": "Nuevo Bloque",
+        "edit": "Editar",
+        "save": "Guardar",
+        "updateBlock": "Actualizar Bloque",
+        "saveNewBlock": "Guardar Nuevo Bloque",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "link": "Enlazar",
+        "editor": "Editor",
+        "preview": "Vista Previa"
+      },
+      "placeholders": {
+        "search": "Buscar bloques...",
+        "blockTitle": "Título del bloque",
+        "tags": "Etiquetas (separadas por comas)",
+        "sourceUrl": "URL de origen (opcional)",
+        "content": "Escribe tu contenido aquí...",
+        "linkSearch": "Buscar bloques para enlazar..."
+      },
+      "labels": {
+        "linkedBy": "Enlazado por",
+        "noBacklinks": "Ningún otro bloque enlaza a este",
+        "selectBlock": "Selecciona un bloque para ver o haz clic en 'Nuevo Bloque'"
+      },
+      "messages": {
+        "titleRequired": "¡El título es requerido!",
+        "blockUpdated": "¡Bloque actualizado!",
+        "blockCreated": "¡Bloque creado!",
+        "blockDeleted": "Bloque eliminado.",
+        "noBlockSelected": "No hay bloque seleccionado para eliminar.",
+        "noBlocksFound": "No se encontraron bloques.",
+        "noBlocksCreated": "No se han creado bloques.",
+        "loadingError": "Error cargando Base de Conocimiento:"
+      },
+      "deleteDialog": {
+        "title": "Confirmar Eliminación",
+        "itemName": "este bloque"
+      },
+      "linkDialog": {
+        "title": "Enlazar con otro bloque"
+      },
+      "fallbacks": {
+        "untitledBlock": "Bloque sin título"
+      }
+    }
+  }
+}

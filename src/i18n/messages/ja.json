@@ -1,0 +1,878 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "close": "閉じる",
+    "open": "開く",
+    "search": "検索",
+    "filter": "フィルター",
+    "sort": "並び替え",
+    "refresh": "更新",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ",
+    "finish": "完了",
+    "start": "開始",
+    "stop": "停止",
+    "pause": "一時停止",
+    "resume": "再開",
+    "copy": "コピー",
+    "clear": "クリア",
+    "reset": "リセット",
+    "yes": "はい",
+    "no": "いいえ",
+    "ok": "OK",
+    "warning": "警告",
+    "info": "情報",
+    "deleteDialog": {
+      "title": "本当によろしいですか？",
+      "description": "この操作は元に戻せません。これにより永続的に削除されます",
+      "selectedItem": "選択されたアイテム",
+      "confirm": "はい、削除します"
+    }
+  },
+  "desktop": {
+    "title": "Dev Utility Box",
+    "description": "実用的で効率的なユーティリティでワークフローを合理化。コーディングと構築に集中しましょう。",
+    "open": "開く",
+    "removeFromDesktop": "デスクトップから削除",
+    "spotlight": {
+      "title": "アプリクイック検索",
+      "placeholder": "アプリを検索...",
+      "noResults": "結果が見つかりません。",
+      "shortcut": "Ctrl+KまたはCmd+Kを押してください"
+    },
+    "dock": {
+      "launcher": "アプリランチャー",
+      "allApps": "すべてのアプリケーション"
+    },
+    "help": {
+      "title": "キーボードショートカット",
+      "description": "これらのショートカットを使用してナビゲートしてください。",
+      "spotlight": "Spotlight検索を開く",
+      "launcher": "アプリランチャーを開く",
+      "language": "言語を変更",
+      "resizeWindow": "右端の中央、下端の中央、または右下角をクリックしてドラッグしてウィンドウサイズを変更してください。"
+    },
+    "shortcuts": {
+      "openQuickSearch": "クイック検索を開く",
+      "openAppLauncher": "アプリランチャーを開く",
+      "resizeWindow": "ウィンドウサイズを変更"
+    },
+    "apps": {
+      "auth": {
+        "name": "認証",
+        "shortName": "認証"
+      },
+      "codeSnippets": {
+        "name": "コードスニペット",
+        "shortName": "スニペット"
+      },
+      "commandCenter": {
+        "name": "コマンドセンター",
+        "shortName": "コマンド"
+      },
+      "pomodoro": {
+        "name": "ポモドーロ",
+        "shortName": "ポモドーロ"
+      },
+      "todo": {
+        "name": "To Doリスト",
+        "shortName": "To Do"
+      },
+      "jsonTools": {
+        "name": "JSONツール",
+        "shortName": "JSON"
+      },
+      "encoders": {
+        "name": "エンコーダー / デコーダー",
+        "shortName": "エンコーダー"
+      },
+      "knowledgeBase": {
+        "name": "ナレッジベース（ベータ）",
+        "shortName": "ナレッジ"
+      },
+      "dataGenerator": {
+        "name": "データジェネレーター",
+        "shortName": "データ生成"
+      },
+      "massDataGenerator": {
+        "name": "大量データジェネレーター",
+        "shortName": "大量生成"
+      }
+    }
+  },
+  "windows": {
+    "maxWindowsReached": "このアプリケーションの最大ウィンドウ数を既に開いています。",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "close": "閉じる",
+    "restore": "復元"
+  },
+  "errors": {
+    "maxWindowsReached": "{appName}の最大ウィンドウ数を既に開いています。",
+    "generic": "エラーが発生しました。もう一度お試しください。",
+    "network": "ネットワークエラー。接続を確認してください。",
+    "validation": "入力されたデータを確認してください。"
+  },
+  "apps": {
+    "pomodoro": {
+      "name": "ポモドーロ",
+      "shortName": "ポモドーロ",
+      "title": "ポモドーロタイマー",
+      "description": "集中と注意力のための生産性テクニック",
+      "modes": {
+        "pomodoro": "ポモドーロ",
+        "shortBreak": "短い休憩",
+        "longBreak": "長い休憩"
+      },
+      "work": "作業",
+      "shortBreak": "短い休憩",
+      "longBreak": "長い休憩",
+      "start": "開始",
+      "pause": "一時停止",
+      "reset": "リセット",
+      "settings": "設定",
+      "workTime": "作業時間",
+      "shortBreakTime": "短い休憩時間",
+      "longBreakTime": "長い休憩時間",
+      "longBreakInterval": "長い休憩間隔",
+      "autoStartBreaks": "休憩を自動開始",
+      "autoStartPomodoros": "ポモドーロを自動開始",
+      "notifications": {
+        "enabled": "通知が有効",
+        "disabled": "通知が無効",
+        "workComplete": "作業時間が完了しました！",
+        "breakComplete": "休憩が完了しました！",
+        "timeFinished": "時間が終了しました！",
+        "currentMode": "現在のモード",
+        "enableInSettings": "設定で有効にする",
+        "youWillBeNotified": "通知されます",
+        "permission": "通知の許可が必要です",
+        "grant": "許可を付与",
+        "denied": "通知が拒否されました"
+      },
+      "config": {
+        "title": "設定",
+        "description": "ポモドーロタイマー、休憩、音設定を調整します。",
+        "timer": "タイマー",
+        "sound": "音",
+        "timeMinutes": "時間（分）",
+        "autoStartBreaks": "休憩を自動開始",
+        "autoStartPomodoros": "ポモドーロを自動開始",
+        "longBreakInterval": "長い休憩間隔",
+        "alarmSound": "アラーム音",
+        "tickingSound": "チクタク音",
+        "repeat": "繰り返し",
+        "cancel": "キャンセル",
+        "saveChanges": "変更を保存",
+        "saved": "設定が保存されました！"
+      },
+      "sounds": {
+        "kitchen": "キッチン",
+        "bell": "ベル",
+        "digital": "デジタル",
+        "wood": "木",
+        "none": "なし",
+        "ticking": "チクタク",
+        "whiteNoise": "ホワイトノイズ",
+        "brownNoise": "ブラウンノイズ"
+      },
+      "history": {
+        "recent": "最近の履歴"
+      },
+      "stats": {
+        "title": "統計",
+        "completedPomodoros": "完了したポモドーロ",
+        "sessionsToday": "今日のセッション"
+      },
+      "controls": {
+        "start": "開始",
+        "pause": "一時停止",
+        "reset": "リセット",
+        "resetShort": "リセット"
+      }
+    },
+    "todo": {
+      "name": "To Doリスト",
+      "shortName": "To Do",
+      "title": "タスクマネージャー",
+      "addTask": "タスクを追加",
+      "addSubtask": "サブタスクを追加...",
+      "placeholder": "新しいタスクを入力...",
+      "addDescription": "説明を追加...",
+      "completed": "完了",
+      "pending": "保留中",
+      "empty": "まだタスクがありません。上に追加してください！",
+      "priorities": {
+        "high": "高",
+        "medium": "中",
+        "low": "低",
+        "none": "なし"
+      }
+    },
+    "auth": {
+      "name": "認証",
+      "shortName": "認証",
+      "title": "認証",
+      "description": "続行するにはログインまたは登録してください",
+      "tabs": {
+        "login": "ログイン",
+        "register": "登録"
+      },
+      "form": {
+        "email": "メール",
+        "password": "パスワード",
+        "confirmPassword": "パスワードを確認",
+        "name": "名前",
+        "emailPlaceholder": "例：example@email.com",
+        "namePlaceholder": "あなたのフルネーム",
+        "forgotPassword": "パスワードを忘れましたか？"
+      },
+      "buttons": {
+        "login": "ログイン",
+        "createAccount": "アカウントを作成"
+      },
+      "social": {
+        "continueWith": "または以下で続行",
+        "google": "Google",
+        "github": "GitHub"
+      },
+      "terms": {
+        "agreement": "続行することで、以下に同意したことになります",
+        "termsOfService": "利用規約",
+        "privacyPolicy": "プライバシーポリシー",
+        "and": "および"
+      },
+      "messages": {
+        "loginSuccess": "ログインに成功しました！",
+        "loginSuccessDesc": "このウィンドウを閉じることができます。",
+        "loginError": "ログインエラー。認証情報を確認してください。",
+        "registerSuccess": "登録に成功しました！",
+        "registerError": "登録エラー。提供されたデータを確認してください。",
+        "titleRequired": "タイトルとコードが必要です！",
+        "nameRequired": "名前とコマンドが必要です！"
+      },
+      "validation": {
+        "required": "必須フィールド。",
+        "invalidEmail": "無効なメール。",
+        "passwordMismatch": "パスワードが一致しません。"
+      }
+    },
+    "codeSnippets": {
+      "name": "コードスニペット",
+      "shortName": "スニペット",
+      "title": "コードスニペットマネージャー",
+      "description": "コードスニペットを管理・整理",
+      "buttons": {
+        "newSnippet": "新しいスニペット",
+        "copyCode": "コードをコピー",
+        "delete": "削除",
+        "update": "更新",
+        "saveNew": "新規保存",
+        "cancel": "キャンセル",
+        "edit": "編集"
+      },
+      "placeholders": {
+        "searchSnippets": "スニペットを検索...",
+        "snippetTitle": "スニペットタイトル",
+        "yourCodeHere": "ここにコードを...",
+        "tagsCommaSeparated": "タグ（カンマ区切り）",
+        "descriptionOptional": "説明（オプション）",
+        "language": "言語"
+      },
+      "messages": {
+        "noSnippetsFound": "スニペットが見つかりません。",
+        "noSnippetsCreated": "まだスニペットが作成されていません。「新しいスニペット」をクリックしてください。",
+        "snippetCreated": "スニペットが作成されました！",
+        "snippetUpdated": "スニペットが更新されました！",
+        "codeCopied": "コードがコピーされました！",
+        "noCodeToCopy": "コピーするコードがありません。",
+        "copyFailed": "コードのコピーに失敗しました。",
+        "selectSnippetToView": "表示するスニペットを選択するか、「新しいスニペット」をクリックしてください。",
+        "titleRequired": "タイトルとコードが必要です！"
+      },
+      "languages": {
+        "javascript": "Javascript",
+        "typescript": "Typescript",
+        "python": "Python",
+        "html": "HTML",
+        "css": "CSS",
+        "json": "JSON",
+        "markdown": "Markdown",
+        "bash": "Bash",
+        "sql": "SQL",
+        "other": "その他"
+      },
+      "deleteDialog": {
+        "title": "スニペット削除の確認",
+        "itemName": "このスニペット"
+      }
+    },
+    "commandCenter": {
+      "name": "コマンドセンター",
+      "shortName": "コマンド",
+      "title": "コマンドセンター",
+      "description": "CLIコマンドを管理・整理",
+      "buttons": {
+        "newCommand": "新しいコマンド",
+        "copyCommand": "コマンドをコピー",
+        "delete": "削除",
+        "update": "更新",
+        "save": "保存",
+        "cancel": "キャンセル",
+        "edit": "編集"
+      },
+      "placeholders": {
+        "searchCommands": "コマンドを検索...",
+        "commandName": "わかりやすいコマンド名",
+        "yourCommandHere": "ここにコマンドを...",
+        "tagsCommaSeparated": "タグ（例：git、docker、backup）",
+        "descriptionOptional": "説明（コマンドの説明に役立ちます）",
+        "platform": "プラットフォーム/タイプ"
+      },
+      "messages": {
+        "noCommandsFound": "コマンドが見つかりません。",
+        "noCommandsCreated": "保存されたコマンドがありません。「新しいコマンド」をクリックしてください。",
+        "commandCreated": "コマンドが作成されました！",
+        "commandUpdated": "コマンドが更新されました！",
+        "commandCopied": "コマンドがコピーされました！",
+        "noCommandToCopy": "コピーするコマンドがありません。",
+        "copyFailed": "コマンドのコピーに失敗しました。",
+        "selectCommandToView": "表示するコマンドを選択するか、「新しいコマンド」をクリックしてください。",
+        "nameRequired": "名前とコマンドが必要です！"
+      },
+      "platforms": {
+        "bash": "bash",
+        "powershell": "powershell",
+        "docker": "docker",
+        "git": "git",
+        "npm": "npm",
+        "yarn": "yarn",
+        "kubectl": "kubectl",
+        "other": "その他"
+      }
+    },
+    "jsonTools": {
+      "name": "JSONツール",
+      "shortName": "JSON",
+      "title": "JSONユーティリティ",
+      "description": "JSONデータのフォーマット、検証、変換",
+      "buttons": {
+        "format": "フォーマット",
+        "minify": "ミニファイ",
+        "load": "読み込み",
+        "download": "ダウンロード",
+        "clear": "クリア",
+        "escape": "エスケープ",
+        "unescape": "アンエスケープ"
+      },
+      "labels": {
+        "input": "入力",
+        "output": "出力",
+        "indentation": "インデント：",
+        "transformString": "文字列を変換：",
+        "viewOutput": "出力を表示："
+      },
+      "placeholders": {
+        "pasteJson": "ここにJSONを貼り付け...",
+        "resultHere": "結果がここに表示されます...",
+        "outputHere": "出力がここに表示されます。"
+      },
+      "badges": {
+        "valid": "有効",
+        "invalid": "無効"
+      },
+      "stats": {
+        "lines": "行数",
+        "characters": "文字数",
+        "size": "サイズ"
+      },
+      "viewModes": {
+        "text": "テキスト",
+        "tree": "ツリー"
+      },
+      "indentOptions": {
+        "twoSpaces": "2スペース",
+        "fourSpaces": "4スペース",
+        "tab": "タブ"
+      },
+      "messages": {
+        "jsonFormatted": "JSONがフォーマットされました！",
+        "jsonMinified": "JSONがミニファイされました！",
+        "fileLoaded": "ファイル「{fileName}」が読み込まれました。",
+        "jsonDownloaded": "JSONがダウンロードされました！",
+        "stringEscaped": "文字列がJSON値にエスケープされました。",
+        "stringUnescaped": "文字列がアンエスケープされました。",
+        "emptyInputEscape": "エスケープする入力が空です。",
+        "emptyInputUnescape": "アンエスケープする入力が空です。",
+        "noContentToDownload": "ダウンロードする出力にコンテンツがありません。",
+        "invalidJsonError": "無効な入力JSON。",
+        "processingError": "JSONの処理中にエラーが発生しました。",
+        "fileReadError": "ファイルの読み込み中にエラーが発生しました。",
+        "copyError": "{type}のコピーに失敗しました。",
+        "copySuccess": "{type}がコピーされました！",
+        "noContentToCopy": "コピーする{type}がありません。",
+        "unexpectedError": "予期しないエラー：{error}",
+        "unescapeError": "アンエスケープ中にエラー：{error}",
+        "unescapeStringError": "文字列のアンエスケープ中にエラーが発生しました。",
+        "invalidStringError": "入力は有効なJSON文字列ではありません。",
+        "invalidJsonForTree": "ツリービュー用の無効な入力JSON。"
+      },
+      "titles": {
+        "escapeString": "文字列をJSON値にエスケープ",
+        "unescapeString": "JSON文字列をアンエスケープ",
+        "copyInput": "入力JSONをコピー",
+        "copyOutput": "出力JSONをコピー"
+      }
+    },
+    "encoders": {
+      "name": "エンコーダー / デコーダー",
+      "shortName": "エンコーダー",
+      "title": "データエンコーダー＆デコーダー",
+      "description": "様々なアルゴリズムを使用してデータをエンコード・デコード",
+      "tools": {
+        "jwt": "JWT",
+        "base64": "Base64",
+        "url": "URL"
+      },
+      "modes": {
+        "encode": "エンコード",
+        "decode": "デコード"
+      },
+      "labels": {
+        "input": "入力",
+        "output": "出力",
+        "tool": "ツール：",
+        "generatedToken": "生成されたトークン（エンコーダー）",
+        "secretKey": "秘密鍵（HMAC）",
+        "algorithm": "アルゴリズム",
+        "headerEditable": "HEADER（編集可能）",
+        "payloadEditable": "PAYLOAD（編集可能）",
+        "pasteTokenToDecode": "デコードするトークンを貼り付け",
+        "headerDecoded": "ヘッダー（デコード済み）",
+        "payloadDecoded": "ペイロード（デコード済み）"
+      },
+      "buttons": {
+        "clear": "クリア",
+        "copyOutput": "出力をコピー",
+        "copyToken": "トークンをコピー",
+        "textToBase64": "テキスト → Base64",
+        "base64ToText": "Base64 → テキスト",
+        "encodeUrl": "URLをエンコード",
+        "decodeUrl": "URLをデコード"
+      },
+      "badges": {
+        "signatureVerified": "署名が検証されました",
+        "signatureInvalid": "無効な署名"
+      },
+      "placeholders": {
+        "secretKey": "32バイト以上のスーパーシークレットキー",
+        "waiting": "待機中...",
+        "pasteTokenToDecode": "デコードするトークンを貼り付け"
+      },
+      "messages": {
+        "copied": "コピーされました！",
+        "jsonError": "署名用のヘッダーまたはペイロードJSONでエラーが発生しました。",
+        "debugWarning": "デバッグツール。本番の秘密鍵は絶対に使用しないでください。"
+      },
+      "algorithms": {
+        "HS256": "HS256",
+        "HS384": "HS384",
+        "HS512": "HS512"
+      }
+    },
+    "dataGenerator": {
+      "name": "データジェネレーター",
+      "shortName": "データ生成",
+      "title": "テストデータジェネレーター",
+      "tools": {
+        "uuid": "UUIDジェネレーター",
+        "nanoid": "NanoIDジェネレーター",
+        "hash": "ハッシュジェネレーター（MD5、SHA）",
+        "password": "セキュアパスワードジェネレーター"
+      },
+      "nanoidAlphabets": {
+        "urlSafe": "URLセーフ（デフォルト）",
+        "numbers": "数字のみ",
+        "uppercase": "大文字のみ",
+        "lowercase": "小文字のみ",
+        "noLookAlikes": "似た文字なし",
+        "custom": "カスタム..."
+      },
+      "labels": {
+        "tool": "ツール",
+        "quantity": "数量",
+        "generatedIds": "生成されたID",
+        "generatedNanoids": "生成されたNanoID"
+      },
+      "buttons": {
+        "generateNew": "新規生成",
+        "copyAll": "すべてコピー",
+        "generateNewPassword": "新しいパスワードを生成"
+      },
+      "errors": {
+        "nameAndNamespaceRequired": "有効な名前とUUID名前空間が必要です。",
+        "uuidGenerationError": "UUID生成エラー",
+        "alphabetError": "アルファベットエラー",
+        "alphabetMinLength": "カスタムアルファベットは少なくとも2文字を含む必要があります。",
+        "nanoidGenerationError": "NanoID生成エラー",
+        "selectCharacterType": "パスワードには少なくとも1つの文字タイプを選択してください。"
+      },
+      "messages": {
+        "copied": "コピーされました！",
+        "allIdsCopied": "すべてのIDがコピーされました！"
+      },
+      "uuid": {
+        "settings": {
+          "title": "UUID設定",
+          "version": "UUIDバージョン",
+          "name": "名前",
+          "namespace": "名前空間（有効なUUID）",
+          "dns": "DNS",
+          "url": "URL",
+          "removeHyphens": "ハイフンを削除",
+          "uppercase": "大文字"
+        },
+        "versions": {
+          "v7": "バージョン7（Unix時間、ソート可能）",
+          "v4": "バージョン4（ランダム）",
+          "v6": "バージョン6（時間、ソート可能）",
+          "v1": "バージョン1（時間ベース）",
+          "v5": "バージョン5（名前ベース、SHA-1）",
+          "v3": "バージョン3（名前ベース、MD5）",
+          "nil": "NIL（空/Null UUID）",
+          "max": "MAX（最大UUID）"
+        }
+      },
+      "nanoid": {
+        "settings": {
+          "title": "NanoID設定",
+          "idSize": "IDサイズ",
+          "alphabet": "アルファベット",
+          "customAlphabetBuilder": "カスタムアルファベットビルダー",
+          "lowercase": "小文字",
+          "uppercase": "大文字",
+          "numbers": "数字",
+          "customAlphabetPlaceholder": "直接編集するか、上記のショートカットを使用..."
+        }
+      },
+      "hash": {
+        "title": "ハッシュジェネレーター",
+        "inputLabel": "入力テキスト",
+        "generatedTitle": "生成されたハッシュ"
+      },
+      "password": {
+        "generatedTitle": "生成されたセキュアパスワード",
+        "settings": {
+          "title": "パスワード設定",
+          "length": "長さ",
+          "uppercase": "大文字（A-Z）",
+          "lowercase": "小文字（a-z）",
+          "numbers": "数字（0-9）",
+          "symbols": "記号（!@#）"
+        }
+      }
+    },
+    "massDataGenerator": {
+      "name": "大量データジェネレーター",
+      "shortName": "大量生成",
+      "title": "バルクデータジェネレーター",
+      "labels": {
+        "dataTypes": "データタイプ",
+        "generalSettings": "一般設定",
+        "recordQuantity": "レコード数量",
+        "outputFormat": "出力形式",
+        "generatedData": "生成されたデータ"
+      },
+      "buttons": {
+        "add": "追加",
+        "fieldFromLibrary": "ライブラリからフィールド",
+        "generateFakeData": "フェイクデータを生成",
+        "generating": "生成中...",
+        "download": "ダウンロード",
+        "copy": "コピー"
+      },
+      "formats": {
+        "json": "JSON",
+        "csv": "CSV"
+      },
+      "csv": {
+        "includeHeader": "CSVヘッダーを含める",
+        "delimiter": "CSV区切り文字",
+        "comma": "カンマ（,）",
+        "semicolon": "セミコロン（;）"
+      },
+      "placeholders": {
+        "quantityExample": "例：10",
+        "searchDataTypes": "任意のデータタイプを検索...",
+        "configureAndGenerate": "データを設定し、「フェイクデータを生成」をクリックして結果をここで確認してください。"
+      },
+      "messages": {
+        "dataCopied": "データがクリップボードにコピーされました！",
+        "generatingInBackground": "バックグラウンドスレッドでデータを生成中...",
+        "noResultsFound": "結果が見つかりません。"
+      },
+      "errors": {
+        "maxQuantity": "最大数量は10,000レコードです。",
+        "copyError": "データのコピー中にエラーが発生しました。もう一度お試しください。"
+      },
+      "fields": {
+        "person": "人物",
+        "fullName": "フルネーム",
+        "firstName": "名",
+        "lastName": "姓",
+        "middleName": "ミドルネーム",
+        "prefix": "敬称（Mr.、Dr.）",
+        "suffix": "接尾辞（Jr.、PhD）",
+        "sex": "生物学的性別",
+        "gender": "性別",
+        "bio": "バイオ",
+        "jobArea": "職種エリア",
+        "jobTitle": "職種タイトル",
+        "jobDescriptor": "職種説明",
+        "jobType": "職種タイプ",
+        "zodiacSign": "星座",
+        "cpf": "CPF",
+        "cnpj": "CNPJ",
+        "internet": "インターネット",
+        "email": "メール",
+        "userName": "ユーザー名",
+        "url": "URL",
+        "domainName": "ドメイン",
+        "ip": "IPアドレス",
+        "ipv6": "IPv6アドレス",
+        "mac": "MACアドレス",
+        "hexColor": "色（16進数）",
+        "password": "パスワード",
+        "protocol": "プロトコル",
+        "userAgent": "ユーザーエージェント",
+        "httpMethod": "HTTPメソッド",
+        "finance": "金融",
+        "accountNumber": "口座番号",
+        "accountName": "口座名",
+        "currencyName": "通貨名",
+        "currencyCode": "通貨コード",
+        "currencySymbol": "通貨記号",
+        "creditCardNumber": "クレジットカード番号",
+        "creditCardCVV": "クレジットカードCVV",
+        "iban": "IBAN",
+        "bic": "BIC",
+        "bitcoinAddress": "ビットコインアドレス",
+        "ethereumAddress": "イーサリアムアドレス",
+        "location": "場所",
+        "streetAddress": "住所",
+        "city": "都市",
+        "state": "州（略）",
+        "country": "国",
+        "countryCode": "国コード",
+        "zipCode": "郵便番号",
+        "latitude": "緯度",
+        "longitude": "経度",
+        "direction": "方向",
+        "timeZone": "タイムゾーン",
+        "animal": "動物",
+        "dog": "犬",
+        "cat": "猫",
+        "bird": "鳥",
+        "fish": "魚",
+        "insect": "昆虫",
+        "animalType": "動物タイプ",
+        "bear": "熊",
+        "cow": "牛",
+        "lion": "ライオン",
+        "commerce": "商業",
+        "productName": "商品名",
+        "price": "価格",
+        "department": "部門",
+        "sku": "SKU",
+        "productDescription": "商品説明",
+        "productAdjective": "商品形容詞",
+        "productMaterial": "商品素材",
+        "system": "システム",
+        "fileName": "ファイル名",
+        "fileExt": "ファイル拡張子",
+        "fileType": "ファイルタイプ",
+        "mimeType": "MIMEタイプ",
+        "directoryPath": "ディレクトリパス",
+        "filePath": "ファイルパス",
+        "semver": "セマンティックバージョン",
+        "string": "文字列",
+        "uuid": "UUID",
+        "alphanumeric": "英数字（文字列）",
+        "numeric": "数字（文字列）",
+        "hexadecimal": "16進数（文字列）",
+        "binary": "2進数（文字列）",
+        "octal": "8進数（文字列）",
+        "vehicle": "車両",
+        "vehicleType": "車両タイプ",
+        "manufacturer": "メーカー",
+        "model": "モデル",
+        "vin": "VIN（シャーシ）",
+        "vehicleColor": "車両色",
+        "date": "日付",
+        "pastDate": "過去の日付",
+        "futureDate": "未来の日付",
+        "recentDate": "最近の日付",
+        "birthdate": "生年月日",
+        "dateBetween": "日付の間...",
+        "weekday": "曜日",
+        "month": "月",
+        "primitiveTypes": "プリミティブタイプ",
+        "stringUuid": "文字列（UUID）",
+        "stringAlphanumeric": "文字列（英数字）",
+        "stringAlpha": "文字列（文字）",
+        "intNumber": "整数",
+        "floatNumber": "小数",
+        "boolean": "ブール値（true/false）",
+        "loremText": "Loremテキスト",
+        "loremWord": "単語（Lorem）",
+        "loremWords": "単語（Lorem）",
+        "loremSentence": "文（Lorem）",
+        "loremParagraph": "段落（Lorem）",
+        "loremLines": "テキスト行（Lorem）",
+        "loremSlug": "スラッグ（Lorem）",
+        "number": "数値",
+        "intNumeric": "整数（数値）",
+        "floatNumeric": "小数（数値）",
+        "hexNumeric": "16進数（数値）",
+        "binaryNumeric": "2進数（数値）",
+        "octalNumeric": "8進数（数値）",
+        "airline": "航空会社",
+        "airplane": "飛行機",
+        "airport": "空港",
+        "flightNumber": "便名",
+        "seat": "座席",
+        "hacker": "ハッカー",
+        "abbreviation": "略語",
+        "adjective": "形容詞",
+        "noun": "名詞",
+        "verb": "動詞",
+        "phrase": "ハッカーフレーズ",
+        "word": "単語",
+        "wordNoun": "名詞（辞書）",
+        "wordVerb": "動詞（辞書）",
+        "wordAdjective": "形容詞（辞書）",
+        "wordPreposition": "前置詞（辞書）",
+        "wordSample": "単語（辞書）",
+        "company": "会社",
+        "companyName": "会社名",
+        "buzzPhrase": "バズフレーズ",
+        "catchPhrase": "キャッチフレーズ",
+        "bs": "ビジネス用語",
+        "database": "データベース",
+        "column": "列名",
+        "columnType": "列タイプ",
+        "engine": "エンジン",
+        "mongodbObjectId": "MongoDBオブジェクトID",
+        "git": "Git",
+        "branch": "ブランチ",
+        "commitSha": "コミットSHA",
+        "shortSha": "短縮SHA",
+        "commitMessage": "コミットメッセージ",
+        "image": "画像",
+        "imageUrl": "画像URL",
+        "avatar": "アバター",
+        "dataUri": "画像データURI",
+        "color": "色",
+        "colorName": "色名",
+        "colorSpace": "色空間",
+        "rgbColor": "RGB色",
+        "music": "音楽",
+        "genre": "音楽ジャンル",
+        "songName": "曲名",
+        "phone": "電話",
+        "phoneNumber": "電話番号",
+        "imei": "IMEI",
+        "science": "科学",
+        "chemicalElement": "化学元素",
+        "unit": "測定単位"
+      }
+    },
+    "regexBuilder": {
+      "name": "正規表現ビルダー",
+      "shortName": "正規表現",
+      "title": "ビジュアル正規表現ビルダー",
+      "build": "構築",
+      "test": "テスト",
+      "clear": "クリア",
+      "copy": "コピー"
+    },
+    "kanbanBoard": {
+      "name": "かんばんボード",
+      "shortName": "かんばん",
+      "title": "かんばんボード",
+      "addColumn": "列を追加",
+      "addCard": "カードを追加",
+      "edit": "編集",
+      "delete": "削除",
+      "move": "移動"
+    },
+    "markdownNotes": {
+      "name": "Markdownノート",
+      "shortName": "ノート",
+      "title": "Markdownノートエディター",
+      "newNote": "新しいノート",
+      "save": "保存",
+      "delete": "削除",
+      "preview": "プレビュー"
+    },
+    "knowledgeBase": {
+      "name": "ナレッジベース",
+      "shortName": "ナレッジ",
+      "title": "ナレッジベース",
+      "description": "Markdownノートと内部リンクでナレッジを整理・管理",
+      "buttons": {
+        "newBlock": "新しいブロック",
+        "edit": "編集",
+        "save": "保存",
+        "updateBlock": "ブロックを更新",
+        "saveNewBlock": "新しいブロックを保存",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "link": "リンク",
+        "editor": "エディター",
+        "preview": "プレビュー"
+      },
+      "placeholders": {
+        "search": "ブロックを検索...",
+        "blockTitle": "ブロックタイトル",
+        "tags": "タグ（カンマ区切り）",
+        "sourceUrl": "ソースURL（オプション）",
+        "content": "ここにコンテンツを書いてください...",
+        "linkSearch": "リンクするブロックを検索..."
+      },
+      "labels": {
+        "linkedBy": "リンク元",
+        "noBacklinks": "このブロックにリンクしている他のブロックはありません",
+        "selectBlock": "表示するブロックを選択するか、「新しいブロック」をクリックしてください"
+      },
+      "messages": {
+        "titleRequired": "タイトルが必要です！",
+        "blockUpdated": "ブロックが更新されました！",
+        "blockCreated": "ブロックが作成されました！",
+        "blockDeleted": "ブロックが削除されました。",
+        "noBlockSelected": "削除するブロックが選択されていません。",
+        "noBlocksFound": "ブロックが見つかりません。",
+        "noBlocksCreated": "ブロックが作成されていません。",
+        "loadingError": "ナレッジベースの読み込み中にエラーが発生しました："
+      },
+      "deleteDialog": {
+        "title": "削除の確認",
+        "itemName": "このブロック"
+      },
+      "linkDialog": {
+        "title": "別のブロックとリンク"
+      },
+      "fallbacks": {
+        "untitledBlock": "無題のブロック"
+      }
+    }
+  }
+}

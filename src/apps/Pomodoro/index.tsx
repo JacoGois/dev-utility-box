@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/Card";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import _ from "lodash";
 import { useCallback, useEffect, useMemo, useRef } from "react";
@@ -12,7 +13,7 @@ import { NotificationInfo } from "./components/NotificationInfo";
 import { StatsPanel } from "./components/StatsPanel";
 import { TimerControls } from "./components/TimerControls";
 import { TimerDisplay } from "./components/TimerDisplay";
-import { MODES, Session } from "./shared";
+import { createModes, MODES, Session } from "./shared";
 
 export const defaultState = {
   mode: "pomodoro" as keyof typeof MODES,
@@ -42,6 +43,8 @@ type PomodoroProps = {
 
 export function Pomodoro({ instanceId }: PomodoroProps) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const t = useAppTranslations("pomodoro");
+  const modes = createModes(t);
   const parentModalContainerRef = useWindowShellStore(
     (state) => state.refs[instanceId]
   );
@@ -62,8 +65,10 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
         const audio = new Audio("/pomodoro.mp3");
         audio.play();
         if ("Notification" in window && Notification.permission === "granted") {
-          new Notification("Tempo finalizado!", {
-            body: `Modo atual: ${MODES[prevState.mode].label}`,
+          new Notification(t("notifications.timeFinished"), {
+            body: `${t("notifications.currentMode")}: ${
+              modes[prevState.mode].label
+            }`,
             tag: "pomodoro-session-end",
           });
         }
@@ -191,17 +196,17 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
       <div className="h-full flex flex-col max-w-none space-y-3 @sm:space-y-4 @lg:space-y-6 mt-8 @sm:mt-0">
         <div className="text-center py-2 @sm:py-4 @lg:py-6 flex-shrink-0">
           <h1 className="text-xl @sm:text-2xl @lg:text-4xl font-bold text-foreground mb-1 @sm:mb-2">
-            Timer Pomodoro
+            {t("title")}
           </h1>
           <p className="text-xs @sm:text-sm @lg:text-base text-muted-foreground">
-            Técnica de produtividade para foco e concentração
+            {t("description")}
           </p>
         </div>
 
         <ModeSelector
           currentMode={state.mode}
           onModeChange={handleChangeMode}
-          modesData={MODES}
+          modesData={modes}
         />
 
         <div className="flex-1 grid grid-cols-1 @xl:grid-cols-3 gap-3 @sm:gap-4 @lg:gap-6 min-h-0">
@@ -209,7 +214,7 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
             <CardContent className="flex-1 flex flex-col justify-center p-4 @sm:p-6">
               <TimerDisplay
                 secondsLeft={state.secondsLeft}
-                modeConfig={MODES[state.mode]}
+                modeConfig={modes[state.mode]}
                 duration={durationsInMinutes[state.mode] * 60}
               />
               <div className="mt-4 @sm:mt-6 flex justify-center">
@@ -230,7 +235,7 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
             <NotificationInfo notificationDenied={state.notificationDenied} />
             <HistoryList
               sessionHistory={state.sessionHistory}
-              modesData={MODES}
+              modesData={modes}
             />
           </div>
         </div>

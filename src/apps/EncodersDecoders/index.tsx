@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form/SelectCore";
 import { Textarea } from "@/components/ui/form/Textarea";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import JsonView from "@uiw/react-json-view";
 import { vscodeTheme } from "@uiw/react-json-view/vscode";
 import { format, fromUnixTime } from "date-fns";
@@ -33,10 +34,10 @@ import React, {
 } from "react";
 import { toast } from "sonner";
 
-const toolOptions = [
-  { value: "jwt", label: "JWT Encoder / Decoder" },
-  { value: "base64", label: "Base64 Encoder / Decoder" },
-  { value: "url", label: "URL Encoder / Decoder" },
+const createToolOptions = (t: (key: string) => string) => [
+  { value: "jwt", label: t("tools.jwt") },
+  { value: "base64", label: t("tools.base64") },
+  { value: "url", label: t("tools.url") },
 ];
 type ToolKey = "base64" | "url" | "jwt";
 
@@ -84,7 +85,10 @@ const jwtInitialState: JWTToolState = {
   verification: { status: "idle", error: null },
 };
 
-const handleCopyToClipboard = (content: unknown) => {
+const handleCopyToClipboard = (
+  content: unknown,
+  t: (key: string) => string
+) => {
   if (!content) return;
   const textToCopy =
     typeof content === "object"
@@ -92,7 +96,7 @@ const handleCopyToClipboard = (content: unknown) => {
       : String(content);
   navigator.clipboard
     .writeText(textToCopy)
-    .then(() => toast.success("Copiado!"));
+    .then(() => toast.success(t("messages.copied")));
 };
 
 function jwtReducer(state: JWTToolState, action: JWTToolAction): JWTToolState {
@@ -128,327 +132,332 @@ function jwtReducer(state: JWTToolState, action: JWTToolAction): JWTToolState {
   }
 }
 
-const JWTToolLayout = forwardRef<{ reset: () => void }, { instanceId: string }>(
-  ({ instanceId }, ref) => {
-    const [persistedState, setPersistedState] = usePersistentAppStore(
-      instanceId,
-      { jwtState: jwtInitialState }
-    );
-    const [state, dispatch] = useReducer(jwtReducer, persistedState.jwtState);
-    const {
-      headerStr,
-      payloadStr,
-      secret,
-      algorithm,
-      generatedToken,
-      tokenToDecode,
-      verification,
-    } = state;
+const JWTToolLayout = forwardRef<
+  { reset: () => void },
+  { instanceId: string; t: (key: string) => string }
+>(({ instanceId, t }, ref) => {
+  const [persistedState, setPersistedState] = usePersistentAppStore(
+    instanceId,
+    { jwtState: jwtInitialState }
+  );
+  const [state, dispatch] = useReducer(jwtReducer, persistedState.jwtState);
+  const {
+    headerStr,
+    payloadStr,
+    secret,
+    algorithm,
+    generatedToken,
+    tokenToDecode,
+    verification,
+  } = state;
 
-    useImperativeHandle(ref, () => ({
-      reset: () => {
-        dispatch({ type: "RESET" });
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      dispatch({ type: "RESET" });
+      dispatch({
+        type: "UPDATE_FIELD",
+        payload: {
+          field: "tokenToDecode",
+          value: "",
+        },
+      });
+    },
+  }));
+
+  useEffect(() => {
+    setPersistedState({ jwtState: state });
+  }, [state]);
+
+  useEffect(() => {
+    const signToken = async () => {
+      try {
+        const header = JSON.parse(headerStr);
+        const payload = JSON.parse(payloadStr);
+        const secretKey = new TextEncoder().encode(secret);
+        const newEncodedToken = await new SignJWT(payload)
+          .setProtectedHeader(header)
+          .sign(secretKey);
+        dispatch({
+          type: "UPDATE_FIELD",
+          payload: { field: "generatedToken", value: newEncodedToken },
+        });
+      } catch {
         dispatch({
           type: "UPDATE_FIELD",
           payload: {
-            field: "tokenToDecode",
-            value: "",
+            field: "generatedToken",
+            value: t("messages.jsonError"),
           },
         });
-      },
-    }));
+      }
+    };
+    const debouncedSign = _.debounce(signToken, 300);
+    debouncedSign();
+    return () => debouncedSign.cancel();
+  }, [headerStr, payloadStr, secret, algorithm]);
 
-    useEffect(() => {
-      setPersistedState({ jwtState: state });
-    }, [state]);
+  const decodedParts = useMemo(() => {
+    if (!tokenToDecode.trim()) {
+      dispatch({
+        type: "UPDATE_FIELD",
+        payload: {
+          field: "verification",
+          value: { status: "idle", error: null },
+        },
+      });
+      return { header: null, payload: null, error: null };
+    }
 
-    useEffect(() => {
-      const signToken = async () => {
-        try {
-          const header = JSON.parse(headerStr);
-          const payload = JSON.parse(payloadStr);
-          const secretKey = new TextEncoder().encode(secret);
-          const newEncodedToken = await new SignJWT(payload)
-            .setProtectedHeader(header)
-            .sign(secretKey);
-          dispatch({
-            type: "UPDATE_FIELD",
-            payload: { field: "generatedToken", value: newEncodedToken },
-          });
-        } catch {
-          dispatch({
-            type: "UPDATE_FIELD",
-            payload: {
-              field: "generatedToken",
-              value: "Erro no JSON do Header ou Payload para assinar.",
-            },
-          });
-        }
-      };
-      const debouncedSign = _.debounce(signToken, 300);
-      debouncedSign();
-      return () => debouncedSign.cancel();
-    }, [headerStr, payloadStr, secret, algorithm]);
-
-    const decodedParts = useMemo(() => {
-      if (!tokenToDecode.trim()) {
+    const verify = async () => {
+      try {
+        const secretKey = new TextEncoder().encode(secret);
+        await jwtVerify(tokenToDecode, secretKey);
         dispatch({
           type: "UPDATE_FIELD",
           payload: {
             field: "verification",
-            value: { status: "idle", error: null },
+            value: { status: "verified", error: null },
           },
         });
-        return { header: null, payload: null, error: null };
-      }
-
-      const verify = async () => {
-        try {
-          const secretKey = new TextEncoder().encode(secret);
-          await jwtVerify(tokenToDecode, secretKey);
-          dispatch({
-            type: "UPDATE_FIELD",
-            payload: {
-              field: "verification",
-              value: { status: "verified", error: null },
-            },
-          });
-        } catch (e) {
-          dispatch({
-            type: "UPDATE_FIELD",
-            payload: {
-              field: "verification",
-              value: { status: "invalid", error: (e as Error).message },
-            },
-          });
-        }
-      };
-      verify();
-
-      try {
-        const header = jwtDecode(tokenToDecode, { header: true });
-        const payload: DecodedJwtPayload & Record<string, unknown> =
-          jwtDecode(tokenToDecode);
-        for (const key of ["iat", "exp", "nbf"]) {
-          if (payload[key] && typeof payload[key] === "number") {
-            payload[`${key}_iso`] = `${format(
-              fromUnixTime(payload[key] as number),
-              "yyyy-MM-dd HH:mm:ss"
-            )} UTC`;
-          }
-        }
-        return { header, payload, error: null };
       } catch (e) {
-        return { header: null, payload: null, error: (e as Error).message };
+        dispatch({
+          type: "UPDATE_FIELD",
+          payload: {
+            field: "verification",
+            value: { status: "invalid", error: (e as Error).message },
+          },
+        });
       }
-    }, [tokenToDecode, secret]);
+    };
+    verify();
 
-    return (
-      <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-4 flex-grow min-h-0 h-full overflow-y-auto">
-        <div className="flex flex-col gap-4">
-          <Card className="flex-grow flex flex-col min-h-0 py-0 gap-0">
-            <CardHeader className="pt-3 pb-2">
-              <CardTitle className="text-base text-rose-400">
-                HEADER (Editável)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex-grow p-0">
-              <Textarea
-                value={headerStr}
-                onChange={(e) =>
-                  dispatch({
-                    type: "UPDATE_FIELD",
-                    payload: { field: "headerStr", value: e.target.value },
-                  })
-                }
-                className="h-full w-full resize-none border-0 rounded-xl font-mono text-xs bg-background"
-              />
-            </CardContent>
-          </Card>
-          <Card className="flex-grow flex flex-col min-h-0 py-0 gap-0">
-            <CardHeader className="pt-3 pb-2">
-              <CardTitle className="text-base text-violet-400">
-                PAYLOAD (Editável)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex-grow p-0">
-              <Textarea
-                value={payloadStr}
-                onChange={(e) =>
-                  dispatch({
-                    type: "UPDATE_FIELD",
-                    payload: { field: "payloadStr", value: e.target.value },
-                  })
-                }
-                className="h-full w-full resize-none border-0 rounded-xl font-mono text-xs bg-background"
-              />
-            </CardContent>
-          </Card>
-        </div>
+    try {
+      const header = jwtDecode(tokenToDecode, { header: true });
+      const payload: DecodedJwtPayload & Record<string, unknown> =
+        jwtDecode(tokenToDecode);
+      for (const key of ["iat", "exp", "nbf"]) {
+        if (payload[key] && typeof payload[key] === "number") {
+          payload[`${key}_iso`] = `${format(
+            fromUnixTime(payload[key] as number),
+            "yyyy-MM-dd HH:mm:ss"
+          )} UTC`;
+        }
+      }
+      return { header, payload, error: null };
+    } catch (e) {
+      return { header: null, payload: null, error: (e as Error).message };
+    }
+  }, [tokenToDecode, secret]);
 
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2 flex-grow min-h-0">
-            <div className="flex justify-between items-center">
-              <Label>Token Gerado (Encoder)</Label>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleCopyToClipboard(generatedToken)}
-                title="Copiar Token"
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
-            </div>
+  return (
+    <div className="grid grid-cols-1 @2xl:grid-cols-3 gap-4 flex-grow min-h-0 h-full overflow-y-auto">
+      <div className="flex flex-col gap-4">
+        <Card className="flex-grow flex flex-col min-h-0 py-0 gap-0">
+          <CardHeader className="pt-3 pb-2">
+            <CardTitle className="text-base text-rose-400">
+              {t("labels.headerEditable")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow p-0">
             <Textarea
-              readOnly
-              value={generatedToken}
-              className="h-full resize-none font-mono text-xs bg-muted/50"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-4">
-              <div className="flex-grow">
-                <Label>Chave Secreta (HMAC)</Label>
-                <Input
-                  type="text"
-                  value={secret}
-                  onChange={(e) =>
-                    dispatch({
-                      type: "UPDATE_FIELD",
-                      payload: { field: "secret", value: e.target.value },
-                    })
-                  }
-                  className="font-mono text-xs"
-                />
-              </div>
-              <div className="w-[120px]">
-                <Label>Algoritmo</Label>
-                <Select
-                  value={algorithm}
-                  onValueChange={(v) =>
-                    dispatch({
-                      type: "UPDATE_FIELD",
-                      payload: { field: "algorithm", value: v },
-                    })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="z-[999999999]">
-                    <SelectItem value="HS256">HS256</SelectItem>
-                    <SelectItem value="HS384">HS384</SelectItem>
-                    <SelectItem value="HS512">HS512</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="jwt-decode-input">
-              Cole um Token para Decodificar
-            </Label>
-            <Textarea
-              id="jwt-decode-input"
-              value={tokenToDecode}
+              value={headerStr}
               onChange={(e) =>
                 dispatch({
                   type: "UPDATE_FIELD",
-                  payload: { field: "tokenToDecode", value: e.target.value },
+                  payload: { field: "headerStr", value: e.target.value },
                 })
               }
-              className="min-h-24 resize-none font-mono text-xs bg-background"
+              className="h-full w-full resize-none border-0 rounded-xl font-mono text-xs bg-background"
             />
+          </CardContent>
+        </Card>
+        <Card className="flex-grow flex flex-col min-h-0 py-0 gap-0">
+          <CardHeader className="pt-3 pb-2">
+            <CardTitle className="text-base text-violet-400">
+              {t("labels.payloadEditable")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow p-0">
+            <Textarea
+              value={payloadStr}
+              onChange={(e) =>
+                dispatch({
+                  type: "UPDATE_FIELD",
+                  payload: { field: "payloadStr", value: e.target.value },
+                })
+              }
+              className="h-full w-full resize-none border-0 rounded-xl font-mono text-xs bg-background"
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 flex-grow min-h-0">
+          <div className="flex justify-between items-center">
+            <Label>{t("labels.generatedToken")}</Label>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleCopyToClipboard(generatedToken, t)}
+              title={t("buttons.copyToken")}
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
           </div>
-          {(verification.status === "verified" ||
-            verification.status === "invalid") && (
-            <div className="mt-2 h-6">
-              {verification.status === "verified" && (
-                <Badge className="bg-green-600 hover:bg-green-700">
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Assinatura Verificada
-                </Badge>
-              )}
-              {verification.status === "invalid" && (
-                <Badge variant="destructive">
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Assinatura Inválida
-                </Badge>
-              )}
+          <Textarea
+            readOnly
+            value={generatedToken}
+            className="h-full resize-none font-mono text-xs bg-muted/50"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-4">
+            <div className="flex-grow">
+              <Label>{t("labels.secretKey")}</Label>
+              <Input
+                type="text"
+                value={secret}
+                placeholder={t("placeholders.secretKey")}
+                onChange={(e) =>
+                  dispatch({
+                    type: "UPDATE_FIELD",
+                    payload: { field: "secret", value: e.target.value },
+                  })
+                }
+                className="font-mono text-xs"
+              />
             </div>
-          )}
-          <div className="grid grid-rows-2 gap-4 flex-grow min-h-0">
-            <Card className="flex flex-col py-0 gap-0">
-              <CardHeader className="flex flex-row items-center justify-between py-2 px-4 w-full">
-                <CardTitle className="text-base flex items-center w-full justify-between">
-                  Header (Decodificado)
-                  {decodedParts.header && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleCopyToClipboard(decodedParts.header)}
-                    >
-                      <Copy className="h-4 w-4" />
-                    </Button>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-grow overflow-auto p-0">
-                {decodedParts.header ? (
-                  <JsonView
-                    value={decodedParts.header}
-                    style={vscodeTheme}
-                    displayDataTypes={false}
-                    enableClipboard={false}
-                  />
-                ) : (
-                  <div className="p-4 text-sm text-muted-foreground">
-                    {decodedParts.error || "Aguardando..."}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-            <Card className="flex flex-col py-0 gap-0">
-              <CardHeader className="flex flex-row items-center justify-between py-2 px-4 w-full">
-                <CardTitle className="text-base flex items-center w-full justify-between">
-                  Payload (Decodificado)
-                  {decodedParts.payload && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() =>
-                        handleCopyToClipboard(decodedParts.payload)
-                      }
-                    >
-                      <Copy className="h-4 w-4" />
-                    </Button>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex-grow overflow-auto p-0">
-                {decodedParts.payload ? (
-                  <JsonView
-                    value={decodedParts.payload}
-                    style={vscodeTheme}
-                    displayDataTypes={false}
-                    enableClipboard={false}
-                  />
-                ) : (
-                  <div className="p-4 text-sm text-muted-foreground">
-                    {decodedParts.error || "Aguardando..."}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <div className="w-[120px]">
+              <Label>{t("labels.algorithm")}</Label>
+              <Select
+                value={algorithm}
+                onValueChange={(v) =>
+                  dispatch({
+                    type: "UPDATE_FIELD",
+                    payload: { field: "algorithm", value: v },
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="z-[999999999]">
+                  <SelectItem value="HS256">{t("algorithms.HS256")}</SelectItem>
+                  <SelectItem value="HS384">{t("algorithms.HS384")}</SelectItem>
+                  <SelectItem value="HS512">{t("algorithms.HS512")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       </div>
-    );
-  }
-);
+
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="jwt-decode-input">
+            {t("labels.pasteTokenToDecode")}
+          </Label>
+          <Textarea
+            id="jwt-decode-input"
+            value={tokenToDecode}
+            onChange={(e) =>
+              dispatch({
+                type: "UPDATE_FIELD",
+                payload: { field: "tokenToDecode", value: e.target.value },
+              })
+            }
+            className="min-h-24 resize-none font-mono text-xs bg-background"
+            placeholder={t("placeholders.pasteTokenToDecode")}
+          />
+        </div>
+        {(verification.status === "verified" ||
+          verification.status === "invalid") && (
+          <div className="mt-2 h-6">
+            {verification.status === "verified" && (
+              <Badge className="bg-green-600 hover:bg-green-700">
+                <CheckCircle className="h-4 w-4 mr-2" />
+                {t("badges.signatureVerified")}
+              </Badge>
+            )}
+            {verification.status === "invalid" && (
+              <Badge variant="destructive">
+                <XCircle className="h-4 w-4 mr-2" />
+                {t("badges.signatureInvalid")}
+              </Badge>
+            )}
+          </div>
+        )}
+        <div className="grid grid-rows-2 gap-4 flex-grow min-h-0">
+          <Card className="flex flex-col py-0 gap-0">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-4 w-full">
+              <CardTitle className="text-base flex items-center w-full justify-between">
+                {t("labels.headerDecoded")}
+                {decodedParts.header && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() =>
+                      handleCopyToClipboard(decodedParts.header, t)
+                    }
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-grow overflow-auto p-0">
+              {decodedParts.header ? (
+                <JsonView
+                  value={decodedParts.header}
+                  style={vscodeTheme}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                />
+              ) : (
+                <div className="p-4 text-sm text-muted-foreground">
+                  {decodedParts.error || t("placeholders.waiting")}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          <Card className="flex flex-col py-0 gap-0">
+            <CardHeader className="flex flex-row items-center justify-between py-2 px-4 w-full">
+              <CardTitle className="text-base flex items-center w-full justify-between">
+                {t("labels.payloadDecoded")}
+                {decodedParts.payload && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() =>
+                      handleCopyToClipboard(decodedParts.payload, t)
+                    }
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-grow overflow-auto p-0">
+              {decodedParts.payload ? (
+                <JsonView
+                  value={decodedParts.payload}
+                  style={vscodeTheme}
+                  displayDataTypes={false}
+                  enableClipboard={false}
+                />
+              ) : (
+                <div className="p-4 text-sm text-muted-foreground">
+                  {decodedParts.error || t("placeholders.waiting")}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+});
 JWTToolLayout.displayName = "JWTToolLayout";
 
 const TextToTextLayout: FC<{
@@ -456,7 +465,8 @@ const TextToTextLayout: FC<{
   setInputValue: (v: string) => void;
   mode: "encode" | "decode";
   processor: (input: string, options: { mode: "encode" | "decode" }) => string;
-}> = ({ inputValue, setInputValue, mode, processor }) => {
+  t: (key: string) => string;
+}> = ({ inputValue, setInputValue, mode, processor, t }) => {
   const outputValue = useMemo(() => {
     if (!inputValue.trim()) return "";
     try {
@@ -469,7 +479,7 @@ const TextToTextLayout: FC<{
   return (
     <div className="grid @md:grid-cols-2 gap-4 flex-grow min-h-0 overflow-y-auto">
       <div className="flex flex-col gap-2">
-        <Label>Entrada</Label>
+        <Label>{t("labels.input")}</Label>
         <Textarea
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
@@ -478,12 +488,12 @@ const TextToTextLayout: FC<{
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
-          <Label>Saída</Label>
+          <Label>{t("labels.output")}</Label>
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => handleCopyToClipboard(outputValue)}
-            title="Copiar Saída"
+            onClick={() => handleCopyToClipboard(outputValue, t)}
+            title={t("buttons.copyOutput")}
           >
             <Copy className="h-4 w-4" />
           </Button>
@@ -501,6 +511,7 @@ const TextToTextLayout: FC<{
 function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
   const { selectedTool, base64Input, urlInput } = state;
+  const t = useAppTranslations("encoders");
   const [base64Mode, setBase64Mode] = useState<"encode" | "decode">("encode");
   const [urlMode, setUrlMode] = useState<"encode" | "decode">("encode");
 
@@ -517,7 +528,7 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
   return (
     <div className="flex flex-col h-full w-full p-4 gap-4 bg-card text-card-foreground border-t @container stable-scrollbar-container">
       <div className="flex items-center gap-4 flex-wrap">
-        <Label className="flex-shrink-0 font-bold">Ferramenta:</Label>
+        <Label className="flex-shrink-0 font-bold">{t("labels.tool")}</Label>
         <Select
           value={selectedTool}
           onValueChange={(value) =>
@@ -528,7 +539,7 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="z-[999999999]">
-            {toolOptions.map((opt) => (
+            {createToolOptions(t).map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
               </SelectItem>
@@ -537,16 +548,14 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
         </Select>
         <div className="flex-grow" />
         <Button onClick={handleClear} variant="ghost" size="sm">
-          <Eraser className="mr-2 h-4 w-4" /> Limpar
+          <Eraser className="mr-2 h-4 w-4" /> {t("buttons.clear")}
         </Button>
       </div>
 
       {selectedTool === "jwt" && (
         <div className="p-3 bg-destructive/10 border border-destructive/50 rounded-lg text-xs flex items-center gap-2">
           <ShieldAlert className="h-5 w-5 text-destructive flex-shrink-0" />
-          <span>
-            Ferramenta de depuração. Nunca use chaves secretas de produção.
-          </span>
+          <span>{t("messages.debugWarning")}</span>
         </div>
       )}
 
@@ -556,13 +565,13 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
             variant={base64Mode === "encode" ? "default" : "outline"}
             onClick={() => setBase64Mode("encode")}
           >
-            Texto → Base64
+            {t("buttons.textToBase64")}
           </Button>
           <Button
             variant={base64Mode === "decode" ? "default" : "outline"}
             onClick={() => setBase64Mode("decode")}
           >
-            Base64 → Texto
+            {t("buttons.base64ToText")}
           </Button>
         </div>
       )}
@@ -572,13 +581,13 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
             variant={urlMode === "encode" ? "default" : "outline"}
             onClick={() => setUrlMode("encode")}
           >
-            Encode URL
+            {t("buttons.encodeUrl")}
           </Button>
           <Button
             variant={urlMode === "decode" ? "default" : "outline"}
             onClick={() => setUrlMode("decode")}
           >
-            Decode URL
+            {t("buttons.decodeUrl")}
           </Button>
         </div>
       )}
@@ -593,6 +602,7 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
               return btoa(unescape(encodeURIComponent(input)));
             return decodeURIComponent(escape(atob(input)));
           }}
+          t={t}
         />
       )}
       {selectedTool === "url" && (
@@ -604,10 +614,11 @@ function EncodersDecodersComponent({ instanceId }: { instanceId: string }) {
             if (options.mode === "encode") return encodeURIComponent(input);
             return decodeURIComponent(input);
           }}
+          t={t}
         />
       )}
       {selectedTool === "jwt" && (
-        <JWTToolLayout instanceId={instanceId} ref={jwtToolRef} />
+        <JWTToolLayout instanceId={instanceId} t={t} ref={jwtToolRef} />
       )}
     </div>
   );

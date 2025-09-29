@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/form/Textarea";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Slider } from "@/components/ui/Slider";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import CryptoJS from "crypto-js";
 import { Copy, RefreshCw } from "lucide-react";
 import { customAlphabet } from "nanoid";
@@ -33,33 +34,33 @@ import {
   validate as uuidValidate,
 } from "uuid";
 
-const toolOptions = [
-  { value: "uuid", label: "Gerador de UUID" },
-  { value: "nanoid", label: "Gerador de NanoID" },
-  { value: "hash", label: "Gerador de Hash (MD5, SHA)" },
-  { value: "password", label: "Gerador de Senhas Seguras" },
+const createToolOptions = (t: (key: string) => string) => [
+  { value: "uuid", label: t("tools.uuid") },
+  { value: "nanoid", label: t("tools.nanoid") },
+  { value: "hash", label: t("tools.hash") },
+  { value: "password", label: t("tools.password") },
 ];
 
-const NANOID_ALPHABETS = {
+const createNanoidAlphabets = (t: (key: string) => string) => ({
   urlSafe: {
-    label: "URL-Safe (Padrão)",
+    label: t("nanoidAlphabets.urlSafe"),
     value: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_",
   },
-  numbers: { label: "Apenas Números", value: "0123456789" },
+  numbers: { label: t("nanoidAlphabets.numbers"), value: "0123456789" },
   uppercase: {
-    label: "Apenas Maiúsculas",
+    label: t("nanoidAlphabets.uppercase"),
     value: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   },
   lowercase: {
-    label: "Apenas Minúsculas",
+    label: t("nanoidAlphabets.lowercase"),
     value: "abcdefghijklmnopqrstuvwxyz",
   },
   noLookAlikes: {
-    label: "Sem Caracteres Parecidos",
+    label: t("nanoidAlphabets.noLookAlikes"),
     value: "346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz",
   },
-  custom: { label: "Customizado...", value: "custom" },
-};
+  custom: { label: t("nanoidAlphabets.custom"), value: "custom" },
+});
 
 const hashAlgorithms = [
   "MD5",
@@ -86,14 +87,14 @@ export const defaultState = {
   nanoidConfig: {
     quantity: 5,
     size: 21,
-    alphabetType: "urlSafe" as keyof typeof NANOID_ALPHABETS,
-    customAlphabetValue: "", // Corrigido para evitar conflito
+    alphabetType: "urlSafe" as keyof ReturnType<typeof createNanoidAlphabets>,
+    customAlphabetValue: "",
     customUseNumbers: true,
     customUseLowercase: true,
     customUseUppercase: true,
   },
   hashConfig: {
-    input: "Olá, mundo!",
+    input: "Hello, world!",
   },
   passwordConfig: {
     length: 16,
@@ -129,6 +130,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
   const { selectedTool, uuidConfig, nanoidConfig, hashConfig, passwordConfig } =
     state;
+  const t = useAppTranslations("dataGenerator");
 
   const [generatedIds, setGeneratedIds] = useState<string[]>([]);
   const [generatedPassword, setGeneratedPassword] = useState<string>("");
@@ -157,12 +159,12 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
           break;
         case "v3":
           if (!v3v5_name || !uuidValidate(v3v5_namespace))
-            throw new Error("Nome e Namespace UUID válido são obrigatórios.");
+            throw new Error(t("errors.nameAndNamespaceRequired"));
           newIds = [uuidv3(v3v5_name, v3v5_namespace)];
           break;
         case "v5":
           if (!v3v5_name || !uuidValidate(v3v5_namespace))
-            throw new Error("Nome e Namespace UUID válido são obrigatórios.");
+            throw new Error(t("errors.nameAndNamespaceRequired"));
           newIds = [uuidv5(v3v5_name, v3v5_namespace)];
           break;
         case "v6":
@@ -184,20 +186,22 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
       }
       setGeneratedIds(newIds);
     } catch (e) {
-      toast.error("Erro ao gerar UUID", { description: (e as Error).message });
+      toast.error(t("errors.uuidGenerationError"), {
+        description: (e as Error).message,
+      });
     }
   }, [uuidConfig]);
 
   const generateNanoIds = useCallback(() => {
     const { quantity, size, alphabetType, customAlphabetValue } = nanoidConfig;
+    const nanoidAlphabets = createNanoidAlphabets(t);
     const alphabet =
       alphabetType === "custom"
         ? customAlphabetValue
-        : NANOID_ALPHABETS[alphabetType].value;
+        : nanoidAlphabets[alphabetType].value;
     if (!alphabet || alphabet.length < 2) {
-      toast.error("Erro no Alfabeto", {
-        description:
-          "O alfabeto customizado deve conter ao menos 2 caracteres.",
+      toast.error(t("errors.alphabetError"), {
+        description: t("errors.alphabetMinLength"),
       });
       setGeneratedIds([]);
       return;
@@ -207,12 +211,12 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
       const newIds = Array.from({ length: quantity }, () => customNanoid());
       setGeneratedIds(newIds);
     } catch (e) {
-      toast.error("Erro ao gerar NanoID", {
+      toast.error(t("errors.nanoidGenerationError"), {
         description: (e as Error).message,
       });
       setGeneratedIds([]);
     }
-  }, [nanoidConfig]);
+  }, [nanoidConfig, t]);
 
   const generatePassword = useCallback(() => {
     const { length, uppercase, lowercase, numbers, symbols } = passwordConfig;
@@ -228,7 +232,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
     if (numbers) charset += charSets.numbers;
     if (symbols) charset += charSets.symbols;
     if (!charset) {
-      toast.error("Selecione ao menos um tipo de caractere para a senha.");
+      toast.error(t("errors.selectCharacterType"));
       setGeneratedPassword("");
       return;
     }
@@ -285,14 +289,16 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
   }, [hashConfig.input]);
 
   const handleCopyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => toast.success("Copiado!"));
+    navigator.clipboard
+      .writeText(text)
+      .then(() => toast.success(t("messages.copied")));
   };
   const handleCopyAllIds = () => {
     if (formattedIds.length === 0) return;
     const allIds = formattedIds.join("\n");
     navigator.clipboard
       .writeText(allIds)
-      .then(() => toast.success("Todos os IDs foram copiados!"));
+      .then(() => toast.success(t("messages.allIdsCopied")));
   };
 
   useEffect(() => {
@@ -322,7 +328,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
   return (
     <div className="flex flex-col h-full w-full p-4 gap-4 bg-card text-card-foreground border-t @container">
       <div className="flex items-center gap-4 border-b pb-4 flex-wrap">
-        <Label className="flex-shrink-0 font-bold">Ferramenta:</Label>
+        <Label className="flex-shrink-0 font-bold">{t("labels.tool")}:</Label>
         <Select
           value={selectedTool}
           onValueChange={(value) => setState({ selectedTool: value })}
@@ -331,7 +337,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="z-[999999999]">
-            {toolOptions.map((opt) => (
+            {createToolOptions(t).map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
               </SelectItem>
@@ -346,12 +352,14 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">
-                  Configurações do UUID
+                  {t("uuid.settings.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="uuid-version">Versão do UUID</Label>
+                  <Label htmlFor="uuid-version">
+                    {t("uuid.settings.version")}
+                  </Label>
                   <Select
                     value={uuidConfig.version}
                     onValueChange={(v) =>
@@ -367,32 +375,38 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                     </SelectTrigger>
                     <SelectContent className="z-[999999999]">
                       <SelectItem value="v7">
-                        Versão 7 (Unix Time, Ordenável)
+                        {t("uuid.versions.v7")}
                       </SelectItem>
-                      <SelectItem value="v4">Versão 4 (Aleatório)</SelectItem>
+                      <SelectItem value="v4">
+                        {t("uuid.versions.v4")}
+                      </SelectItem>
                       <SelectItem value="v6">
-                        Versão 6 (Tempo, Ordenável)
+                        {t("uuid.versions.v6")}
                       </SelectItem>
                       <SelectItem value="v1">
-                        Versão 1 (Baseado em Tempo)
+                        {t("uuid.versions.v1")}
                       </SelectItem>
                       <SelectItem value="v5">
-                        Versão 5 (Baseado em Nome, SHA-1)
+                        {t("uuid.versions.v5")}
                       </SelectItem>
                       <SelectItem value="v3">
-                        Versão 3 (Baseado em Nome, MD5)
+                        {t("uuid.versions.v3")}
                       </SelectItem>
                       <SelectItem value="nil">
-                        NIL (UUID Vazio / Nulo)
+                        {t("uuid.versions.nil")}
                       </SelectItem>
-                      <SelectItem value="max">MAX (UUID Máximo)</SelectItem>
+                      <SelectItem value="max">
+                        {t("uuid.versions.max")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 {isNameBasedVersion && (
                   <div className="space-y-4 border-t pt-4">
                     <div>
-                      <Label htmlFor="v3v5-name">Nome (Name)</Label>
+                      <Label htmlFor="v3v5-name">
+                        {t("uuid.settings.name")}
+                      </Label>
                       <Input
                         id="v3v5-name"
                         type="text"
@@ -409,7 +423,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                     </div>
                     <div>
                       <Label htmlFor="v3v5-namespace">
-                        Namespace (UUID Válido)
+                        {t("uuid.settings.namespace")}
                       </Label>
                       <Input
                         id="v3v5-namespace"
@@ -436,7 +450,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                             )
                           }
                         >
-                          DNS
+                          {t("uuid.settings.dns")}
                         </Button>
                         <Button
                           size="sm"
@@ -449,7 +463,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                             )
                           }
                         >
-                          URL
+                          {t("uuid.settings.url")}
                         </Button>
                       </div>
                     </div>
@@ -459,7 +473,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                   <div className="space-y-4 border-t pt-4">
                     {isBulkGeneratable && (
                       <div>
-                        <Label htmlFor="uuid-quantity">Quantidade</Label>
+                        <Label htmlFor="uuid-quantity">
+                          {t("labels.quantity")}
+                        </Label>
                         <Input
                           id="uuid-quantity"
                           type="number"
@@ -490,7 +506,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                         }
                       />
                       <Label htmlFor="no-hyphens" className="cursor-pointer">
-                        Remover Hífens
+                        {t("uuid.settings.removeHyphens")}
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -506,7 +522,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                         }
                       />
                       <Label htmlFor="uppercase" className="cursor-pointer">
-                        Maiúsculas
+                        {t("uuid.settings.uppercase")}
                       </Label>
                     </div>
                   </div>
@@ -515,17 +531,20 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
             </Card>
             {isBulkGeneratable && (
               <Button onClick={generateUuids} size="lg">
-                <RefreshCw className="mr-2 h-4 w-4" /> Gerar Novos
+                <RefreshCw className="mr-2 h-4 w-4" />{" "}
+                {t("buttons.generateNew")}
               </Button>
             )}
             <Button onClick={handleCopyAllIds} variant="outline">
-              <Copy className="mr-2 h-4 w-4" /> Copiar Todos
+              <Copy className="mr-2 h-4 w-4" /> {t("buttons.copyAll")}
             </Button>
           </div>
           <div className="@4xl:col-span-2">
             <Card className="h-full">
               <CardHeader>
-                <CardTitle className="text-base">IDs Gerados</CardTitle>
+                <CardTitle className="text-base">
+                  {t("labels.generatedIds")}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-fit max-h-[calc(100vh-20rem)]">
@@ -560,12 +579,14 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">
-                  Configurações do NanoID
+                  {t("nanoid.settings.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="nanoid-quantity">Quantidade</Label>
+                  <Label htmlFor="nanoid-quantity">
+                    {t("labels.quantity")}
+                  </Label>
                   <Input
                     id="nanoid-quantity"
                     type="number"
@@ -583,7 +604,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="nanoid-size">Tamanho do ID</Label>
+                  <Label htmlFor="nanoid-size">
+                    {t("nanoid.settings.idSize")}
+                  </Label>
                   <Input
                     id="nanoid-size"
                     type="number"
@@ -601,14 +624,16 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="nanoid-alphabet-type">Alfabeto</Label>
+                  <Label htmlFor="nanoid-alphabet-type">
+                    {t("nanoid.settings.alphabet")}
+                  </Label>
                   <Select
                     value={nanoidConfig.alphabetType}
                     onValueChange={(v) =>
                       handleConfigChange(
                         "nanoidConfig",
                         "alphabetType",
-                        v as keyof typeof NANOID_ALPHABETS
+                        v as keyof ReturnType<typeof createNanoidAlphabets>
                       )
                     }
                   >
@@ -616,7 +641,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="z-[999999999]">
-                      {Object.entries(NANOID_ALPHABETS).map(
+                      {Object.entries(createNanoidAlphabets(t)).map(
                         ([key, { label }]) => (
                           <SelectItem key={key} value={key}>
                             {label}
@@ -628,7 +653,7 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                 </div>
                 {nanoidConfig.alphabetType === "custom" && (
                   <div className="space-y-4 border-t pt-4">
-                    <Label>Construtor de Alfabeto Customizado</Label>
+                    <Label>{t("nanoid.settings.customAlphabetBuilder")}</Label>
                     <div className="grid @md:grid-cols-3 gap-x-4 gap-y-2 mt-2">
                       <div className="flex items-center space-x-2">
                         <Checkbox
@@ -642,7 +667,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                             )
                           }
                         />
-                        <Label htmlFor="nanoid-custom-lower">Minúsculas</Label>
+                        <Label htmlFor="nanoid-custom-lower">
+                          {t("nanoid.settings.lowercase")}
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Checkbox
@@ -656,7 +683,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                             )
                           }
                         />
-                        <Label htmlFor="nanoid-custom-upper">Maiúsculas</Label>
+                        <Label htmlFor="nanoid-custom-upper">
+                          {t("nanoid.settings.uppercase")}
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Checkbox
@@ -670,7 +699,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                             )
                           }
                         />
-                        <Label htmlFor="nanoid-custom-numbers">Números</Label>
+                        <Label htmlFor="nanoid-custom-numbers">
+                          {t("nanoid.settings.numbers")}
+                        </Label>
                       </div>
                     </div>
                     <Textarea
@@ -684,23 +715,27 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                         )
                       }
                       className="font-mono text-xs h-24"
-                      placeholder="Edite diretamente ou use os atalhos acima..."
+                      placeholder={t(
+                        "nanoid.settings.customAlphabetPlaceholder"
+                      )}
                     />
                   </div>
                 )}
               </CardContent>
             </Card>
             <Button onClick={generateNanoIds} size="lg">
-              <RefreshCw className="mr-2 h-4 w-4" /> Gerar Novos
+              <RefreshCw className="mr-2 h-4 w-4" /> {t("buttons.generateNew")}
             </Button>
             <Button onClick={handleCopyAllIds} variant="outline">
-              <Copy className="mr-2 h-4 w-4" /> Copiar Todos
+              <Copy className="mr-2 h-4 w-4" /> {t("buttons.copyAll")}
             </Button>
           </div>
           <div className="@4xl:col-span-2">
             <Card className="h-full">
               <CardHeader>
-                <CardTitle className="text-base">NanoIDs Gerados</CardTitle>
+                <CardTitle className="text-base">
+                  {t("labels.generatedNanoids")}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-fit max-h-[calc(100vh-20rem)]">
@@ -733,10 +768,10 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
         <div className="flex flex-col gap-4 flex-grow min-h-0 overflow-y-auto">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Gerador de Hash</CardTitle>
+              <CardTitle className="text-base">{t("hash.title")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <Label htmlFor="hash-input">Texto de Entrada</Label>
+              <Label htmlFor="hash-input">{t("hash.inputLabel")}</Label>
               <Textarea
                 id="hash-input"
                 value={hashConfig.input}
@@ -749,7 +784,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
           </Card>
           <Card className="flex-grow">
             <CardHeader>
-              <CardTitle className="text-base">Hashes Gerados</CardTitle>
+              <CardTitle className="text-base">
+                {t("hash.generatedTitle")}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <ScrollArea className="h-fit max-h-[calc(100vh-25rem)]">
@@ -783,7 +820,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
         <div className="flex flex-col items-center gap-4 flex-grow overflow-y-auto">
           <Card className="w-full max-w-lg">
             <CardHeader>
-              <CardTitle className="text-base">Senha Segura Gerada</CardTitle>
+              <CardTitle className="text-base">
+                {t("password.generatedTitle")}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2 font-mono text-lg p-3 bg-primary/10 rounded">
@@ -802,13 +841,13 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
           <Card className="w-full max-w-lg">
             <CardHeader>
               <CardTitle className="text-base">
-                Configurações da Senha
+                {t("password.settings.title")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <Label>Tamanho:</Label>
+                  <Label>{t("password.settings.length")}:</Label>
                   <span>{passwordConfig.length}</span>
                 </div>
                 <Slider
@@ -830,7 +869,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                       handleConfigChange("passwordConfig", "uppercase", !!c)
                     }
                   />
-                  <Label htmlFor="uppercase">Maiúsculas (A-Z)</Label>
+                  <Label htmlFor="uppercase">
+                    {t("password.settings.uppercase")}
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -840,7 +881,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                       handleConfigChange("passwordConfig", "lowercase", !!c)
                     }
                   />
-                  <Label htmlFor="lowercase">Minúsculas (a-z)</Label>
+                  <Label htmlFor="lowercase">
+                    {t("password.settings.lowercase")}
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -850,7 +893,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                       handleConfigChange("passwordConfig", "numbers", !!c)
                     }
                   />
-                  <Label htmlFor="numbers">Números (0-9)</Label>
+                  <Label htmlFor="numbers">
+                    {t("password.settings.numbers")}
+                  </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -860,7 +905,9 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
                       handleConfigChange("passwordConfig", "symbols", !!c)
                     }
                   />
-                  <Label htmlFor="symbols">Símbolos (!@#)</Label>
+                  <Label htmlFor="symbols">
+                    {t("password.settings.symbols")}
+                  </Label>
                 </div>
               </div>
             </CardContent>
@@ -870,7 +917,8 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
             size="lg"
             className="w-full max-w-lg"
           >
-            <RefreshCw className="mr-2 h-4 w-4" /> Gerar Nova Senha
+            <RefreshCw className="mr-2 h-4 w-4" />{" "}
+            {t("buttons.generateNewPassword")}
           </Button>
         </div>
       )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/ScrollArea";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { FileText, Link2 } from "lucide-react";
 import { useMemo } from "react";
 import { KnowledgeEntry } from "../types";
@@ -37,6 +38,7 @@ export function BacklinksPanel({
   allEntries,
   onSelectEntry,
 }: BacklinksPanelProps) {
+  const t = useAppTranslations("knowledgeBase");
   const backlinks = useMemo(() => {
     if (!selectedEntry) return [];
 
@@ -62,7 +64,7 @@ export function BacklinksPanel({
   if (!selectedEntry) {
     return (
       <div className="p-3 text-sm text-muted-foreground italic">
-        Selecione um bloco para ver os backlinks.
+        {t("labels.selectBlock")}
       </div>
     );
   }
@@ -71,11 +73,11 @@ export function BacklinksPanel({
     <div className="h-full flex flex-col">
       <h4 className="text-sm font-semibold mb-2 text-muted-foreground flex items-center p-3 border-b h-[50px]">
         <Link2 className="w-4 h-4 mr-2 flex-shrink-0" />
-        Linkado por ({backlinks.length}):
+        {t("labels.linkedBy")} ({backlinks.length}):
       </h4>
       {backlinks.length === 0 ? (
         <div className="p-3 text-xs text-muted-foreground italic flex-grow flex items-center justify-center">
-          Nenhuma outra nota linka para esta.
+          {t("labels.noBacklinks")}
         </div>
       ) : (
         <ScrollArea className="flex-grow text-sm">
@@ -89,7 +91,7 @@ export function BacklinksPanel({
                 >
                   <FileText className="w-3.5 h-3.5 mr-1.5 flex-shrink-0 opacity-70" />
                   <span className="truncate">
-                    {entry.title || "Bloco sem título"}
+                    {entry.title || t("fallbacks.untitledBlock")}
                   </span>
                 </button>
               </li>

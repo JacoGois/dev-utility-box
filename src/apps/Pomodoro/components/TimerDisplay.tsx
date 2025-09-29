@@ -1,10 +1,10 @@
 import { Progress } from "@/components/ui/Progress";
 import React from "react";
-import { CIRCUMFERENCE, MODES, TIMER_SVG_RADIUS } from "../shared";
+import { CIRCUMFERENCE, createModes, MODES, TIMER_SVG_RADIUS } from "../shared";
 
 interface TimerDisplayProps {
   secondsLeft: number;
-  modeConfig: (typeof MODES)[keyof typeof MODES];
+  modeConfig: ReturnType<typeof createModes>[keyof typeof MODES];
   duration: number;
 }
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { apps } from "@/lib/apps";
+import { useDesktopTranslations } from "@/hooks/useTranslations";
+import { createApps } from "@/lib/apps";
 import { cn } from "@/lib/utils";
 import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import { useWindowStore, WindowInstance } from "@/stores/useWindowStore";
@@ -28,6 +29,8 @@ function AppWindow({ instance }: Props) {
   } = useWindowStore();
 
   const { id, appKey } = instance;
+  const t = useDesktopTranslations();
+  const apps = createApps(t);
   const app = apps[appKey];
   const Component = app.component;
 

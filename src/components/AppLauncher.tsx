@@ -6,7 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
-import { AppKey, apps, appsType } from "@/lib/apps";
+import { useDesktopTranslations } from "@/hooks/useTranslations";
+import { AppKey, appsType, createApps } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
 import {
@@ -22,12 +23,14 @@ export function AppLauncher() {
     addToDesktop,
   } = useDockStore();
   const { openApp } = useWindowStore();
+  const t = useDesktopTranslations();
+  const apps = createApps(t);
 
   return (
     <Dialog open={isAppLauncherOpen} onOpenChange={toggleLauncher}>
       <DialogContent className="sm:max-w-xl z-[99999]">
         <DialogHeader>
-          <DialogTitle>Todos os Aplicativos</DialogTitle>
+          <DialogTitle>{t("dock.allApps")}</DialogTitle>
         </DialogHeader>
 
         <div className="grid grid-cols-5 gap-4 pt-4">
@@ -43,7 +46,7 @@ export function AppLauncher() {
                   <button
                     className="flex flex-col gap-2 items-center cursor-pointer hover:opacity-70"
                     onClick={() => {
-                      openApp(key);
+                      openApp(key, apps[key].maxInstances);
                       toggleLauncher();
                     }}
                   >

@@ -8,8 +8,8 @@ export const useThemeStore = create<{
   currentTheme: ThemeKey | null;
   setTheme: (theme: ThemeKey) => void;
   hydrateTheme: () => void;
-}>((set) => ({
-  currentTheme: null,
+}>((set, get) => ({
+  currentTheme: defaultTheme, // Start with default theme to prevent hydration mismatch
   setTheme: (theme) => {
     if (typeof document !== "undefined") {
       document.body.classList.remove(
@@ -23,18 +23,10 @@ export const useThemeStore = create<{
     set({ currentTheme: theme });
   },
   hydrateTheme: () => {
-    if (typeof localStorage !== "undefined") {
+    if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
       const storedTheme =
         (localStorage.getItem("theme") as ThemeKey) || defaultTheme;
-      set((state) => {
-        state.setTheme(storedTheme);
-        return { currentTheme: storedTheme };
-      });
-    } else {
-      set((state) => {
-        state.setTheme(defaultTheme);
-        return { currentTheme: defaultTheme };
-      });
+      get().setTheme(storedTheme);
     }
   },
 }));

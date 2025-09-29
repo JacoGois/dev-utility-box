@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/Card";
+import { useAppTranslations } from "@/hooks/useTranslations";
 import { Bell, BellOff } from "lucide-react";
 import React from "react";
 
@@ -8,6 +9,8 @@ interface NotificationInfoProps {
 
 const NotificationInfo = React.memo(
   ({ notificationDenied }: NotificationInfoProps) => {
+    const t = useAppTranslations("pomodoro");
+
     return (
       <Card className="flex-shrink-0 py-0">
         <CardContent className="p-3 @sm:p-4">
@@ -17,10 +20,10 @@ const NotificationInfo = React.memo(
                 <BellOff className="w-4 h-4 @sm:w-5 @sm:h-5 text-destructive flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs @sm:text-sm font-medium text-destructive truncate">
-                    Notificações desabilitadas
+                    {t("notifications.disabled")}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">
-                    Ative nas configurações
+                    {t("notifications.enableInSettings")}
                   </p>
                 </div>
               </>
@@ -29,10 +32,10 @@ const NotificationInfo = React.memo(
                 <Bell className="w-4 h-4 @sm:w-5 @sm:h-5 text-green-500 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs @sm:text-sm font-medium text-green-500 truncate">
-                    Notificações ativadas
+                    {t("notifications.enabled")}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">
-                    Você será notificado
+                    {t("notifications.youWillBeNotified")}
                   </p>
                 </div>
               </>

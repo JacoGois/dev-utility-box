@@ -1,0 +1,879 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "open": "Open",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "finish": "Finish",
+    "start": "Start",
+    "stop": "Stop",
+    "pause": "Pause",
+    "resume": "Resume",
+    "copy": "Copy",
+    "clear": "Clear",
+    "reset": "Reset",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "warning": "Warning",
+    "info": "Info",
+    "deleteDialog": {
+      "title": "Are you sure?",
+      "description": "This action cannot be undone. This will permanently delete",
+      "selectedItem": "the selected item",
+      "confirm": "Yes, delete"
+    }
+  },
+  "desktop": {
+    "title": "Dev Utility Box",
+    "description": "Streamline your workflow with practical and efficient utilities. Focus on coding and building.",
+    "open": "Open",
+    "removeFromDesktop": "Remove from Desktop",
+    "spotlight": {
+      "title": "Quick App Search",
+      "placeholder": "Search apps...",
+      "noResults": "No results found.",
+      "shortcut": "Press Ctrl+K or Cmd+K"
+    },
+    "dock": {
+      "launcher": "App Launcher",
+      "allApps": "All Applications"
+    },
+    "help": {
+      "title": "Keyboard Shortcuts",
+      "description": "Use these shortcuts to navigate.",
+      "spotlight": "Open Spotlight Search",
+      "launcher": "Open App Launcher",
+      "language": "Change Language",
+      "resizeWindow": "Resize window by clicking and dragging the middle of the right edge, the middle of the bottom edge, or the bottom-right corner."
+    },
+    "shortcuts": {
+      "openQuickSearch": "Open quick search",
+      "openAppLauncher": "Open app launcher",
+      "resizeWindow": "Resize window"
+    },
+    "apps": {
+      "auth": {
+        "name": "Authentication",
+        "shortName": "Auth"
+      },
+      "codeSnippets": {
+        "name": "Code Snippets",
+        "shortName": "Snippets"
+      },
+      "commandCenter": {
+        "name": "Command Center",
+        "shortName": "Commands"
+      },
+      "pomodoro": {
+        "name": "Pomodoro",
+        "shortName": "Pomodoro"
+      },
+      "todo": {
+        "name": "To Do List",
+        "shortName": "To Do"
+      },
+      "jsonTools": {
+        "name": "JSON Tools",
+        "shortName": "JSON"
+      },
+      "encoders": {
+        "name": "Encoders / Decoders",
+        "shortName": "Encoders"
+      },
+      "knowledgeBase": {
+        "name": "Knowledge Base (BETA)",
+        "shortName": "Knowledge"
+      },
+      "dataGenerator": {
+        "name": "Data Generator",
+        "shortName": "Data Gen"
+      },
+      "massDataGenerator": {
+        "name": "Mass Data Generator",
+        "shortName": "Mass Gen"
+      }
+    }
+  },
+  "windows": {
+    "maxWindowsReached": "You have already opened the maximum number of windows for this application.",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close",
+    "restore": "Restore"
+  },
+  "errors": {
+    "maxWindowsReached": "You have already opened the maximum number of windows for {appName}.",
+    "generic": "An error occurred. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "validation": "Please check the entered data."
+  },
+  "apps": {
+    "pomodoro": {
+      "name": "Pomodoro",
+      "shortName": "Pomodoro",
+      "title": "Pomodoro Timer",
+      "description": "Productivity technique for focus and concentration",
+      "modes": {
+        "pomodoro": "Pomodoro",
+        "shortBreak": "Short Break",
+        "longBreak": "Long Break"
+      },
+      "work": "Work",
+      "shortBreak": "Short Break",
+      "longBreak": "Long Break",
+      "start": "Start",
+      "pause": "Pause",
+      "reset": "Reset",
+      "settings": "Settings",
+      "workTime": "Work Time",
+      "shortBreakTime": "Short Break Time",
+      "longBreakTime": "Long Break Time",
+      "longBreakInterval": "Long Break Interval",
+      "autoStartBreaks": "Auto Start Breaks",
+      "autoStartPomodoros": "Auto Start Pomodoros",
+      "notifications": {
+        "enabled": "Notifications Enabled",
+        "disabled": "Notifications disabled",
+        "workComplete": "Work time completed!",
+        "breakComplete": "Break completed!",
+        "timeFinished": "Time finished!",
+        "currentMode": "Current mode",
+        "enableInSettings": "Enable in settings",
+        "youWillBeNotified": "You will be notified",
+        "permission": "Notification permission required",
+        "grant": "Grant Permission",
+        "denied": "Notifications denied"
+      },
+      "config": {
+        "title": "Settings",
+        "description": "Adjust Pomodoro timer, breaks and sound settings.",
+        "timer": "Timer",
+        "sound": "Sound",
+        "timeMinutes": "Time (minutes)",
+        "autoStartBreaks": "Auto Start Breaks",
+        "autoStartPomodoros": "Auto Start Pomodoros",
+        "longBreakInterval": "Long Break interval",
+        "alarmSound": "Alarm Sound",
+        "tickingSound": "Ticking Sound",
+        "repeat": "repeat",
+        "cancel": "Cancel",
+        "saveChanges": "Save Changes",
+        "saved": "Settings saved!"
+      },
+      "sounds": {
+        "kitchen": "Kitchen",
+        "bell": "Bell",
+        "digital": "Digital",
+        "wood": "Wood",
+        "none": "None",
+        "ticking": "Ticking",
+        "whiteNoise": "White Noise",
+        "brownNoise": "Brown Noise"
+      },
+      "history": {
+        "recent": "Recent History"
+      },
+      "stats": {
+        "title": "Statistics",
+        "completedPomodoros": "Completed Pomodoros",
+        "sessionsToday": "Sessions today"
+      },
+      "controls": {
+        "start": "Start",
+        "pause": "Pause",
+        "reset": "Reset",
+        "resetShort": "Reset"
+      }
+    },
+    "todo": {
+      "name": "To Do List",
+      "shortName": "To Do",
+      "title": "Task Manager",
+      "addTask": "Add Task",
+      "addSubtask": "Add subtask...",
+      "placeholder": "Enter a new task...",
+      "addDescription": "Add description...",
+      "completed": "Completed",
+      "pending": "Pending",
+      "empty": "No tasks yet. Add one above!",
+      "priorities": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low",
+        "none": "None"
+      }
+    },
+    "auth": {
+      "name": "Authentication",
+      "shortName": "Auth",
+      "title": "Authentication",
+      "description": "Login or register to continue",
+      "tabs": {
+        "login": "Login",
+        "register": "Register"
+      },
+      "form": {
+        "email": "E-mail",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "name": "Name",
+        "emailPlaceholder": "Ex.: example@email.com",
+        "namePlaceholder": "Your full name",
+        "forgotPassword": "Forgot your password?"
+      },
+      "buttons": {
+        "login": "Login",
+        "createAccount": "Create Account"
+      },
+      "social": {
+        "continueWith": "Or continue with",
+        "google": "Google",
+        "github": "GitHub"
+      },
+      "terms": {
+        "agreement": "By continuing, you agree to our",
+        "termsOfService": "Terms of Service",
+        "privacyPolicy": "Privacy Policy",
+        "and": "and"
+      },
+      "messages": {
+        "loginSuccess": "Login successful!",
+        "loginSuccessDesc": "You can close this window.",
+        "loginError": "Login error. Please check your credentials.",
+        "registerSuccess": "Registration successful!",
+        "registerError": "Registration error. Please check the provided data.",
+        "titleRequired": "Title and Code are required!",
+        "nameRequired": "Name and Command are required!"
+      },
+      "validation": {
+        "required": "Required field.",
+        "invalidEmail": "Invalid email.",
+        "passwordMismatch": "Passwords do not match."
+      }
+    },
+    "codeSnippets": {
+      "name": "Code Snippets",
+      "shortName": "Snippets",
+      "title": "Code Snippets Manager",
+      "description": "Manage and organize your code snippets",
+      "buttons": {
+        "newSnippet": "New Snippet",
+        "copyCode": "Copy Code",
+        "delete": "Delete",
+        "update": "Update",
+        "saveNew": "Save New",
+        "cancel": "Cancel",
+        "edit": "Edit"
+      },
+      "placeholders": {
+        "searchSnippets": "Search snippets...",
+        "snippetTitle": "Snippet Title",
+        "yourCodeHere": "Your code here...",
+        "tagsCommaSeparated": "Tags (comma separated)",
+        "descriptionOptional": "Description (optional)",
+        "language": "Language"
+      },
+      "messages": {
+        "noSnippetsFound": "No snippets found.",
+        "noSnippetsCreated": "No snippets created yet. Click 'New Snippet'.",
+        "snippetCreated": "Snippet created!",
+        "snippetUpdated": "Snippet updated!",
+        "codeCopied": "Code copied!",
+        "noCodeToCopy": "No code to copy.",
+        "copyFailed": "Failed to copy code.",
+        "selectSnippetToView": "Select a snippet to view or click 'New Snippet'.",
+        "titleRequired": "Title and Code are required!"
+      },
+      "languages": {
+        "javascript": "Javascript",
+        "typescript": "Typescript",
+        "python": "Python",
+        "html": "HTML",
+        "css": "CSS",
+        "json": "JSON",
+        "markdown": "Markdown",
+        "bash": "Bash",
+        "sql": "SQL",
+        "other": "Other"
+      },
+      "deleteDialog": {
+        "title": "Confirm Snippet Deletion",
+        "itemName": "this snippet"
+      }
+    },
+    "commandCenter": {
+      "name": "Command Center",
+      "shortName": "Commands",
+      "title": "Command Center",
+      "description": "Manage and organize your CLI commands",
+      "buttons": {
+        "newCommand": "New Command",
+        "copyCommand": "Copy Command",
+        "delete": "Delete",
+        "update": "Update",
+        "save": "Save",
+        "cancel": "Cancel",
+        "edit": "Edit"
+      },
+      "placeholders": {
+        "searchCommands": "Search commands...",
+        "commandName": "Friendly Command Name",
+        "yourCommandHere": "Your command here...",
+        "tagsCommaSeparated": "Tags (ex: git, docker, backup)",
+        "descriptionOptional": "Description (useful to explain the command)",
+        "platform": "Platform/Type"
+      },
+      "messages": {
+        "noCommandsFound": "No commands found.",
+        "noCommandsCreated": "No commands saved. Click 'New Command'.",
+        "commandCreated": "Command created!",
+        "commandUpdated": "Command updated!",
+        "commandCopied": "Command copied!",
+        "noCommandToCopy": "No command to copy.",
+        "copyFailed": "Failed to copy command.",
+        "selectCommandToView": "Select a command to view or click 'New Command'.",
+        "nameRequired": "Name and Command are required!"
+      },
+      "platforms": {
+        "bash": "bash",
+        "powershell": "powershell",
+        "docker": "docker",
+        "git": "git",
+        "npm": "npm",
+        "yarn": "yarn",
+        "kubectl": "kubectl",
+        "other": "other"
+      }
+    },
+    "jsonTools": {
+      "name": "JSON Tools",
+      "shortName": "JSON",
+      "title": "JSON Utilities",
+      "description": "Format, validate, and transform JSON data",
+      "buttons": {
+        "format": "Format",
+        "minify": "Minify",
+        "load": "Load",
+        "download": "Download",
+        "clear": "Clear",
+        "escape": "Escape",
+        "unescape": "Unescape"
+      },
+      "labels": {
+        "input": "Input",
+        "output": "Output",
+        "indentation": "Indentation:",
+        "transformString": "Transform String:",
+        "viewOutput": "View Output:"
+      },
+      "placeholders": {
+        "pasteJson": "Paste your JSON here...",
+        "resultHere": "Result will appear here...",
+        "outputHere": "Output will appear here."
+      },
+      "badges": {
+        "valid": "Valid",
+        "invalid": "Invalid"
+      },
+      "stats": {
+        "lines": "Lines",
+        "characters": "Characters",
+        "size": "Size"
+      },
+      "viewModes": {
+        "text": "Text",
+        "tree": "Tree"
+      },
+      "indentOptions": {
+        "twoSpaces": "2 Spaces",
+        "fourSpaces": "4 Spaces",
+        "tab": "Tab"
+      },
+      "messages": {
+        "jsonFormatted": "JSON formatted!",
+        "jsonMinified": "JSON minified!",
+        "fileLoaded": "File \"{fileName}\" loaded.",
+        "jsonDownloaded": "JSON downloaded!",
+        "stringEscaped": "String escaped to JSON value.",
+        "stringUnescaped": "String unescaped.",
+        "emptyInputEscape": "Empty input to escape.",
+        "emptyInputUnescape": "Empty input to unescape.",
+        "noContentToDownload": "No content in output to download.",
+        "invalidJsonError": "Invalid input JSON.",
+        "processingError": "Error processing JSON.",
+        "fileReadError": "Error reading file.",
+        "copyError": "Failed to copy {type}.",
+        "copySuccess": "{type} copied!",
+        "noContentToCopy": "No {type} to copy.",
+        "unexpectedError": "Unexpected error: {error}",
+        "unescapeError": "Error unescaping: {error}",
+        "unescapeStringError": "Error unescaping string.",
+        "invalidStringError": "Input is not a valid JSON string.",
+        "invalidJsonForTree": "Invalid input JSON for tree view."
+      },
+      "titles": {
+        "escapeString": "Escape string to JSON value",
+        "unescapeString": "Unescape JSON string",
+        "copyInput": "Copy input JSON",
+        "copyOutput": "Copy output JSON"
+      }
+    },
+    "encoders": {
+      "name": "Encoders / Decoders",
+      "shortName": "Encoders",
+      "title": "Data Encoders & Decoders",
+      "description": "Encode and decode data using various algorithms",
+      "tools": {
+        "jwt": "JWT",
+        "base64": "Base64",
+        "url": "URL"
+      },
+      "modes": {
+        "encode": "Encode",
+        "decode": "Decode"
+      },
+      "labels": {
+        "input": "Input",
+        "output": "Output",
+        "tool": "Tool:",
+        "generatedToken": "Generated Token (Encoder)",
+        "secretKey": "Secret Key (HMAC)",
+        "algorithm": "Algorithm",
+        "headerEditable": "HEADER (Editable)",
+        "payloadEditable": "PAYLOAD (Editable)",
+        "pasteTokenToDecode": "Paste a token to decode",
+        "headerDecoded": "Header (Decoded)",
+        "payloadDecoded": "Payload (Decoded)"
+      },
+      "buttons": {
+        "clear": "Clear",
+        "copyOutput": "Copy Output",
+        "copyToken": "Copy Token",
+        "textToBase64": "Text → Base64",
+        "base64ToText": "Base64 → Text",
+        "encodeUrl": "Encode URL",
+        "decodeUrl": "Decode URL"
+      },
+      "badges": {
+        "signatureVerified": "Signature Verified",
+        "signatureInvalid": "Invalid Signature"
+      },
+      "placeholders": {
+        "secretKey": "your-super-secret-key-that-is-at-least-32-bytes-long",
+        "waiting": "Waiting...",
+        "pasteTokenToDecode": "Paste a token to decode"
+      },
+      "messages": {
+        "copied": "Copied!",
+        "jsonError": "Error in Header or Payload JSON for signing.",
+        "debugWarning": "Debug tool. Never use production secret keys."
+      },
+      "algorithms": {
+        "HS256": "HS256",
+        "HS384": "HS384",
+        "HS512": "HS512"
+      }
+    },
+    "dataGenerator": {
+      "name": "Data Generator",
+      "shortName": "Data Gen",
+      "title": "Test Data Generator",
+      "tools": {
+        "uuid": "UUID Generator",
+        "nanoid": "NanoID Generator",
+        "hash": "Hash Generator (MD5, SHA)",
+        "password": "Secure Password Generator"
+      },
+      "nanoidAlphabets": {
+        "urlSafe": "URL-Safe (Default)",
+        "numbers": "Numbers Only",
+        "uppercase": "Uppercase Only",
+        "lowercase": "Lowercase Only",
+        "noLookAlikes": "No Look-Alikes",
+        "custom": "Custom..."
+      },
+      "labels": {
+        "tool": "Tool",
+        "quantity": "Quantity",
+        "generatedIds": "Generated IDs",
+        "generatedNanoids": "Generated NanoIDs"
+      },
+      "buttons": {
+        "generateNew": "Generate New",
+        "copyAll": "Copy All",
+        "generateNewPassword": "Generate New Password"
+      },
+      "errors": {
+        "nameAndNamespaceRequired": "Valid name and UUID namespace are required.",
+        "uuidGenerationError": "Error generating UUID",
+        "alphabetError": "Alphabet Error",
+        "alphabetMinLength": "Custom alphabet must contain at least 2 characters.",
+        "nanoidGenerationError": "Error generating NanoID",
+        "selectCharacterType": "Select at least one character type for the password."
+      },
+      "messages": {
+        "copied": "Copied!",
+        "allIdsCopied": "All IDs copied!"
+      },
+      "uuid": {
+        "settings": {
+          "title": "UUID Settings",
+          "version": "UUID Version",
+          "name": "Name",
+          "namespace": "Namespace (Valid UUID)",
+          "dns": "DNS",
+          "url": "URL",
+          "removeHyphens": "Remove Hyphens",
+          "uppercase": "Uppercase"
+        },
+        "versions": {
+          "v7": "Version 7 (Unix Time, Sortable)",
+          "v4": "Version 4 (Random)",
+          "v6": "Version 6 (Time, Sortable)",
+          "v1": "Version 1 (Time-based)",
+          "v5": "Version 5 (Name-based, SHA-1)",
+          "v3": "Version 3 (Name-based, MD5)",
+          "nil": "NIL (Empty/Null UUID)",
+          "max": "MAX (Maximum UUID)"
+        }
+      },
+      "nanoid": {
+        "settings": {
+          "title": "NanoID Settings",
+          "idSize": "ID Size",
+          "alphabet": "Alphabet",
+          "customAlphabetBuilder": "Custom Alphabet Builder",
+          "lowercase": "Lowercase",
+          "uppercase": "Uppercase",
+          "numbers": "Numbers",
+          "customAlphabetPlaceholder": "Edit directly or use shortcuts above..."
+        }
+      },
+      "hash": {
+        "title": "Hash Generator",
+        "inputLabel": "Input Text",
+        "generatedTitle": "Generated Hashes"
+      },
+      "password": {
+        "generatedTitle": "Generated Secure Password",
+        "settings": {
+          "title": "Password Settings",
+          "length": "Length",
+          "uppercase": "Uppercase (A-Z)",
+          "lowercase": "Lowercase (a-z)",
+          "numbers": "Numbers (0-9)",
+          "symbols": "Symbols (!@#)"
+        }
+      }
+    },
+    "massDataGenerator": {
+      "name": "Mass Data Generator",
+      "shortName": "Mass Gen",
+      "title": "Bulk Data Generator",
+      "labels": {
+        "dataTypes": "Data Types",
+        "generalSettings": "General Settings",
+        "recordQuantity": "Record Quantity",
+        "outputFormat": "Output Format",
+        "generatedData": "Generated Data"
+      },
+      "buttons": {
+        "add": "Add",
+        "fieldFromLibrary": "Field from Library",
+        "generateFakeData": "Generate Fake Data",
+        "generating": "Generating...",
+        "download": "Download",
+        "copy": "Copy"
+      },
+      "formats": {
+        "json": "JSON",
+        "csv": "CSV"
+      },
+      "csv": {
+        "includeHeader": "Include CSV header",
+        "delimiter": "CSV Delimiter",
+        "comma": "Comma (,)",
+        "semicolon": "Semicolon (;)"
+      },
+      "placeholders": {
+        "quantityExample": "Ex.: 10",
+        "searchDataTypes": "Search for any data type...",
+        "configureAndGenerate": "Configure the data and click 'Generate Fake Data' to see the results here."
+      },
+      "messages": {
+        "dataCopied": "Data copied to clipboard!",
+        "generatingInBackground": "Generating data in background thread...",
+        "noResultsFound": "No results found."
+      },
+      "errors": {
+        "maxQuantity": "Maximum quantity is 10,000 records.",
+        "copyError": "Error copying data. Please try again."
+      },
+      "fields": {
+        "person": "Person",
+        "fullName": "Full Name",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "middleName": "Middle Name",
+        "prefix": "Prefix (Mr., Dr.)",
+        "suffix": "Suffix (Jr., PhD)",
+        "sex": "Biological Sex",
+        "gender": "Gender",
+        "bio": "Bio",
+        "jobArea": "Job Area",
+        "jobTitle": "Job Title",
+        "jobDescriptor": "Job Description",
+        "jobType": "Job Type",
+        "zodiacSign": "Zodiac Sign",
+        "cpf": "CPF",
+        "cnpj": "CNPJ",
+        "internet": "Internet",
+        "email": "Email",
+        "userName": "Username",
+        "url": "URL",
+        "domainName": "Domain",
+        "ip": "IP Address",
+        "ipv6": "IPv6 Address",
+        "mac": "MAC Address",
+        "hexColor": "Color (Hex)",
+        "password": "Password",
+        "protocol": "Protocol",
+        "userAgent": "User Agent",
+        "httpMethod": "HTTP Method",
+        "finance": "Finance",
+        "accountNumber": "Account Number",
+        "accountName": "Account Name",
+        "currencyName": "Currency Name",
+        "currencyCode": "Currency Code",
+        "currencySymbol": "Currency Symbol",
+        "creditCardNumber": "Credit Card Number",
+        "creditCardCVV": "Credit Card CVV",
+        "iban": "IBAN",
+        "bic": "BIC",
+        "bitcoinAddress": "Bitcoin Address",
+        "ethereumAddress": "Ethereum Address",
+        "location": "Location",
+        "streetAddress": "Street Address",
+        "city": "City",
+        "state": "State (Abbr.)",
+        "country": "Country",
+        "countryCode": "Country Code",
+        "zipCode": "ZIP Code",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "direction": "Direction",
+        "timeZone": "Time Zone",
+        "animal": "Animal",
+        "dog": "Dog",
+        "cat": "Cat",
+        "bird": "Bird",
+        "fish": "Fish",
+        "insect": "Insect",
+        "animalType": "Animal Type",
+        "bear": "Bear",
+        "cow": "Cow",
+        "lion": "Lion",
+        "commerce": "Commerce",
+        "productName": "Product Name",
+        "price": "Price",
+        "department": "Department",
+        "sku": "SKU",
+        "productDescription": "Product Description",
+        "productAdjective": "Product Adjective",
+        "productMaterial": "Product Material",
+        "system": "System",
+        "fileName": "File Name",
+        "fileExt": "File Extension",
+        "fileType": "File Type",
+        "mimeType": "MIME Type",
+        "directoryPath": "Directory Path",
+        "filePath": "File Path",
+        "semver": "Semantic Version",
+        "string": "String",
+        "uuid": "UUID",
+        "alphanumeric": "Alphanumeric (String)",
+        "numeric": "Numeric (String)",
+        "hexadecimal": "Hexadecimal (String)",
+        "binary": "Binary (String)",
+        "octal": "Octal (String)",
+        "vehicle": "Vehicle",
+        "vehicleType": "Vehicle Type",
+        "manufacturer": "Manufacturer",
+        "model": "Model",
+        "vin": "VIN (Chassis)",
+        "vehicleColor": "Vehicle Color",
+        "date": "Date",
+        "pastDate": "Past Date",
+        "futureDate": "Future Date",
+        "recentDate": "Recent Date",
+        "birthdate": "Birthdate",
+        "dateBetween": "Date Between...",
+        "weekday": "Weekday",
+        "month": "Month",
+        "primitiveTypes": "Primitive Types",
+        "stringUuid": "String (UUID)",
+        "stringAlphanumeric": "String (Alphanumeric)",
+        "stringAlpha": "String (Letters)",
+        "intNumber": "Integer Number",
+        "floatNumber": "Decimal Number",
+        "boolean": "Boolean (true/false)",
+        "loremText": "Lorem Text",
+        "loremWord": "Word (Lorem)",
+        "loremWords": "Words (Lorem)",
+        "loremSentence": "Sentence (Lorem)",
+        "loremParagraph": "Paragraph (Lorem)",
+        "loremLines": "Text Lines (Lorem)",
+        "loremSlug": "Slug (Lorem)",
+        "number": "Number",
+        "intNumeric": "Integer (Numeric)",
+        "floatNumeric": "Decimal (Numeric)",
+        "hexNumeric": "Hexadecimal (Numeric)",
+        "binaryNumeric": "Binary (Numeric)",
+        "octalNumeric": "Octal (Numeric)",
+        "airline": "Airline",
+        "airplane": "Airplane",
+        "airport": "Airport",
+        "flightNumber": "Flight Number",
+        "seat": "Seat",
+        "hacker": "Hacker",
+        "abbreviation": "Abbreviation",
+        "adjective": "Adjective",
+        "noun": "Noun",
+        "verb": "Verb",
+        "phrase": "Hacker Phrase",
+        "word": "Word",
+        "wordNoun": "Noun (Dictionary)",
+        "wordVerb": "Verb (Dictionary)",
+        "wordAdjective": "Adjective (Dictionary)",
+        "wordPreposition": "Preposition (Dictionary)",
+        "wordSample": "Word (Dictionary)",
+        "company": "Company",
+        "companyName": "Company Name",
+        "buzzPhrase": "Buzz Phrase",
+        "catchPhrase": "Catch Phrase",
+        "bs": "Business Jargon",
+        "database": "Database",
+        "column": "Column Name",
+        "columnType": "Column Type",
+        "engine": "Engine",
+        "mongodbObjectId": "MongoDB Object ID",
+        "git": "Git",
+        "branch": "Branch",
+        "commitSha": "Commit SHA",
+        "shortSha": "Short SHA",
+        "commitMessage": "Commit Message",
+        "image": "Image",
+        "imageUrl": "Image URL",
+        "avatar": "Avatar",
+        "dataUri": "Image Data URI",
+        "color": "Color",
+        "colorName": "Color Name",
+        "colorSpace": "Color Space",
+        "rgbColor": "RGB Color",
+        "music": "Music",
+        "genre": "Music Genre",
+        "songName": "Song Name",
+        "phone": "Phone",
+        "phoneNumber": "Phone Number",
+        "imei": "IMEI",
+        "science": "Science",
+        "chemicalElement": "Chemical Element",
+        "unit": "Unit of Measure"
+      }
+    },
+    "regexBuilder": {
+      "name": "Regex Builder",
+      "shortName": "Regex",
+      "title": "Visual Regex Builder",
+      "build": "Build",
+      "test": "Test",
+      "clear": "Clear",
+      "copy": "Copy"
+    },
+    "kanbanBoard": {
+      "name": "Kanban Board",
+      "shortName": "Kanban",
+      "title": "Kanban Board",
+      "addColumn": "Add Column",
+      "addCard": "Add Card",
+      "edit": "Edit",
+      "delete": "Delete",
+      "move": "Move"
+    },
+    "markdownNotes": {
+      "name": "Markdown Notes",
+      "shortName": "Notes",
+      "title": "Markdown Notes Editor",
+      "newNote": "New Note",
+      "save": "Save",
+      "delete": "Delete",
+      "preview": "Preview"
+    },
+
+    "knowledgeBase": {
+      "name": "Knowledge Base",
+      "shortName": "Knowledge",
+      "title": "Knowledge Base",
+      "description": "Organize and manage your knowledge with markdown notes and internal linking",
+      "buttons": {
+        "newBlock": "New Block",
+        "edit": "Edit",
+        "save": "Save",
+        "updateBlock": "Update Block",
+        "saveNewBlock": "Save New Block",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "link": "Link",
+        "editor": "Editor",
+        "preview": "Preview"
+      },
+      "placeholders": {
+        "search": "Search blocks...",
+        "blockTitle": "Block title",
+        "tags": "Tags (comma separated)",
+        "sourceUrl": "Source URL (optional)",
+        "content": "Write your content here...",
+        "linkSearch": "Search blocks to link..."
+      },
+      "labels": {
+        "linkedBy": "Linked by",
+        "noBacklinks": "No other blocks link to this one",
+        "selectBlock": "Select a block to view or click 'New Block'"
+      },
+      "messages": {
+        "titleRequired": "Title is required!",
+        "blockUpdated": "Block updated!",
+        "blockCreated": "Block created!",
+        "blockDeleted": "Block deleted.",
+        "noBlockSelected": "No block selected to delete.",
+        "noBlocksFound": "No blocks found.",
+        "noBlocksCreated": "No blocks created.",
+        "loadingError": "Error loading Knowledge Base:"
+      },
+      "deleteDialog": {
+        "title": "Confirm Deletion",
+        "itemName": "this block"
+      },
+      "linkDialog": {
+        "title": "Link with another block"
+      },
+      "fallbacks": {
+        "untitledBlock": "Untitled block"
+      }
+    }
+  }
+}

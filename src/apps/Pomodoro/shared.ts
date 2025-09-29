@@ -1,5 +1,27 @@
 import { Clock, Coffee, Timer } from "lucide-react";
 
+export const createModes = (t: (key: string) => string) => ({
+  pomodoro: {
+    label: t("modes.pomodoro"),
+    duration: 25 * 60,
+    color: "hsl(var(--destructive))",
+    icon: Timer,
+  },
+  shortBreak: {
+    label: t("modes.shortBreak"),
+    duration: 5 * 60,
+    color: "hsl(var(--chart-2))",
+    icon: Coffee,
+  },
+  longBreak: {
+    label: t("modes.longBreak"),
+    duration: 15 * 60,
+    color: "hsl(var(--primary))",
+    icon: Clock,
+  },
+});
+
+// Versão estática para compatibilidade (será removida)
 export const MODES = {
   pomodoro: {
     label: "Pomodoro",

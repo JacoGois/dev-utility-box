@@ -1,14 +1,16 @@
 "use client";
 
-import { AppKey, apps } from "@/lib/apps";
+import { useDesktopTranslations } from "@/hooks/useTranslations";
+import { AppKey, createApps } from "@/lib/apps";
 import { useDesktopStore } from "@/stores/useDesktopStore";
 import { useDockStore } from "@/stores/useDockStore";
 import { useSpotlightStore } from "@/stores/useSpotlightStore";
 import { useWindowStore } from "@/stores/useWindowStore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AppIcon from "./AppIcon";
 import AppWindow from "./AppWindow";
 import { HelpTips } from "./HelpTips";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SpotlightSearch } from "./SpotlightSearch";
 
 type Props = {
@@ -20,6 +22,9 @@ export default function Desktop({ children }: Props) {
   const { openApps } = useWindowStore();
   const { desktopApps, toggleLauncher } = useDockStore();
   const { openSpotlight, isOpen: isSpotlightOpen } = useSpotlightStore();
+  const [isLanguageSwitcherOpen, setIsLanguageSwitcherOpen] = useState(false);
+  const t = useDesktopTranslations();
+  const apps = createApps(t);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -31,6 +36,11 @@ export default function Desktop({ children }: Props) {
       if ((event.metaKey || event.ctrlKey) && event.key === "m") {
         event.preventDefault();
         toggleLauncher();
+      }
+
+      if ((event.metaKey || event.ctrlKey) && event.key === "l") {
+        event.preventDefault();
+        setIsLanguageSwitcherOpen(true);
       }
     };
 
@@ -50,6 +60,13 @@ export default function Desktop({ children }: Props) {
           const app = apps[key];
           return <AppIcon key={key} appKey={key} app={app} />;
         })}
+      </div>
+
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSwitcher
+          open={isLanguageSwitcherOpen}
+          onOpenChange={setIsLanguageSwitcherOpen}
+        />
       </div>
 
       {openApps.map((instance) => (

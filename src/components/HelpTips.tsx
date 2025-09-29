@@ -5,10 +5,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/Popover";
-import { shortcuts } from "@/lib/shortcuts";
+import { useShortcuts } from "@/hooks/useShortcuts";
+import { useDesktopTranslations } from "@/hooks/useTranslations";
 import { HelpCircle } from "lucide-react";
 
 export function HelpTips() {
+  const t = useDesktopTranslations();
+  const shortcuts = useShortcuts();
+  
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -19,9 +23,9 @@ export function HelpTips() {
       <PopoverContent className="w-96 mb-2" side="top" align="end">
         <div>
           <div className="space-y-1">
-            <h4 className="font-medium leading-none">Dicas e Atalhos</h4>
+            <h4 className="font-medium leading-none">{t("help.title")}</h4>
             <p className="text-base text-muted-foreground">
-              Use estes atalhos para navegar.
+              {t("help.description")}
             </p>
           </div>
           <hr className="my-3" />
