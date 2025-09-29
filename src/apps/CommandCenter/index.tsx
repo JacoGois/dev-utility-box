@@ -204,7 +204,7 @@ function CommandCenterComponent() {
   }, [selectedCommandId, commands, resetAndClearForm, t]);
 
   const handleCopyToClipboard = useCallback(
-    (text: string | undefined, type: string = "Comando") => {
+    (text: string | undefined) => {
       if (typeof text !== "string" || !text.trim()) {
         toast.error(t("messages.noCommandToCopy"));
         return;
@@ -474,8 +474,7 @@ function CommandCenterComponent() {
                     size="sm"
                     onClick={() =>
                       handleCopyToClipboard(
-                        currentSelectedCommandObject.command,
-                        "Comando"
+                        currentSelectedCommandObject.command
                       )
                     }
                   >

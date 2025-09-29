@@ -23,9 +23,9 @@ export const Auth = () => {
   const registerApi = useRegister();
 
   const loginForm = useLoginForm({
-    onSubmit: (data) => {
+    onSubmit: () => {
       loginApi
-        .makeRequest(data)
+        .makeRequest(loginForm.getValues())
         .then((response) => {
           login(response.data.token);
           toast.success(t("messages.loginSuccess"), {
@@ -41,9 +41,9 @@ export const Auth = () => {
   });
 
   const registerForm = useRegisterForm({
-    onSubmit: (data) => {
+    onSubmit: () => {
       registerApi
-        .makeRequest(data)
+        .makeRequest(registerForm.getValues())
         .then(() => {
           setActiveTab("login");
           toast.success(t("messages.registerSuccess"));

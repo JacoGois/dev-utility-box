@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 interface UseFormProps {
-  onSubmit: SubmitHandler<any>;
+  onSubmit: SubmitHandler<unknown>;
   t: (key: string) => string;
 }
 
