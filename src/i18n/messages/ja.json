@@ -116,7 +116,7 @@
     "restore": "復元"
   },
   "errors": {
-    "maxWindowsReached": "{appName}の最大ウィンドウ数を既に開いています。",
+    "maxWindowsReached": "このアプリケーションの最大ウィンドウ数を既に開いています。",
     "generic": "エラーが発生しました。もう一度お試しください。",
     "network": "ネットワークエラー。接続を確認してください。",
     "validation": "入力されたデータを確認してください。"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useDesktopTranslations } from "@/hooks/useTranslations";
+import { useGlobalErrorTranslations } from "@/hooks/useTranslations";
 import { AppKey } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
@@ -22,19 +22,19 @@ type Props = {
 function AppIcon({ appKey, app }: Props) {
   const { openApp } = useWindowStore();
   const { removeFromDesktop } = useDockStore();
-  const t = useDesktopTranslations();
+  const t = useGlobalErrorTranslations();
   const Icon = app.icon;
 
   const handleOpenApp = useCallback(() => {
-    openApp(appKey, app.maxInstances);
-  }, [openApp, appKey, app.maxInstances]);
+    openApp(appKey, app.maxInstances, t);
+  }, [openApp, appKey, app.maxInstances, t]);
 
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <button
           className="text-center cursor-pointer hover:opacity-70 w-16"
-          onClick={() => openApp(appKey, app.maxInstances)}
+          onClick={handleOpenApp}
         >
           <div className="w-16 h-16 bg-foreground/20 rounded-lg flex items-center justify-center text-foreground">
             <Icon className="w-8 h-8" />

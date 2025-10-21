@@ -116,7 +116,7 @@
     "restore": "Wiederherstellen"
   },
   "errors": {
-    "maxWindowsReached": "Sie haben bereits die maximale Anzahl von Fenstern für {appName} geöffnet.",
+    "maxWindowsReached": "Sie haben bereits die maximale Anzahl von Fenstern für diese Anwendung geöffnet.",
     "generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
     "network": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
     "validation": "Bitte überprüfen Sie die eingegebenen Daten."

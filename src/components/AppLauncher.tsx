@@ -6,7 +6,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
-import { useDesktopTranslations } from "@/hooks/useTranslations";
+import {
+  useDesktopTranslations,
+  useGlobalErrorTranslations,
+} from "@/hooks/useTranslations";
 import { AppKey, appsType, createApps } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
@@ -24,6 +27,7 @@ export function AppLauncher() {
   } = useDockStore();
   const { openApp } = useWindowStore();
   const t = useDesktopTranslations();
+  const tGlobalError = useGlobalErrorTranslations();
   const apps = createApps(t);
 
   return (
@@ -46,7 +50,7 @@ export function AppLauncher() {
                   <button
                     className="flex flex-col gap-2 items-center cursor-pointer hover:opacity-70"
                     onClick={() => {
-                      openApp(key, apps[key].maxInstances);
+                      openApp(key, apps[key].maxInstances, tGlobalError);
                       toggleLauncher();
                     }}
                   >

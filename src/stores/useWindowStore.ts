@@ -21,7 +21,11 @@ type WindowStore = {
   positions: Record<string, Position>;
   sizes: Record<string, Size>;
 
-  openApp: (appKey: AppKey, maxInstances?: number) => void;
+  openApp: (
+    appKey: AppKey,
+    maxInstances?: number,
+    t?: (key: string, params?: Record<string, string>) => string
+  ) => void;
   closeApp: (id: string) => void;
   focusApp: (id: string) => void;
   minimizeApp: (id: string) => void;
@@ -41,15 +45,20 @@ export const useWindowStore = create<WindowStore>()(
       positions: {},
       sizes: {},
 
-      openApp: (appKey: AppKey, maxInstances: number = Infinity) => {
-        const currentCount = get().openApps.filter(
+      openApp: (
+        appKey: AppKey,
+        maxInstances: number = Infinity,
+        t?: (key: string, params?: Record<string, string>) => string
+      ) => {
+        const currentApps = get().openApps.filter(
           (app) => app.appKey === appKey
-        ).length;
+        );
 
-        if (currentCount >= maxInstances) {
-          // Note: This will be updated to use translated messages
+        if (currentApps?.length >= maxInstances) {
           toast(
-            "You have already opened the maximum number of windows for this application."
+            t
+              ? t("maxWindowsReached", { appName: currentApps[0].appKey })
+              : "You have already opened the maximum number of windows for this application."
           );
           return;
         }

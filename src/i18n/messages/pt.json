@@ -116,7 +116,7 @@
     "restore": "Restaurar"
   },
   "errors": {
-    "maxWindowsReached": "Você já abriu o número máximo de janelas para {appName}.",
+    "maxWindowsReached": "Você já abriu o número máximo de janelas para este aplicativo.",
     "generic": "Ocorreu um erro. Tente novamente.",
     "network": "Erro de rede. Verifique sua conexão.",
     "validation": "Verifique os dados inseridos."

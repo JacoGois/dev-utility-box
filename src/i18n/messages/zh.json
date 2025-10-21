@@ -116,7 +116,7 @@
     "restore": "还原"
   },
   "errors": {
-    "maxWindowsReached": "您已经打开了 {appName} 的最大窗口数。",
+    "maxWindowsReached": "您已经打开了此应用程序的最大窗口数。",
     "generic": "发生错误。请重试。",
     "network": "网络错误。请检查您的连接。",
     "validation": "请检查输入的数据。"

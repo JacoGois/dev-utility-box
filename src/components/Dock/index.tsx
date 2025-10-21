@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemedComponent } from "@/components/ThemedComponent";
+import { useGlobalErrorTranslations } from "@/hooks/useTranslations";
 import { AppKey } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
@@ -11,6 +12,7 @@ export function Dock() {
   const { dockApps, toggleLauncher } = useDockStore();
   const { openApps, minimizedApps, focusStack, openApp, restoreApp, focusApp } =
     useWindowStore();
+  const t = useGlobalErrorTranslations();
 
   const handleAppClick = (appKeyOrInstanceId: string) => {
     const instanceById = openApps.find((w) => w.id === appKeyOrInstanceId);
@@ -30,7 +32,7 @@ export function Dock() {
     );
 
     if (appInstances.length === 0) {
-      openApp(appKey);
+      openApp(appKey, undefined, t);
     } else if (minimizedInstances.length > 0) {
       restoreApp(minimizedInstances[0]);
     } else {

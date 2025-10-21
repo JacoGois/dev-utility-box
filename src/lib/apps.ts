@@ -1,3 +1,4 @@
+import { Auth } from "@/apps/Auth";
 import { DataGenerator } from "@/apps/DataGenerator";
 import { EncodersDecoders } from "@/apps/EncodersDecoders";
 import { JSONTools } from "@/apps/JSONTools";
@@ -13,9 +14,20 @@ import {
   FileJson,
   NotebookPen,
   Timer,
+  User,
 } from "lucide-react";
 
 export const createApps = (t: (key: string) => string) => ({
+  Auth: {
+    name: t("apps.auth.name"),
+    shortName: t("apps.auth.shortName"),
+    icon: User,
+    component: Auth,
+    maxInstances: 2,
+    maxWidth: 550,
+    maxHeight: 850,
+    minHeight: undefined,
+  },
   Pomodoro: {
     name: t("apps.pomodoro.name"),
     shortName: t("apps.pomodoro.shortName"),
