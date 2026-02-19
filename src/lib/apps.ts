@@ -1,6 +1,7 @@
 import { Auth } from "@/apps/Auth";
 import { DataGenerator } from "@/apps/DataGenerator";
 import { EncodersDecoders } from "@/apps/EncodersDecoders";
+import { ImageTextLab } from "@/apps/ImageTextLab";
 import { JSONTools } from "@/apps/JSONTools";
 import { KanbanBoard } from "@/apps/KanbanBoard";
 import { KnowledgeBase } from "@/apps/KnowledgeBase";
@@ -12,6 +13,7 @@ import {
   Brain,
   Combine,
   Database,
+  FileImage,
   FileJson,
   Kanban as KanbanIcon,
   NotebookPen,
@@ -109,6 +111,16 @@ export const createApps = (t: (key: string) => string) => ({
     maxWidth: undefined,
     maxHeight: undefined,
     minHeight: undefined,
+  },
+  ImageTextLab: {
+    name: t("apps.imageTextLab.name"),
+    shortName: t("apps.imageTextLab.shortName"),
+    icon: FileImage,
+    component: ImageTextLab,
+    maxInstances: 2,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: 500,
   },
 });
 

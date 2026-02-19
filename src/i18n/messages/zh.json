@@ -109,6 +109,10 @@
       "kanban": {
         "name": "看板",
         "shortName": "看板"
+      },
+      "imageTextLab": {
+        "name": "图像工作室",
+        "shortName": "图像"
       }
     }
   },
@@ -938,6 +942,72 @@
         "invalidDueDate": "截止日期无效。",
         "tagNameRequired": "标签名称为必填项。",
         "invalidColor": "颜色无效。"
+      }
+    },
+    "imageTextLab": {
+      "name": "图像工作室",
+      "shortName": "图像",
+      "title": "图像工作室",
+      "description": "从图像中提取文本，并将文本生成风格化图片。",
+      "tabs": {
+        "imageToText": "图像 -> 文本",
+        "removeBackground": "移除背景",
+        "textToImage": "文本 -> 图像"
+      },
+      "ocr": {
+        "languageLabel": "OCR 语言",
+        "selectImage": "选择图像",
+        "previewAlt": "所选图像预览",
+        "noImageSelected": "请选择图像以开始 OCR。",
+        "bgRemovalSensitivity": "背景敏感度",
+        "removeBackground": "移除背景",
+        "resetImage": "重置图像",
+        "downloadNoBgPng": "下载无背景PNG",
+        "extractButton": "提取文本",
+        "processing": "OCR 处理中...",
+        "progress": "进度",
+        "currentLanguage": "语言：{language}",
+        "outputTitle": "提取结果",
+        "originalImage": "原始图像",
+        "processedImage": "处理后图像",
+        "noProcessedPreview": "暂无处理后预览。",
+        "copyText": "复制文本",
+        "downloadTxt": "下载 .txt",
+        "emptyOutput": "尚无提取文本。",
+        "languages": {
+          "english": "英语",
+          "portuguese": "葡萄牙语",
+          "spanish": "西班牙语",
+          "german": "德语",
+          "french": "法语",
+          "japanese": "日语",
+          "chineseSimplified": "中文（简体）"
+        }
+      },
+      "textToImage": {
+        "contentLabel": "文本内容",
+        "contentPlaceholder": "输入文本以生成图片...",
+        "width": "宽度",
+        "height": "高度",
+        "fontSize": "字体大小",
+        "textColor": "文字颜色",
+        "backgroundColor": "背景颜色",
+        "downloadPng": "下载 PNG",
+        "preview": "预览"
+      },
+      "messages": {
+        "selectImageFirst": "请先选择图像。",
+        "emptyOcrResult": "暂无可导出的文本。",
+        "noProcessedImage": "没有可用的处理后图像。",
+        "downloadedTxt": "文本文件已下载。",
+        "copiedText": "文本已复制。",
+        "copyFailed": "无法复制文本。",
+        "bgRemovalSuccess": "背景已移除。",
+        "bgRemovalFailed": "无法移除背景。",
+        "downloadedProcessedPng": "透明PNG已下载。",
+        "ocrSuccess": "文本提取成功。",
+        "ocrFailed": "无法从图像中提取文本。",
+        "downloadedPng": "PNG 已下载。"
       }
     },
     "markdownNotes": {

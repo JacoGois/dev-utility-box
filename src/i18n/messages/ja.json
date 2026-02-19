@@ -109,6 +109,10 @@
       "kanban": {
         "name": "かんばんボード",
         "shortName": "かんばん"
+      },
+      "imageTextLab": {
+        "name": "イメージスタジオ",
+        "shortName": "スタジオ"
       }
     }
   },
@@ -938,6 +942,72 @@
         "invalidDueDate": "期限日が無効です。",
         "tagNameRequired": "タグ名は必須です。",
         "invalidColor": "色の形式が無効です。"
+      }
+    },
+    "imageTextLab": {
+      "name": "イメージスタジオ",
+      "shortName": "スタジオ",
+      "title": "イメージスタジオ",
+      "description": "画像から文字を抽出し、文字から画像を生成します。",
+      "tabs": {
+        "imageToText": "画像 -> テキスト",
+        "removeBackground": "背景削除",
+        "textToImage": "テキスト -> 画像"
+      },
+      "ocr": {
+        "languageLabel": "OCR言語",
+        "selectImage": "画像を選択",
+        "previewAlt": "選択された画像のプレビュー",
+        "noImageSelected": "OCRを開始するには画像を選択してください。",
+        "bgRemovalSensitivity": "背景の感度",
+        "removeBackground": "背景を削除",
+        "resetImage": "画像をリセット",
+        "downloadNoBgPng": "背景なしPNGをダウンロード",
+        "extractButton": "テキストを抽出",
+        "processing": "OCR処理中...",
+        "progress": "進捗",
+        "currentLanguage": "言語: {language}",
+        "outputTitle": "抽出されたテキスト",
+        "originalImage": "元画像",
+        "processedImage": "処理後画像",
+        "noProcessedPreview": "まだ処理済みプレビューはありません。",
+        "copyText": "テキストをコピー",
+        "downloadTxt": ".txt をダウンロード",
+        "emptyOutput": "まだ抽出されたテキストはありません。",
+        "languages": {
+          "english": "英語",
+          "portuguese": "ポルトガル語",
+          "spanish": "スペイン語",
+          "german": "ドイツ語",
+          "french": "フランス語",
+          "japanese": "日本語",
+          "chineseSimplified": "中国語（簡体字）"
+        }
+      },
+      "textToImage": {
+        "contentLabel": "テキスト内容",
+        "contentPlaceholder": "画像化するテキストを入力してください...",
+        "width": "幅",
+        "height": "高さ",
+        "fontSize": "フォントサイズ",
+        "textColor": "文字色",
+        "backgroundColor": "背景色",
+        "downloadPng": "PNGをダウンロード",
+        "preview": "プレビュー"
+      },
+      "messages": {
+        "selectImageFirst": "先に画像を選択してください。",
+        "emptyOcrResult": "エクスポートするテキストがまだありません。",
+        "noProcessedImage": "処理済み画像がありません。",
+        "downloadedTxt": "テキストファイルをダウンロードしました。",
+        "copiedText": "テキストをコピーしました。",
+        "copyFailed": "テキストをコピーできませんでした。",
+        "bgRemovalSuccess": "背景を削除しました。",
+        "bgRemovalFailed": "背景を削除できませんでした。",
+        "downloadedProcessedPng": "透過PNGをダウンロードしました。",
+        "ocrSuccess": "テキスト抽出に成功しました。",
+        "ocrFailed": "画像からテキストを抽出できませんでした。",
+        "downloadedPng": "PNGをダウンロードしました。"
       }
     },
     "markdownNotes": {

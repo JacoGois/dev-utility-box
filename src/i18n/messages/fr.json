@@ -109,6 +109,10 @@
       "kanban": {
         "name": "Tableau Kanban",
         "shortName": "Kanban"
+      },
+      "imageTextLab": {
+        "name": "Studio d'Image",
+        "shortName": "Studio"
       }
     }
   },
@@ -938,6 +942,72 @@
         "invalidDueDate": "Date limite invalide.",
         "tagNameRequired": "Le nom du tag est requis.",
         "invalidColor": "Couleur invalide."
+      }
+    },
+    "imageTextLab": {
+      "name": "Studio d'Image",
+      "shortName": "Studio",
+      "title": "Studio d'Image",
+      "description": "Extraire du texte depuis des images et générer des images stylisées depuis du texte.",
+      "tabs": {
+        "imageToText": "Image -> Texte",
+        "removeBackground": "Supprimer le Fond",
+        "textToImage": "Texte -> Image"
+      },
+      "ocr": {
+        "languageLabel": "Langue OCR",
+        "selectImage": "Sélectionner une image",
+        "previewAlt": "Aperçu de l'image sélectionnée",
+        "noImageSelected": "Sélectionnez une image pour lancer l'OCR.",
+        "bgRemovalSensitivity": "Sensibilité du fond",
+        "removeBackground": "Supprimer le fond",
+        "resetImage": "Réinitialiser l'image",
+        "downloadNoBgPng": "Télécharger PNG sans fond",
+        "extractButton": "Extraire le texte",
+        "processing": "Traitement OCR...",
+        "progress": "Progression",
+        "currentLanguage": "Langue : {language}",
+        "outputTitle": "Texte extrait",
+        "originalImage": "Image originale",
+        "processedImage": "Image traitée",
+        "noProcessedPreview": "Aucun aperçu traité pour le moment.",
+        "copyText": "Copier le texte",
+        "downloadTxt": "Télécharger .txt",
+        "emptyOutput": "Aucun texte extrait pour le moment.",
+        "languages": {
+          "english": "Anglais",
+          "portuguese": "Portugais",
+          "spanish": "Espagnol",
+          "german": "Allemand",
+          "french": "Français",
+          "japanese": "Japonais",
+          "chineseSimplified": "Chinois (Simplifié)"
+        }
+      },
+      "textToImage": {
+        "contentLabel": "Contenu du texte",
+        "contentPlaceholder": "Saisissez votre texte pour générer une image...",
+        "width": "Largeur",
+        "height": "Hauteur",
+        "fontSize": "Taille de police",
+        "textColor": "Couleur du texte",
+        "backgroundColor": "Couleur d'arrière-plan",
+        "downloadPng": "Télécharger PNG",
+        "preview": "Aperçu"
+      },
+      "messages": {
+        "selectImageFirst": "Sélectionnez d'abord une image.",
+        "emptyOcrResult": "Aucun texte à exporter pour le moment.",
+        "noProcessedImage": "Aucune image traitée disponible.",
+        "downloadedTxt": "Fichier texte téléchargé.",
+        "copiedText": "Texte copié.",
+        "copyFailed": "Impossible de copier le texte.",
+        "bgRemovalSuccess": "Fond supprimé.",
+        "bgRemovalFailed": "Impossible de supprimer le fond.",
+        "downloadedProcessedPng": "PNG transparent téléchargé.",
+        "ocrSuccess": "Texte extrait avec succès.",
+        "ocrFailed": "Échec de l'extraction du texte depuis l'image.",
+        "downloadedPng": "PNG téléchargé."
       }
     },
     "markdownNotes": {

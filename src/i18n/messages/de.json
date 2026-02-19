@@ -109,6 +109,10 @@
       "kanban": {
         "name": "Kanban-Board",
         "shortName": "Kanban"
+      },
+      "imageTextLab": {
+        "name": "Bildstudio",
+        "shortName": "Studio"
       }
     }
   },
@@ -938,6 +942,72 @@
         "invalidDueDate": "Ungültiges Fälligkeitsdatum.",
         "tagNameRequired": "Tag-Name ist erforderlich.",
         "invalidColor": "Ungültige Farbe."
+      }
+    },
+    "imageTextLab": {
+      "name": "Bildstudio",
+      "shortName": "Studio",
+      "title": "Bildstudio",
+      "description": "Extrahiere Text aus Bildern und erstelle stilisierte Textbilder.",
+      "tabs": {
+        "imageToText": "Bild -> Text",
+        "removeBackground": "Hintergrund Entfernen",
+        "textToImage": "Text -> Bild"
+      },
+      "ocr": {
+        "languageLabel": "OCR-Sprache",
+        "selectImage": "Bild auswählen",
+        "previewAlt": "Vorschau des ausgewählten Bildes",
+        "noImageSelected": "Wähle ein Bild, um OCR zu starten.",
+        "bgRemovalSensitivity": "Hintergrund-Empfindlichkeit",
+        "removeBackground": "Hintergrund entfernen",
+        "resetImage": "Bild zurücksetzen",
+        "downloadNoBgPng": "PNG ohne Hintergrund herunterladen",
+        "extractButton": "Text extrahieren",
+        "processing": "OCR wird verarbeitet...",
+        "progress": "Fortschritt",
+        "currentLanguage": "Sprache: {language}",
+        "outputTitle": "Extrahierter Text",
+        "originalImage": "Originalbild",
+        "processedImage": "Bearbeitetes Bild",
+        "noProcessedPreview": "Noch keine bearbeitete Vorschau.",
+        "copyText": "Text kopieren",
+        "downloadTxt": ".txt herunterladen",
+        "emptyOutput": "Noch kein extrahierter Text.",
+        "languages": {
+          "english": "Englisch",
+          "portuguese": "Portugiesisch",
+          "spanish": "Spanisch",
+          "german": "Deutsch",
+          "french": "Französisch",
+          "japanese": "Japanisch",
+          "chineseSimplified": "Chinesisch (Vereinfacht)"
+        }
+      },
+      "textToImage": {
+        "contentLabel": "Textinhalt",
+        "contentPlaceholder": "Text eingeben, um ein Bild zu erzeugen...",
+        "width": "Breite",
+        "height": "Höhe",
+        "fontSize": "Schriftgröße",
+        "textColor": "Textfarbe",
+        "backgroundColor": "Hintergrundfarbe",
+        "downloadPng": "PNG herunterladen",
+        "preview": "Vorschau"
+      },
+      "messages": {
+        "selectImageFirst": "Bitte zuerst ein Bild auswählen.",
+        "emptyOcrResult": "Noch kein Text zum Exportieren.",
+        "noProcessedImage": "Kein verarbeitetes Bild verfügbar.",
+        "downloadedTxt": "Textdatei heruntergeladen.",
+        "copiedText": "Text kopiert.",
+        "copyFailed": "Text konnte nicht kopiert werden.",
+        "bgRemovalSuccess": "Hintergrund entfernt.",
+        "bgRemovalFailed": "Hintergrund konnte nicht entfernt werden.",
+        "downloadedProcessedPng": "Transparentes PNG heruntergeladen.",
+        "ocrSuccess": "Text erfolgreich extrahiert.",
+        "ocrFailed": "Text konnte nicht aus dem Bild extrahiert werden.",
+        "downloadedPng": "PNG heruntergeladen."
       }
     },
     "markdownNotes": {

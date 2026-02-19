@@ -109,6 +109,10 @@
       "kanban": {
         "name": "Kanban Board",
         "shortName": "Kanban"
+      },
+      "imageTextLab": {
+        "name": "Image Studio",
+        "shortName": "Studio"
       }
     }
   },
@@ -938,6 +942,72 @@
         "invalidDueDate": "Invalid due date.",
         "tagNameRequired": "Tag name is required.",
         "invalidColor": "Invalid color."
+      }
+    },
+    "imageTextLab": {
+      "name": "Image Studio",
+      "shortName": "Studio",
+      "title": "Image Studio",
+      "description": "Extract text from images and generate styled text images.",
+      "tabs": {
+        "imageToText": "Image -> Text",
+        "removeBackground": "Remove Background",
+        "textToImage": "Text -> Image"
+      },
+      "ocr": {
+        "languageLabel": "OCR language",
+        "selectImage": "Select image",
+        "previewAlt": "Selected image preview",
+        "noImageSelected": "Select an image to start OCR.",
+        "bgRemovalSensitivity": "Background sensitivity",
+        "removeBackground": "Remove background",
+        "resetImage": "Reset image",
+        "downloadNoBgPng": "Download no-bg PNG",
+        "extractButton": "Extract text",
+        "processing": "Processing OCR...",
+        "progress": "Progress",
+        "currentLanguage": "Language: {language}",
+        "outputTitle": "Extracted text",
+        "originalImage": "Original image",
+        "processedImage": "Processed image",
+        "noProcessedPreview": "No processed preview yet.",
+        "copyText": "Copy text",
+        "downloadTxt": "Download .txt",
+        "emptyOutput": "No extracted text yet.",
+        "languages": {
+          "english": "English",
+          "portuguese": "Portuguese",
+          "spanish": "Spanish",
+          "german": "German",
+          "french": "French",
+          "japanese": "Japanese",
+          "chineseSimplified": "Chinese (Simplified)"
+        }
+      },
+      "textToImage": {
+        "contentLabel": "Text content",
+        "contentPlaceholder": "Type your text to generate an image...",
+        "width": "Width",
+        "height": "Height",
+        "fontSize": "Font size",
+        "textColor": "Text color",
+        "backgroundColor": "Background color",
+        "downloadPng": "Download PNG",
+        "preview": "Preview"
+      },
+      "messages": {
+        "selectImageFirst": "Select an image first.",
+        "emptyOcrResult": "No text to export yet.",
+        "noProcessedImage": "No processed image available.",
+        "downloadedTxt": "Text file downloaded.",
+        "copiedText": "Text copied.",
+        "copyFailed": "Could not copy text.",
+        "bgRemovalSuccess": "Background removed.",
+        "bgRemovalFailed": "Could not remove background.",
+        "downloadedProcessedPng": "Transparent PNG downloaded.",
+        "ocrSuccess": "Text extracted successfully.",
+        "ocrFailed": "Failed to extract text from image.",
+        "downloadedPng": "PNG downloaded."
       }
     },
     "markdownNotes": {

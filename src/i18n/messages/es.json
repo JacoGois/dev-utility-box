@@ -109,6 +109,10 @@
       "kanban": {
         "name": "Tablero Kanban",
         "shortName": "Kanban"
+      },
+      "imageTextLab": {
+        "name": "Estudio de Imagen",
+        "shortName": "Estudio"
       }
     }
   },
@@ -938,6 +942,72 @@
         "invalidDueDate": "Fecha límite inválida.",
         "tagNameRequired": "El nombre de la etiqueta es obligatorio.",
         "invalidColor": "Color inválido."
+      }
+    },
+    "imageTextLab": {
+      "name": "Estudio de Imagen",
+      "shortName": "Estudio",
+      "title": "Estudio de Imagen",
+      "description": "Extrae texto de imágenes y genera imágenes estilizadas desde texto.",
+      "tabs": {
+        "imageToText": "Imagen -> Texto",
+        "removeBackground": "Quitar Fondo",
+        "textToImage": "Texto -> Imagen"
+      },
+      "ocr": {
+        "languageLabel": "Idioma OCR",
+        "selectImage": "Seleccionar imagen",
+        "previewAlt": "Vista previa de la imagen seleccionada",
+        "noImageSelected": "Selecciona una imagen para iniciar OCR.",
+        "bgRemovalSensitivity": "Sensibilidad del fondo",
+        "removeBackground": "Quitar fondo",
+        "resetImage": "Restablecer imagen",
+        "downloadNoBgPng": "Descargar PNG sin fondo",
+        "extractButton": "Extraer texto",
+        "processing": "Procesando OCR...",
+        "progress": "Progreso",
+        "currentLanguage": "Idioma: {language}",
+        "outputTitle": "Texto extraído",
+        "originalImage": "Imagen original",
+        "processedImage": "Imagen procesada",
+        "noProcessedPreview": "Aún no hay vista previa procesada.",
+        "copyText": "Copiar texto",
+        "downloadTxt": "Descargar .txt",
+        "emptyOutput": "Aún no hay texto extraído.",
+        "languages": {
+          "english": "Inglés",
+          "portuguese": "Portugués",
+          "spanish": "Español",
+          "german": "Alemán",
+          "french": "Francés",
+          "japanese": "Japonés",
+          "chineseSimplified": "Chino (Simplificado)"
+        }
+      },
+      "textToImage": {
+        "contentLabel": "Contenido del texto",
+        "contentPlaceholder": "Escribe tu texto para generar una imagen...",
+        "width": "Ancho",
+        "height": "Alto",
+        "fontSize": "Tamaño de fuente",
+        "textColor": "Color del texto",
+        "backgroundColor": "Color de fondo",
+        "downloadPng": "Descargar PNG",
+        "preview": "Vista previa"
+      },
+      "messages": {
+        "selectImageFirst": "Selecciona una imagen primero.",
+        "emptyOcrResult": "Aún no hay texto para exportar.",
+        "noProcessedImage": "No hay imagen procesada disponible.",
+        "downloadedTxt": "Archivo de texto descargado.",
+        "copiedText": "Texto copiado.",
+        "copyFailed": "No se pudo copiar el texto.",
+        "bgRemovalSuccess": "Fondo eliminado.",
+        "bgRemovalFailed": "No fue posible eliminar el fondo.",
+        "downloadedProcessedPng": "PNG transparente descargado.",
+        "ocrSuccess": "Texto extraído correctamente.",
+        "ocrFailed": "No fue posible extraer texto de la imagen.",
+        "downloadedPng": "PNG descargado."
       }
     },
     "markdownNotes": {
