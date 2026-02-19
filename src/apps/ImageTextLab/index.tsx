@@ -2,6 +2,13 @@
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/form/Input";
 import { Label } from "@/components/ui/form/Label";
 import { Textarea } from "@/components/ui/form/Textarea";
@@ -10,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
 import { useAppTranslations } from "@/hooks/useTranslations";
 import {
+  CircleHelp,
   Download,
   Eraser,
   FileImage,
@@ -61,6 +69,7 @@ type ImageTextLabProps = {
 function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
   const t = useAppTranslations("imageTextLab");
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const appRootRef = useRef<HTMLDivElement | null>(null);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [processedImageUrl, setProcessedImageUrl] = useState<string | null>(
@@ -366,7 +375,10 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
   };
 
   return (
-    <div className="@container flex h-full w-full flex-col gap-2 @sm:gap-3 overflow-hidden border-t bg-card p-2 @sm:p-3 text-card-foreground">
+    <div
+      ref={appRootRef}
+      className="@container flex h-full w-full flex-col gap-2 @sm:gap-3 overflow-hidden border-t bg-card p-2 @sm:p-3 text-card-foreground"
+    >
       <input
         ref={fileInputRef}
         type="file"
@@ -380,6 +392,41 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
         }}
       />
 
+      <div className="rounded-md border border-border bg-muted/20 p-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-xs text-muted-foreground">{t("description")}</p>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-7 w-7 p-0"
+                title={t("description")}
+              >
+                <CircleHelp className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              portalContainer={appRootRef.current ?? undefined}
+              overlayClassName="absolute inset-0 z-[180] bg-black/35"
+              className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+            >
+              <DialogHeader>
+                <DialogTitle>{t("title")}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>{t("description")}</p>
+                <div className="rounded-md border border-border bg-muted/30 p-2 text-xs">
+                  <p>1. {t("tabs.imageToText")}</p>
+                  <p>2. {t("tabs.removeBackground")}</p>
+                  <p>3. {t("tabs.textToImage")}</p>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+
       <Tabs
         value={state.activeTab}
         onValueChange={(value) =>
@@ -390,29 +437,75 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
               | "textToImage",
           })
         }
-        className="min-h-0 flex-1 gap-2 @sm:gap-3"
+        className="min-h-0 flex-1 overflow-hidden gap-2 @sm:gap-3"
       >
-        <TabsList className="w-full justify-start overflow-x-auto">
-          <TabsTrigger value="imageToText">
-            <FileText className="mr-1 h-4 w-4" />
-            {t("tabs.imageToText")}
+        <TabsList className="max-w-full shrink-0 justify-start overflow-x-auto overflow-y-hidden">
+          <TabsTrigger
+            value="imageToText"
+            className="flex-none px-2 @sm:px-3"
+            title={t("tabs.imageToText")}
+          >
+            <FileText className="h-4 w-4" />
+            <span className="hidden @sm:inline @sm:ml-1">
+              {t("tabs.imageToText")}
+            </span>
           </TabsTrigger>
-          <TabsTrigger value="textToImage">
-            <FileImage className="mr-1 h-4 w-4" />
-            {t("tabs.textToImage")}
+          <TabsTrigger
+            value="textToImage"
+            className="flex-none px-2 @sm:px-3"
+            title={t("tabs.textToImage")}
+          >
+            <FileImage className="h-4 w-4" />
+            <span className="hidden @sm:inline @sm:ml-1">
+              {t("tabs.textToImage")}
+            </span>
           </TabsTrigger>
-          <TabsTrigger value="removeBackground">
-            <Eraser className="mr-1 h-4 w-4" />
-            {t("tabs.removeBackground")}
+          <TabsTrigger
+            value="removeBackground"
+            className="flex-none px-2 @sm:px-3"
+            title={t("tabs.removeBackground")}
+          >
+            <Eraser className="h-4 w-4" />
+            <span className="hidden @sm:inline @sm:ml-1">
+              {t("tabs.removeBackground")}
+            </span>
           </TabsTrigger>
         </TabsList>
 
         <TabsContent
           value="imageToText"
-          className="min-h-0 overflow-y-auto @4xl:overflow-hidden"
+          className="min-h-0 flex-1 overflow-y-auto pb-1"
         >
-          <div className="grid min-h-0 grid-cols-1 gap-3 @4xl:h-full @4xl:grid-cols-[360px_1fr]">
+          <div className="grid min-h-[520px] grid-cols-1 gap-3 @4xl:grid-cols-[360px_1fr]">
             <div className="flex min-h-0 flex-col gap-3 rounded-md border border-border p-3">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium">{t("tabs.imageToText")}</p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 w-7 p-0"
+                      title={t("ocr.noImageSelected")}
+                    >
+                      <CircleHelp className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent
+                    portalContainer={appRootRef.current ?? undefined}
+                    overlayClassName="absolute inset-0 z-[180] bg-black/35"
+                    className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+                  >
+                    <DialogHeader>
+                      <DialogTitle>{t("tabs.imageToText")}</DialogTitle>
+                    </DialogHeader>
+                    <p className="text-sm text-muted-foreground">
+                      {t("ocr.noImageSelected")}
+                    </p>
+                  </DialogContent>
+                </Dialog>
+              </div>
+
               <div className="space-y-1">
                 <Label>{t("ocr.languageLabel")}</Label>
                 <select
@@ -457,7 +550,12 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
                 </div>
               )}
 
-              <Button type="button" onClick={runOcr} disabled={isRecognizing}>
+              <Button
+                type="button"
+                onClick={runOcr}
+                disabled={isRecognizing}
+                className="w-full"
+              >
                 {isRecognizing ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -489,13 +587,19 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
               <div className="mb-2 flex flex-col @sm:flex-row @sm:items-center @sm:justify-between gap-2">
                 <p className="text-sm font-medium">{t("ocr.outputTitle")}</p>
                 <div className="flex flex-wrap gap-2">
-                  <Button size="sm" variant="outline" onClick={copyOcrText}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={copyOcrText}
+                    className="w-full @sm:w-auto"
+                  >
                     {t("ocr.copyText")}
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={downloadTextFile}
+                    className="w-full @sm:w-auto"
                   >
                     <Download className="mr-1 h-3.5 w-3.5" />
                     {t("ocr.downloadTxt")}
@@ -513,10 +617,40 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
 
         <TabsContent
           value="removeBackground"
-          className="min-h-0 overflow-y-auto @4xl:overflow-hidden"
+          className="min-h-0 flex-1 overflow-y-auto pb-1"
         >
-          <div className="grid min-h-0 grid-cols-1 gap-3 @4xl:h-full @4xl:grid-cols-[360px_1fr]">
+          <div className="grid min-h-[560px] grid-cols-1 gap-3 @4xl:grid-cols-[360px_1fr]">
             <div className="flex min-h-0 flex-col gap-3 rounded-md border border-border p-3">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium">
+                  {t("tabs.removeBackground")}
+                </p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 w-7 p-0"
+                      title={t("ocr.noProcessedPreview")}
+                    >
+                      <CircleHelp className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent
+                    portalContainer={appRootRef.current ?? undefined}
+                    overlayClassName="absolute inset-0 z-[180] bg-black/35"
+                    className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+                  >
+                    <DialogHeader>
+                      <DialogTitle>{t("tabs.removeBackground")}</DialogTitle>
+                    </DialogHeader>
+                    <p className="text-sm text-muted-foreground">
+                      {t("ocr.noProcessedPreview")}
+                    </p>
+                  </DialogContent>
+                </Dialog>
+              </div>
+
               <Button
                 type="button"
                 variant="outline"
@@ -556,6 +690,7 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
                     type="button"
                     onClick={removeBackgroundSimple}
                     disabled={!selectedImageFile || isRemovingBg}
+                    className="w-full @sm:w-auto"
                   >
                     {isRemovingBg ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -574,6 +709,7 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
                       }
                     }}
                     disabled={!processedImageUrl}
+                    className="w-full @sm:w-auto"
                   >
                     <RotateCcw className="mr-2 h-4 w-4" />
                     {t("ocr.resetImage")}
@@ -583,6 +719,7 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
                     variant="outline"
                     onClick={downloadProcessedPng}
                     disabled={!processedImageUrl}
+                    className="w-full @sm:w-auto"
                   >
                     <Download className="mr-2 h-4 w-4" />
                     {t("ocr.downloadNoBgPng")}
@@ -591,10 +728,10 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
               </div>
             </div>
 
-            <div className="grid min-h-[300px] @4xl:min-h-0 grid-cols-1 @md:grid-cols-2 gap-3 rounded-md border border-border p-3">
+            <div className="grid min-h-[300px] grid-cols-1 @md:grid-cols-2 gap-3 rounded-md border border-border p-3">
               <div className="flex min-h-0 flex-col gap-2">
                 <p className="text-sm font-medium">{t("ocr.originalImage")}</p>
-                <div className="flex min-h-[220px] @4xl:min-h-0 flex-1 items-center justify-center rounded-md border border-border bg-muted/20 p-2">
+                <div className="flex min-h-[220px] flex-1 items-center justify-center rounded-md border border-border bg-muted/20 p-2">
                   {previewUrl ? (
                     <Image
                       src={previewUrl}
@@ -614,7 +751,7 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
 
               <div className="flex min-h-0 flex-col gap-2">
                 <p className="text-sm font-medium">{t("ocr.processedImage")}</p>
-                <div className="flex min-h-[220px] @4xl:min-h-0 flex-1 items-center justify-center rounded-md border border-border bg-muted/20 p-2">
+                <div className="flex min-h-[220px] flex-1 items-center justify-center rounded-md border border-border bg-muted/20 p-2">
                   {processedImageUrl ? (
                     <Image
                       src={processedImageUrl}
@@ -637,10 +774,38 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
 
         <TabsContent
           value="textToImage"
-          className="min-h-0 overflow-y-auto @4xl:overflow-hidden"
+          className="min-h-0 flex-1 overflow-y-auto pb-1"
         >
-          <div className="grid min-h-0 grid-cols-1 gap-3 @4xl:h-full @4xl:grid-cols-[360px_1fr]">
+          <div className="grid min-h-[560px] grid-cols-1 gap-3 @4xl:grid-cols-[360px_1fr]">
             <div className="flex min-h-0 flex-col gap-3 rounded-md border border-border p-3">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-medium">{t("tabs.textToImage")}</p>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 w-7 p-0"
+                      title={t("textToImage.contentPlaceholder")}
+                    >
+                      <CircleHelp className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent
+                    portalContainer={appRootRef.current ?? undefined}
+                    overlayClassName="absolute inset-0 z-[180] bg-black/35"
+                    className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+                  >
+                    <DialogHeader>
+                      <DialogTitle>{t("tabs.textToImage")}</DialogTitle>
+                    </DialogHeader>
+                    <p className="text-sm text-muted-foreground">
+                      {t("textToImage.contentPlaceholder")}
+                    </p>
+                  </DialogContent>
+                </Dialog>
+              </div>
+
               <div className="space-y-1">
                 <Label htmlFor="textToImageContent">
                   {t("textToImage.contentLabel")}
@@ -749,13 +914,13 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
                 </div>
               </div>
 
-              <Button type="button" onClick={downloadPng}>
+              <Button type="button" onClick={downloadPng} className="w-full">
                 <Download className="mr-2 h-4 w-4" />
                 {t("textToImage.downloadPng")}
               </Button>
             </div>
 
-            <div className="flex min-h-[260px] @4xl:min-h-0 flex-col rounded-md border border-border p-3">
+            <div className="flex min-h-[260px] flex-col rounded-md border border-border p-3">
               <p className="mb-2 text-sm font-medium">
                 {t("textToImage.preview")}
               </p>

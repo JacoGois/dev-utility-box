@@ -113,6 +113,10 @@
       "imageTextLab": {
         "name": "图像工作室",
         "shortName": "图像"
+      },
+      "schemaLab": {
+        "name": "Schema 实验室",
+        "shortName": "Schema"
       }
     }
   },
@@ -851,9 +855,9 @@
         "low": "低"
       },
       "defaultColumns": {
-        "todo": "待办",
-        "inProgress": "进行中",
-        "done": "已完成"
+        "todo": "Backlog",
+        "inProgress": "In Progress",
+        "done": "Done"
       },
       "filters": {
         "title": "看板筛选",
@@ -1008,6 +1012,89 @@
         "ocrSuccess": "文本提取成功。",
         "ocrFailed": "无法从图像中提取文本。",
         "downloadedPng": "PNG 已下载。"
+      }
+    },
+    "schemaLab": {
+      "name": "Schema 实验室",
+      "shortName": "Schema",
+      "title": "Schema 实验室",
+      "description": "校验 JSON Schema、生成 TypeScript 类型并生成示例 payload。",
+      "buttons": {
+        "validate": "校验数据",
+        "generateTypes": "生成 TS 类型",
+        "generateSample": "生成示例",
+        "clear": "清空",
+        "copy": "复制",
+        "useAsData": "用作 Data"
+      },
+      "labels": {
+        "schema": "JSON Schema",
+        "data": "JSON Data"
+      },
+      "resultTabs": {
+        "validation": "校验结果",
+        "typescript": "TypeScript",
+        "sample": "示例 Payload"
+      },
+      "validation": {
+        "notRun": "未校验",
+        "valid": "有效",
+        "invalid": "无效",
+        "notRunHint": "点击“校验数据”开始校验。",
+        "validHint": "该数据符合当前 schema。",
+        "invalidHint": "校验失败，请查看下方错误。",
+        "unknownError": "未知校验错误"
+      },
+      "placeholders": {
+        "schema": "在此粘贴 JSON Schema...",
+        "data": "在此粘贴待校验 JSON...",
+        "typesOutput": "生成的 TypeScript 类型将显示在这里。",
+        "sampleOutput": "生成的示例 payload 将显示在这里。"
+      },
+      "messages": {
+        "invalidSchema": "Schema JSON 无效: {error}",
+        "invalidData": "Data JSON 无效: {error}",
+        "validationPassed": "校验通过。",
+        "validationFailed": "校验失败，共 {count} 个问题。",
+        "validationEngineError": "校验引擎错误: {error}",
+        "typesGenerated": "TypeScript 类型已生成。",
+        "sampleGenerated": "示例 payload 已生成。",
+        "sampleSentToData": "示例已复制到 Data 输入区。",
+        "nothingToCopy": "没有可复制内容。",
+        "copied": "已复制。",
+        "copyFailed": "复制文本失败。",
+        "unknownParseError": "未知解析错误。",
+        "unknownErrorValue": "未知"
+      },
+      "tips": {
+        "hint": "提示：先定义 schema，再校验数据，最后生成类型与示例。"
+      },
+      "help": {
+        "globalWhatIs": "JSON Schema 是一种用于描述 JSON 结构的标准，可定义类型、必填字段、约束和格式。",
+        "globalFlowTitle": "推荐流程：",
+        "globalFlowStep1": "1. 定义 JSON Schema。",
+        "globalFlowStep2": "2. 粘贴用于测试的 JSON Data。",
+        "globalFlowStep3": "3. 点击“校验数据”。",
+        "globalFlowStep4": "4. 生成 TypeScript 或示例 Payload，加快开发。",
+        "globalTipsTitle": "实用提示：",
+        "globalTipRequired": "- 使用 `required` 定义必填字段。",
+        "globalTipEnum": "- 使用 `enum` 限制可选值。",
+        "globalTipFormat": "- 对 `email`、`uuid`、`uri` 等使用 `format`。",
+        "schemaWhatIs": "这里用于定义 JSON 应该长什么样，可以理解为校验契约。",
+        "schemaMinimalTitle": "最小结构：",
+        "schemaMinimalExample": "\"type\": \"object\", \"properties\": ...",
+        "schemaChecklistTitle": "快速检查清单：",
+        "schemaChecklistType": "- 为每个字段定义 `type`。",
+        "schemaChecklistRequired": "- 在 `required` 中列出必填字段。",
+        "schemaChecklistRules": "- 使用 `minLength`、`minimum`、`minItems` 添加约束。",
+        "schemaChecklistAdditionalProps": "- 使用 `additionalProperties: false` 提高严格性。",
+        "dataWhatIs": "这里粘贴要按 schema 校验的真实 JSON 数据。",
+        "dataErrorsTitle": "避免常见 JSON 错误：",
+        "dataErrorQuotes": "- 键名和字符串必须使用双引号。",
+        "dataErrorTrailingComma": "- 最后一项后不要保留逗号。",
+        "dataErrorLiterals": "- `true`、`false`、`null` 必须小写。",
+        "dataTipTitle": "提示：",
+        "dataTipDescription": "先生成示例 payload，再点击“用作 Data”可快速进入校验循环。"
       }
     },
     "markdownNotes": {

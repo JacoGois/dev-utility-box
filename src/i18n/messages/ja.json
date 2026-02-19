@@ -113,6 +113,10 @@
       "imageTextLab": {
         "name": "イメージスタジオ",
         "shortName": "スタジオ"
+      },
+      "schemaLab": {
+        "name": "スキーマラボ",
+        "shortName": "Schema"
       }
     }
   },
@@ -851,9 +855,9 @@
         "low": "低"
       },
       "defaultColumns": {
-        "todo": "未着手",
-        "inProgress": "進行中",
-        "done": "完了"
+        "todo": "Backlog",
+        "inProgress": "In Progress",
+        "done": "Done"
       },
       "filters": {
         "title": "ボードフィルター",
@@ -1008,6 +1012,89 @@
         "ocrSuccess": "テキスト抽出に成功しました。",
         "ocrFailed": "画像からテキストを抽出できませんでした。",
         "downloadedPng": "PNGをダウンロードしました。"
+      }
+    },
+    "schemaLab": {
+      "name": "スキーマラボ",
+      "shortName": "Schema",
+      "title": "スキーマラボ",
+      "description": "JSON Schemaの検証、TypeScript型生成、サンプルPayload生成を行います。",
+      "buttons": {
+        "validate": "データを検証",
+        "generateTypes": "TS型を生成",
+        "generateSample": "サンプルを生成",
+        "clear": "クリア",
+        "copy": "コピー",
+        "useAsData": "Dataに使用"
+      },
+      "labels": {
+        "schema": "JSON Schema",
+        "data": "JSON Data"
+      },
+      "resultTabs": {
+        "validation": "検証",
+        "typescript": "TypeScript",
+        "sample": "サンプルPayload"
+      },
+      "validation": {
+        "notRun": "未検証",
+        "valid": "有効",
+        "invalid": "無効",
+        "notRunHint": "「データを検証」をクリックして検証を実行します。",
+        "validHint": "データは指定したSchemaに対して有効です。",
+        "invalidHint": "検証に失敗しました。下のエラーを確認してください。",
+        "unknownError": "不明な検証エラー"
+      },
+      "placeholders": {
+        "schema": "JSON Schemaをここに貼り付け...",
+        "data": "検証するJSONを貼り付け...",
+        "typesOutput": "生成されたTypeScript型がここに表示されます。",
+        "sampleOutput": "生成されたサンプルPayloadがここに表示されます。"
+      },
+      "messages": {
+        "invalidSchema": "Schema JSONが無効です: {error}",
+        "invalidData": "Data JSONが無効です: {error}",
+        "validationPassed": "検証に成功しました。",
+        "validationFailed": "{count} 件のエラーで検証に失敗しました。",
+        "validationEngineError": "検証エンジンエラー: {error}",
+        "typesGenerated": "TypeScript型を生成しました。",
+        "sampleGenerated": "サンプルPayloadを生成しました。",
+        "sampleSentToData": "サンプルをData入力にコピーしました。",
+        "nothingToCopy": "コピーする内容がありません。",
+        "copied": "コピーしました。",
+        "copyFailed": "テキストをコピーできませんでした。",
+        "unknownParseError": "不明なパースエラー。",
+        "unknownErrorValue": "不明"
+      },
+      "tips": {
+        "hint": "ヒント: 先にSchemaを設定し、データ検証後に型とサンプルを生成すると効率的です。"
+      },
+      "help": {
+        "globalWhatIs": "JSON Schema は、JSON の期待される構造（型、必須項目、制約、フォーマット）を定義するための標準です。",
+        "globalFlowTitle": "おすすめの手順:",
+        "globalFlowStep1": "1. JSON Schema を定義します。",
+        "globalFlowStep2": "2. テスト用の JSON Data を貼り付けます。",
+        "globalFlowStep3": "3. 「データを検証」をクリックします。",
+        "globalFlowStep4": "4. TypeScript 型やサンプル Payload を生成して実装を高速化します。",
+        "globalTipsTitle": "ポイント:",
+        "globalTipRequired": "- 必須項目は `required` を使います。",
+        "globalTipEnum": "- 値を限定するには `enum` を使います。",
+        "globalTipFormat": "- `email`、`uuid`、`uri` などは `format` を使います。",
+        "schemaWhatIs": "ここでは JSON の形を定義します。バリデーションの契約だと考えてください。",
+        "schemaMinimalTitle": "最小構成:",
+        "schemaMinimalExample": "\"type\": \"object\", \"properties\": ...",
+        "schemaChecklistTitle": "クイックチェック:",
+        "schemaChecklistType": "- 各フィールドに `type` を設定します。",
+        "schemaChecklistRequired": "- 必須項目を `required` に列挙します。",
+        "schemaChecklistRules": "- 制約には `minLength`、`minimum`、`minItems` を使います。",
+        "schemaChecklistAdditionalProps": "- 厳密にしたい場合は `additionalProperties: false` を使います。",
+        "dataWhatIs": "ここには、schema に対して検証する実際の JSON を貼り付けます。",
+        "dataErrorsTitle": "よくある JSON エラー:",
+        "dataErrorQuotes": "- キーと文字列は必ずダブルクォートを使います。",
+        "dataErrorTrailingComma": "- 最後の要素に末尾カンマを残さないでください。",
+        "dataErrorLiterals": "- `true`、`false`、`null` は小文字で記述します。",
+        "dataTipTitle": "ヒント:",
+        "dataTipDescription": "サンプル payload を生成し、「Dataに使用」を使うと素早く検証できます。"
       }
     },
     "markdownNotes": {

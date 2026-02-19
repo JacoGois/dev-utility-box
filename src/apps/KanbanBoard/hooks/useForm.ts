@@ -20,7 +20,7 @@ const createCardSchema = (t: TranslateFn) =>
       .trim()
       .min(1, t("validation.cardTitleRequired")),
     description: z.string().optional(),
-    priority: z.coerce.number().int().min(0).max(3),
+    priority: z.number().int().min(0).max(3),
     dueDate: z
       .string()
       .optional()

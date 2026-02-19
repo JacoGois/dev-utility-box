@@ -127,7 +127,7 @@ function KanbanBoardComponent() {
   const [activePriorityFilters, setActivePriorityFilters] = useState<
     KanbanCardPriority[]
   >([]);
-  const [isFilterPanelExpanded, setIsFilterPanelExpanded] = useState(true);
+  const [isFilterPanelExpanded, setIsFilterPanelExpanded] = useState(false);
   const [draggingSubtaskId, setDraggingSubtaskId] = useState<string | null>(
     null,
   );
@@ -400,7 +400,7 @@ function KanbanBoardComponent() {
     const cardDetails = {
       title: values.title,
       description: values.description || "",
-      priority: values.priority,
+      priority: resolvePriority(values.priority),
       dueDate: values.dueDate || undefined,
       tagIds: tagIdsToSave,
       subtasks: formCardSubtasks,

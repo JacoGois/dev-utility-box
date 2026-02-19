@@ -113,6 +113,10 @@
       "imageTextLab": {
         "name": "Estúdio de Imagem",
         "shortName": "Estúdio"
+      },
+      "schemaLab": {
+        "name": "Laboratorio de Schemas",
+        "shortName": "Schema"
       }
     }
   },
@@ -851,9 +855,9 @@
         "low": "Baixo"
       },
       "defaultColumns": {
-        "todo": "A Fazer",
-        "inProgress": "Em Andamento",
-        "done": "Feito"
+        "todo": "Backlog",
+        "inProgress": "In Progress",
+        "done": "Done"
       },
       "filters": {
         "title": "Filtros do board",
@@ -1008,6 +1012,89 @@
         "ocrSuccess": "Texto extraído com sucesso.",
         "ocrFailed": "Falha ao extrair texto da imagem.",
         "downloadedPng": "PNG baixado."
+      }
+    },
+    "schemaLab": {
+      "name": "Laboratorio de Schemas",
+      "shortName": "Schema",
+      "title": "Laboratorio de Schemas",
+      "description": "Valide JSON Schema, gere tipos TypeScript e payloads de exemplo.",
+      "buttons": {
+        "validate": "Validar Dados",
+        "generateTypes": "Gerar Tipos TS",
+        "generateSample": "Gerar Exemplo",
+        "clear": "Limpar",
+        "copy": "Copiar",
+        "useAsData": "Usar no Data"
+      },
+      "labels": {
+        "schema": "JSON Schema",
+        "data": "JSON Data"
+      },
+      "resultTabs": {
+        "validation": "Validação",
+        "typescript": "TypeScript",
+        "sample": "Payload Exemplo"
+      },
+      "validation": {
+        "notRun": "Não validado",
+        "valid": "Válido",
+        "invalid": "Inválido",
+        "notRunHint": "Clique em \"Validar Dados\" para validar com o schema.",
+        "validHint": "Os dados estão válidos para o schema informado.",
+        "invalidHint": "A validação falhou. Veja os erros abaixo.",
+        "unknownError": "Erro de validação desconhecido"
+      },
+      "placeholders": {
+        "schema": "Cole seu JSON Schema aqui...",
+        "data": "Cole o JSON para validar...",
+        "typesOutput": "Os tipos TypeScript gerados aparecerão aqui.",
+        "sampleOutput": "O payload de exemplo gerado aparecerá aqui."
+      },
+      "messages": {
+        "invalidSchema": "JSON de schema inválido: {error}",
+        "invalidData": "JSON de dados inválido: {error}",
+        "validationPassed": "Validação concluída com sucesso.",
+        "validationFailed": "Validação falhou com {count} erro(s).",
+        "validationEngineError": "Erro no motor de validação: {error}",
+        "typesGenerated": "Tipos TypeScript gerados.",
+        "sampleGenerated": "Payload de exemplo gerado.",
+        "sampleSentToData": "Exemplo copiado para o campo de dados.",
+        "nothingToCopy": "Nada para copiar.",
+        "copied": "Copiado.",
+        "copyFailed": "Não foi possível copiar o texto.",
+        "unknownParseError": "Erro de parse desconhecido.",
+        "unknownErrorValue": "desconhecido"
+      },
+      "tips": {
+        "hint": "Dica: comece pelo schema, valide os dados e depois gere tipos e payload de exemplo."
+      },
+      "help": {
+        "globalWhatIs": "JSON Schema e um padrao para descrever a estrutura esperada de um JSON: tipos, campos obrigatorios, limites e formatos.",
+        "globalFlowTitle": "Fluxo recomendado:",
+        "globalFlowStep1": "1. Defina o JSON Schema.",
+        "globalFlowStep2": "2. Cole o JSON Data para teste.",
+        "globalFlowStep3": "3. Clique em Validar Dados.",
+        "globalFlowStep4": "4. Gere TypeScript ou Payload Exemplo para acelerar a implementacao.",
+        "globalTipsTitle": "Dicas:",
+        "globalTipRequired": "- Use `required` para campos obrigatorios.",
+        "globalTipEnum": "- Use `enum` para restringir valores permitidos.",
+        "globalTipFormat": "- Use `format` para `email`, `uuid`, `uri` etc.",
+        "schemaWhatIs": "Aqui voce descreve como o JSON deve ser. Pense nisso como um contrato de validacao.",
+        "schemaMinimalTitle": "Estrutura minima:",
+        "schemaMinimalExample": "\"type\": \"object\", \"properties\": ...",
+        "schemaChecklistTitle": "Checklist rapido:",
+        "schemaChecklistType": "- Defina `type` em cada campo.",
+        "schemaChecklistRequired": "- Liste campos obrigatorios em `required`.",
+        "schemaChecklistRules": "- Use `minLength`, `minimum` e `minItems` para regras.",
+        "schemaChecklistAdditionalProps": "- Use `additionalProperties: false` para ser mais rigido.",
+        "dataWhatIs": "Aqui vai o JSON real que sera validado contra o schema.",
+        "dataErrorsTitle": "Evite erros comuns de JSON:",
+        "dataErrorQuotes": "- Sempre use aspas duplas em chaves e strings.",
+        "dataErrorTrailingComma": "- Nao deixe virgula no ultimo item.",
+        "dataErrorLiterals": "- `true`, `false` e `null` sao minusculos.",
+        "dataTipTitle": "Dica:",
+        "dataTipDescription": "Gere um payload de exemplo e use \"Usar no Data\" para validar mais rapido."
       }
     },
     "markdownNotes": {

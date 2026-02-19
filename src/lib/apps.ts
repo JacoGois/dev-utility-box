@@ -7,6 +7,7 @@ import { KanbanBoard } from "@/apps/KanbanBoard";
 import { KnowledgeBase } from "@/apps/KnowledgeBase";
 import { MassDataGenerator } from "@/apps/MassDataGenerator";
 import { Pomodoro } from "@/apps/Pomodoro";
+import { SchemaLab } from "@/apps/SchemaLab";
 import { TodoList } from "@/apps/TodoList";
 import {
   Braces,
@@ -14,6 +15,7 @@ import {
   Combine,
   Database,
   FileImage,
+  FileSearch,
   FileJson,
   Kanban as KanbanIcon,
   NotebookPen,
@@ -121,6 +123,16 @@ export const createApps = (t: (key: string) => string) => ({
     maxWidth: undefined,
     maxHeight: undefined,
     minHeight: 500,
+  },
+  SchemaLab: {
+    name: t("apps.schemaLab.name"),
+    shortName: t("apps.schemaLab.shortName"),
+    icon: FileSearch,
+    component: SchemaLab,
+    maxInstances: 3,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: 520,
   },
 });
 

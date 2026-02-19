@@ -113,6 +113,10 @@
       "imageTextLab": {
         "name": "Image Studio",
         "shortName": "Studio"
+      },
+      "schemaLab": {
+        "name": "Schema Lab",
+        "shortName": "Schema"
       }
     }
   },
@@ -851,7 +855,7 @@
         "low": "Low"
       },
       "defaultColumns": {
-        "todo": "To Do",
+        "todo": "Backlog",
         "inProgress": "In Progress",
         "done": "Done"
       },
@@ -1008,6 +1012,89 @@
         "ocrSuccess": "Text extracted successfully.",
         "ocrFailed": "Failed to extract text from image.",
         "downloadedPng": "PNG downloaded."
+      }
+    },
+    "schemaLab": {
+      "name": "Schema Lab",
+      "shortName": "Schema",
+      "title": "Schema Lab",
+      "description": "Validate JSON Schema, generate TypeScript types and sample payloads.",
+      "buttons": {
+        "validate": "Validate Data",
+        "generateTypes": "Generate TS Types",
+        "generateSample": "Generate Sample",
+        "clear": "Clear",
+        "copy": "Copy",
+        "useAsData": "Use as Data"
+      },
+      "labels": {
+        "schema": "JSON Schema",
+        "data": "JSON Data"
+      },
+      "resultTabs": {
+        "validation": "Validation",
+        "typescript": "TypeScript",
+        "sample": "Sample Payload"
+      },
+      "validation": {
+        "notRun": "Not validated",
+        "valid": "Valid",
+        "invalid": "Invalid",
+        "notRunHint": "Click \"Validate Data\" to run schema validation.",
+        "validHint": "Data is valid for the provided schema.",
+        "invalidHint": "Validation failed. See issues below.",
+        "unknownError": "Unknown validation error"
+      },
+      "placeholders": {
+        "schema": "Paste your JSON Schema here...",
+        "data": "Paste JSON payload to validate...",
+        "typesOutput": "Generated TypeScript types will appear here.",
+        "sampleOutput": "Generated sample payload will appear here."
+      },
+      "messages": {
+        "invalidSchema": "Invalid schema JSON: {error}",
+        "invalidData": "Invalid data JSON: {error}",
+        "validationPassed": "Validation passed.",
+        "validationFailed": "Validation failed with {count} issue(s).",
+        "validationEngineError": "Validation engine error: {error}",
+        "typesGenerated": "TypeScript types generated.",
+        "sampleGenerated": "Sample payload generated.",
+        "sampleSentToData": "Sample copied to data input.",
+        "nothingToCopy": "Nothing to copy.",
+        "copied": "Copied.",
+        "copyFailed": "Could not copy text.",
+        "unknownParseError": "Unknown parse error.",
+        "unknownErrorValue": "unknown"
+      },
+      "tips": {
+        "hint": "Tip: Start with a schema, validate your data, then generate types and a sample payload."
+      },
+      "help": {
+        "globalWhatIs": "JSON Schema is a standard to describe the expected structure of a JSON payload: types, required fields, limits, and formats.",
+        "globalFlowTitle": "Recommended flow:",
+        "globalFlowStep1": "1. Define your JSON Schema.",
+        "globalFlowStep2": "2. Paste JSON Data to test.",
+        "globalFlowStep3": "3. Click Validate Data.",
+        "globalFlowStep4": "4. Generate TypeScript or Sample Payload to speed up implementation.",
+        "globalTipsTitle": "Tips:",
+        "globalTipRequired": "- Use `required` for mandatory fields.",
+        "globalTipEnum": "- Use `enum` to restrict allowed values.",
+        "globalTipFormat": "- Use `format` for `email`, `uuid`, `uri`, etc.",
+        "schemaWhatIs": "Describe how your JSON must look. Think of this as a validation contract.",
+        "schemaMinimalTitle": "Minimal structure:",
+        "schemaMinimalExample": "\"type\": \"object\", \"properties\": ...",
+        "schemaChecklistTitle": "Quick checklist:",
+        "schemaChecklistType": "- Define `type` for each field.",
+        "schemaChecklistRequired": "- List mandatory fields in `required`.",
+        "schemaChecklistRules": "- Use `minLength`, `minimum`, and `minItems` for constraints.",
+        "schemaChecklistAdditionalProps": "- Use `additionalProperties: false` for stricter payloads.",
+        "dataWhatIs": "Paste the real JSON payload that will be validated against the schema.",
+        "dataErrorsTitle": "Avoid common JSON mistakes:",
+        "dataErrorQuotes": "- Always use double quotes for keys and strings.",
+        "dataErrorTrailingComma": "- Do not leave a trailing comma on the last item.",
+        "dataErrorLiterals": "- `true`, `false`, and `null` must be lowercase.",
+        "dataTipTitle": "Tip:",
+        "dataTipDescription": "Generate a sample payload and use \"Use as Data\" for a fast validation cycle."
       }
     },
     "markdownNotes": {

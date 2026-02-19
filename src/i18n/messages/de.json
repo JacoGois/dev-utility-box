@@ -113,6 +113,10 @@
       "imageTextLab": {
         "name": "Bildstudio",
         "shortName": "Studio"
+      },
+      "schemaLab": {
+        "name": "Schema-Labor",
+        "shortName": "Schema"
       }
     }
   },
@@ -851,9 +855,9 @@
         "low": "Niedrig"
       },
       "defaultColumns": {
-        "todo": "Zu Erledigen",
-        "inProgress": "In Bearbeitung",
-        "done": "Erledigt"
+        "todo": "Backlog",
+        "inProgress": "In Progress",
+        "done": "Done"
       },
       "filters": {
         "title": "Board-Filter",
@@ -1008,6 +1012,89 @@
         "ocrSuccess": "Text erfolgreich extrahiert.",
         "ocrFailed": "Text konnte nicht aus dem Bild extrahiert werden.",
         "downloadedPng": "PNG heruntergeladen."
+      }
+    },
+    "schemaLab": {
+      "name": "Schema-Labor",
+      "shortName": "Schema",
+      "title": "Schema-Labor",
+      "description": "Validiere JSON Schema, generiere TypeScript-Typen und Beispiel-Payloads.",
+      "buttons": {
+        "validate": "Daten validieren",
+        "generateTypes": "TS-Typen generieren",
+        "generateSample": "Beispiel generieren",
+        "clear": "Leeren",
+        "copy": "Kopieren",
+        "useAsData": "Als Daten verwenden"
+      },
+      "labels": {
+        "schema": "JSON Schema",
+        "data": "JSON-Daten"
+      },
+      "resultTabs": {
+        "validation": "Validierung",
+        "typescript": "TypeScript",
+        "sample": "Beispiel-Payload"
+      },
+      "validation": {
+        "notRun": "Nicht validiert",
+        "valid": "Gültig",
+        "invalid": "Ungültig",
+        "notRunHint": "Klicke auf \"Daten validieren\", um die Prüfung zu starten.",
+        "validHint": "Die Daten sind für das angegebene Schema gültig.",
+        "invalidHint": "Die Validierung ist fehlgeschlagen. Siehe Fehler unten.",
+        "unknownError": "Unbekannter Validierungsfehler"
+      },
+      "placeholders": {
+        "schema": "JSON Schema hier einfügen...",
+        "data": "JSON-Daten zum Validieren einfügen...",
+        "typesOutput": "Generierte TypeScript-Typen erscheinen hier.",
+        "sampleOutput": "Generiertes Beispiel-Payload erscheint hier."
+      },
+      "messages": {
+        "invalidSchema": "Ungültiges Schema-JSON: {error}",
+        "invalidData": "Ungültiges Daten-JSON: {error}",
+        "validationPassed": "Validierung erfolgreich.",
+        "validationFailed": "Validierung fehlgeschlagen mit {count} Fehler(n).",
+        "validationEngineError": "Fehler der Validierungs-Engine: {error}",
+        "typesGenerated": "TypeScript-Typen generiert.",
+        "sampleGenerated": "Beispiel-Payload generiert.",
+        "sampleSentToData": "Beispiel in das Datenfeld kopiert.",
+        "nothingToCopy": "Nichts zu kopieren.",
+        "copied": "Kopiert.",
+        "copyFailed": "Text konnte nicht kopiert werden.",
+        "unknownParseError": "Unbekannter Parse-Fehler.",
+        "unknownErrorValue": "unbekannt"
+      },
+      "tips": {
+        "hint": "Tipp: Starte mit dem Schema, validiere dann Daten und generiere Typen sowie Beispiel."
+      },
+      "help": {
+        "globalWhatIs": "JSON Schema ist ein Standard, um die erwartete Struktur eines JSON zu beschreiben: Typen, Pflichtfelder, Grenzen und Formate.",
+        "globalFlowTitle": "Empfohlener Ablauf:",
+        "globalFlowStep1": "1. Definiere das JSON Schema.",
+        "globalFlowStep2": "2. Fuege JSON-Daten zum Testen ein.",
+        "globalFlowStep3": "3. Klicke auf Daten validieren.",
+        "globalFlowStep4": "4. Generiere TypeScript oder Beispiel-Payload, um die Implementierung zu beschleunigen.",
+        "globalTipsTitle": "Tipps:",
+        "globalTipRequired": "- Nutze `required` fuer Pflichtfelder.",
+        "globalTipEnum": "- Nutze `enum`, um erlaubte Werte zu begrenzen.",
+        "globalTipFormat": "- Nutze `format` fuer `email`, `uuid`, `uri` usw.",
+        "schemaWhatIs": "Hier beschreibst du, wie das JSON aussehen muss. Denk daran wie an einen Validierungsvertrag.",
+        "schemaMinimalTitle": "Minimale Struktur:",
+        "schemaMinimalExample": "\"type\": \"object\", \"properties\": ...",
+        "schemaChecklistTitle": "Schnelle Checkliste:",
+        "schemaChecklistType": "- Definiere `type` fuer jedes Feld.",
+        "schemaChecklistRequired": "- Liste Pflichtfelder in `required` auf.",
+        "schemaChecklistRules": "- Nutze `minLength`, `minimum` und `minItems` fuer Regeln.",
+        "schemaChecklistAdditionalProps": "- Nutze `additionalProperties: false` fuer strengere Payloads.",
+        "dataWhatIs": "Hier kommt das echte JSON hinein, das gegen das Schema validiert wird.",
+        "dataErrorsTitle": "Vermeide haeufige JSON-Fehler:",
+        "dataErrorQuotes": "- Verwende immer doppelte Anfuehrungszeichen bei Schluesseln und Strings.",
+        "dataErrorTrailingComma": "- Lasse kein abschliessendes Komma beim letzten Eintrag stehen.",
+        "dataErrorLiterals": "- `true`, `false` und `null` muessen kleingeschrieben sein.",
+        "dataTipTitle": "Tipp:",
+        "dataTipDescription": "Generiere eine Beispiel-Payload und nutze \"Als Daten verwenden\" fuer schnellere Tests."
       }
     },
     "markdownNotes": {
