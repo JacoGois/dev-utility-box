@@ -105,6 +105,10 @@
       "massDataGenerator": {
         "name": "大量データジェネレーター",
         "shortName": "大量生成"
+      },
+      "kanban": {
+        "name": "かんばんボード",
+        "shortName": "かんばん"
       }
     }
   },
@@ -812,7 +816,129 @@
       "addCard": "カードを追加",
       "edit": "編集",
       "delete": "削除",
-      "move": "移動"
+      "move": "移動",
+      "common": {
+        "cancel": "キャンセル",
+        "save": "保存",
+        "create": "作成",
+        "add": "追加"
+      },
+      "buttons": {
+        "manageTags": "タグ管理",
+        "newColumn": "新しい列"
+      },
+      "itemTypes": {
+        "card": "カード",
+        "column": "列",
+        "tag": "タグ"
+      },
+      "messages": {
+        "itemDeleted": "{itemType} \"{itemName}\" を削除しました。"
+      },
+      "deleteDialog": {
+        "title": "{itemType}の削除を確認",
+        "defaultItemName": "この項目",
+        "columnDescription": "この列内のすべてのカードも削除されます。"
+      },
+      "priorities": {
+        "critical": "最重要",
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "defaultColumns": {
+        "todo": "未着手",
+        "inProgress": "進行中",
+        "done": "完了"
+      },
+      "filters": {
+        "title": "ボードフィルター",
+        "clear": "フィルターをクリア",
+        "collapse": "折りたたむ",
+        "expand": "展開",
+        "search": "検索",
+        "searchPlaceholder": "カードのタイトルまたは説明で絞り込み...",
+        "tagsSelected": "タグ（{count} 件選択）",
+        "tagsEmpty": "コンテキストフィルターを使うにはタグを作成してください。",
+        "prioritySelected": "優先度（{count} 件選択）",
+        "sla": "SLA",
+        "overdue": "期限切れ",
+        "dueToday": "今日が期限",
+        "noDueDate": "期限なし"
+      },
+      "column": {
+        "empty": "この列にはカードがありません。",
+        "newCard": "新しいカード",
+        "actions": {
+          "move": "列を移動",
+          "edit": "列を編集",
+          "delete": "列を削除"
+        }
+      },
+      "columnForm": {
+        "editTitle": "列を編集",
+        "newTitle": "新しい列",
+        "titlePlaceholder": "列タイトル"
+      },
+      "card": {
+        "subtasksProgress": "サブタスク（{completed}/{total}）",
+        "actions": {
+          "move": "カードを移動",
+          "edit": "カードを編集",
+          "delete": "カードを削除"
+        },
+        "links": {
+          "branch": "ブランチ",
+          "commit": "コミット",
+          "pr": "PR"
+        }
+      },
+      "cardForm": {
+        "editTitle": "カードを編集",
+        "newTitle": "新しいカード",
+        "fields": {
+          "title": "タイトル",
+          "description": "説明",
+          "priority": "優先度",
+          "dueDate": "期限日",
+          "tags": "タグ",
+          "subtasks": "サブタスク",
+          "devLinks": "開発リンク"
+        },
+        "tagsSelected": "{count} 件選択",
+        "tagInputPlaceholder": "タグ名を入力して Enter を押してください",
+        "removeTag": "タグを削除",
+        "noTagsSelected": "タグが選択されていません。フィルターと整理のためにタグを活用してください。",
+        "completeAllSubtasks": "すべて完了",
+        "clearCompletedSubtasks": "完了済みをクリア",
+        "addSubtask": "サブタスクを追加",
+        "reorderSubtask": "サブタスクの並び替え",
+        "removeSubtask": "サブタスクを削除",
+        "placeholders": {
+          "gitBranch": "Git ブランチ",
+          "commitUrl": "コミット URL",
+          "pullRequestUrl": "プルリクエスト URL"
+        },
+        "saveChanges": "変更を保存",
+        "createCard": "カードを作成"
+      },
+      "tagForm": {
+        "editTitle": "タグを編集",
+        "newTitle": "新しいタグ",
+        "namePlaceholder": "タグ名",
+        "color": "色：",
+        "saveTag": "タグを保存",
+        "createTag": "タグを作成",
+        "existingTags": "既存タグ",
+        "empty": "作成されたタグはありません。"
+      },
+      "validation": {
+        "columnTitleRequired": "列タイトルは必須です。",
+        "cardTitleRequired": "カードタイトルは必須です。",
+        "invalidDueDate": "期限日が無効です。",
+        "tagNameRequired": "タグ名は必須です。",
+        "invalidColor": "色の形式が無効です。"
+      }
     },
     "markdownNotes": {
       "name": "Markdownノート",

@@ -9,6 +9,30 @@ interface Endpoint {
 const baseEndpoints: Endpoint[] = [
   { name: "login", route: "/auth/login", method: "post" },
   { name: "register", route: "/auth/register", method: "post" },
+  { name: "me", route: "/auth/me", method: "get" },
+];
+
+// Pomodoro endpoints
+const pomodoroEndpoints: Endpoint[] = [
+  { name: "pomodoroSettings", route: "/pomodoro/settings", method: "get" },
+  {
+    name: "updatePomodoroSettings",
+    route: "/pomodoro/settings",
+    method: "put",
+  },
+  { name: "logPomodoroSession", route: "/pomodoro/history", method: "post" },
+  { name: "pomodoroHistory", route: "/pomodoro/history", method: "get" },
+  { name: "pomodoroStats", route: "/pomodoro/stats/summary", method: "get" },
+  {
+    name: "pomodoroAdvancedStats",
+    route: "/pomodoro/stats/advanced",
+    method: "get",
+  },
+  {
+    name: "pomodoroGlobalRanking",
+    route: "/pomodoro/ranking/global",
+    method: "get",
+  },
 ];
 
 const resourceNames: string[] = [];
@@ -51,6 +75,7 @@ const generateCrudEndpoints = (
 
 const endpoints: Endpoint[] = [
   ...baseEndpoints,
+  ...pomodoroEndpoints,
   ...resourceNames.flatMap((resource) => generateCrudEndpoints(resource)),
 ];
 

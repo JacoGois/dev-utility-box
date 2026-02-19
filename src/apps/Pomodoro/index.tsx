@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/Card";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { usePomodoroStorage } from "@/hooks/usePomodoroStorage";
 import { useAppTranslations } from "@/hooks/useTranslations";
 import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import _ from "lodash";
@@ -43,6 +44,7 @@ type PomodoroProps = {
 
 export function Pomodoro({ instanceId }: PomodoroProps) {
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const pomodoroStorage = usePomodoroStorage();
   const t = useAppTranslations("pomodoro");
   const modes = createModes(t);
   const parentModalContainerRef = useWindowShellStore(
@@ -59,20 +61,33 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
     [state.pomodoroTime, state.shortBreakTime, state.longBreakTime]
   );
 
-  const handleSessionEnd = useCallback(() => {
-    setState((prevState) => {
-      if (typeof window !== "undefined") {
-        const audio = new Audio("/pomodoro.mp3");
-        audio.play();
-        if ("Notification" in window && Notification.permission === "granted") {
-          new Notification(t("notifications.timeFinished"), {
-            body: `${t("notifications.currentMode")}: ${
-              modes[prevState.mode].label
-            }`,
-            tag: "pomodoro-session-end",
-          });
-        }
+  const handleSessionEnd = useCallback(async () => {
+    if (typeof window !== "undefined") {
+      const audio = new Audio("/pomodoro.mp3");
+      audio.play();
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(t("notifications.timeFinished"), {
+          body: `${t("notifications.currentMode")}: ${modes[state.mode].label}`,
+          tag: "pomodoro-session-end",
+        });
       }
+    }
+
+    try {
+      await pomodoroStorage.addSession({
+        sessionType:
+          state.mode === "pomodoro"
+            ? "POMODORO"
+            : state.mode === "shortBreak"
+            ? "SHORT_BREAK"
+            : "LONG_BREAK",
+        durationInSeconds: durationsInMinutes[state.mode] * 60,
+      });
+    } catch (error) {
+      console.error("Error saving session:", error);
+    }
+
+    setState((prevState) => {
       const nextPomodoros =
         prevState.mode === "pomodoro"
           ? prevState.completedPomodoros + 1
@@ -99,7 +114,7 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
         endTime: shouldAutoStart ? Date.now() + newDuration * 1000 : 0,
       };
     });
-  }, [durationsInMinutes, setState]);
+  }, [durationsInMinutes, setState, state.mode]);
 
   useEffect(() => {
     if (!state.isRunning) return;
@@ -178,10 +193,10 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
   const sessionsTodayCount = useMemo(() => {
     if (typeof window === "undefined") return 0;
     const todayString = new Date().toDateString();
-    return state.sessionHistory.filter(
+    return pomodoroStorage.sessions.filter(
       (session) => new Date(session.completedAt).toDateString() === todayString
     ).length;
-  }, [state.sessionHistory]);
+  }, [pomodoroStorage.sessions]);
 
   return (
     <div
@@ -201,6 +216,26 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
           <p className="text-xs @sm:text-sm @lg:text-base text-muted-foreground">
             {t("description")}
           </p>
+          <div className="mt-2 flex justify-center">
+            {pomodoroStorage.isLoading ? (
+              <div className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                Carregando dados...
+              </div>
+            ) : pomodoroStorage.isLoggedIn ? (
+              <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-md">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                {pomodoroStorage.pendingChanges
+                  ? "Sincronizando..."
+                  : "Sincronizado"}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-xs text-yellow-600 bg-yellow-50 px-2 py-1 rounded-md">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                Modo Offline - Faça login para sincronizar
+              </div>
+            )}
+          </div>
         </div>
 
         <ModeSelector
@@ -229,12 +264,24 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
 
           <div className="space-y-3 @sm:space-y-4 @lg:space-y-6 flex flex-col min-h-0">
             <StatsPanel
-              completedPomodoros={state.completedPomodoros}
+              completedPomodoros={
+                pomodoroStorage.sessions.filter(
+                  (s) => s.sessionType === "POMODORO"
+                ).length
+              }
               sessionsToday={sessionsTodayCount}
             />
             <NotificationInfo notificationDenied={state.notificationDenied} />
             <HistoryList
-              sessionHistory={state.sessionHistory}
+              sessionHistory={pomodoroStorage.sessions.map((session) => ({
+                mode:
+                  session.sessionType === "POMODORO"
+                    ? "pomodoro"
+                    : session.sessionType === "SHORT_BREAK"
+                    ? "shortBreak"
+                    : "longBreak",
+                completedAt: session.completedAt,
+              }))}
               modesData={modes}
             />
           </div>

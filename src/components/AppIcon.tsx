@@ -1,6 +1,9 @@
 "use client";
 
-import { useGlobalErrorTranslations } from "@/hooks/useTranslations";
+import {
+  useDesktopTranslations,
+  useGlobalErrorTranslations,
+} from "@/hooks/useTranslations";
 import { AppKey } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
@@ -22,12 +25,13 @@ type Props = {
 function AppIcon({ appKey, app }: Props) {
   const { openApp } = useWindowStore();
   const { removeFromDesktop } = useDockStore();
-  const t = useGlobalErrorTranslations();
+  const tErrors = useGlobalErrorTranslations();
+  const tDesktop = useDesktopTranslations();
   const Icon = app.icon;
 
   const handleOpenApp = useCallback(() => {
-    openApp(appKey, app.maxInstances, t);
-  }, [openApp, appKey, app.maxInstances, t]);
+    openApp(appKey, app.maxInstances, tErrors);
+  }, [openApp, appKey, app.maxInstances, tErrors]);
 
   return (
     <ContextMenu>
@@ -48,9 +52,11 @@ function AppIcon({ appKey, app }: Props) {
       </ContextMenuTrigger>
 
       <ContextMenuContent className="w-48">
-        <ContextMenuItem onClick={handleOpenApp}>{t("open")}</ContextMenuItem>
+        <ContextMenuItem onClick={handleOpenApp}>
+          {tDesktop("open")}
+        </ContextMenuItem>
         <ContextMenuItem onClick={() => removeFromDesktop(appKey)}>
-          {t("removeFromDesktop")}
+          {tDesktop("removeFromDesktop")}
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

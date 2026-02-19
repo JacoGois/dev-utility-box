@@ -105,6 +105,10 @@
       "massDataGenerator": {
         "name": "Mass Data Generator",
         "shortName": "Mass Gen"
+      },
+      "kanban": {
+        "name": "Kanban Board",
+        "shortName": "Kanban"
       }
     }
   },
@@ -812,7 +816,129 @@
       "addCard": "Add Card",
       "edit": "Edit",
       "delete": "Delete",
-      "move": "Move"
+      "move": "Move",
+      "common": {
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create",
+        "add": "Add"
+      },
+      "buttons": {
+        "manageTags": "Manage tags",
+        "newColumn": "New Column"
+      },
+      "itemTypes": {
+        "card": "Card",
+        "column": "Column",
+        "tag": "Tag"
+      },
+      "messages": {
+        "itemDeleted": "{itemType} \"{itemName}\" deleted."
+      },
+      "deleteDialog": {
+        "title": "Confirm deletion of {itemType}",
+        "defaultItemName": "this item",
+        "columnDescription": "All cards in this column will also be deleted."
+      },
+      "priorities": {
+        "critical": "Critical",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "defaultColumns": {
+        "todo": "To Do",
+        "inProgress": "In Progress",
+        "done": "Done"
+      },
+      "filters": {
+        "title": "Board filters",
+        "clear": "Clear filters",
+        "collapse": "Collapse",
+        "expand": "Expand",
+        "search": "Search",
+        "searchPlaceholder": "Filter by card title or description...",
+        "tagsSelected": "Tags ({count} selected)",
+        "tagsEmpty": "Create tags to enable context filters.",
+        "prioritySelected": "Priority ({count} selected)",
+        "sla": "SLA",
+        "overdue": "Overdue",
+        "dueToday": "Due today",
+        "noDueDate": "No due date"
+      },
+      "column": {
+        "empty": "No cards in this column.",
+        "newCard": "New Card",
+        "actions": {
+          "move": "Move column",
+          "edit": "Edit Column",
+          "delete": "Delete Column"
+        }
+      },
+      "columnForm": {
+        "editTitle": "Edit Column",
+        "newTitle": "New Column",
+        "titlePlaceholder": "Column Title"
+      },
+      "card": {
+        "subtasksProgress": "Subtasks ({completed}/{total})",
+        "actions": {
+          "move": "Move card",
+          "edit": "Edit Card",
+          "delete": "Delete Card"
+        },
+        "links": {
+          "branch": "Branch",
+          "commit": "Commit",
+          "pr": "PR"
+        }
+      },
+      "cardForm": {
+        "editTitle": "Edit Card",
+        "newTitle": "New Card",
+        "fields": {
+          "title": "Title",
+          "description": "Description",
+          "priority": "Priority",
+          "dueDate": "Due date",
+          "tags": "Tags",
+          "subtasks": "Subtasks",
+          "devLinks": "Dev Links"
+        },
+        "tagsSelected": "{count} selected",
+        "tagInputPlaceholder": "Type a tag name and press Enter",
+        "removeTag": "Remove tag",
+        "noTagsSelected": "No selected tags. Use tags to improve filtering and organization.",
+        "completeAllSubtasks": "Complete all",
+        "clearCompletedSubtasks": "Clear completed",
+        "addSubtask": "Add subtask",
+        "reorderSubtask": "Reorder subtask",
+        "removeSubtask": "Remove subtask",
+        "placeholders": {
+          "gitBranch": "Git branch",
+          "commitUrl": "Commit URL",
+          "pullRequestUrl": "Pull Request URL"
+        },
+        "saveChanges": "Save Changes",
+        "createCard": "Create Card"
+      },
+      "tagForm": {
+        "editTitle": "Edit Tag",
+        "newTitle": "New Tag",
+        "namePlaceholder": "Tag Name",
+        "color": "Color:",
+        "saveTag": "Save Tag",
+        "createTag": "Create Tag",
+        "existingTags": "Existing Tags",
+        "empty": "No tags created."
+      },
+      "validation": {
+        "columnTitleRequired": "Column title is required.",
+        "cardTitleRequired": "Card title is required.",
+        "invalidDueDate": "Invalid due date.",
+        "tagNameRequired": "Tag name is required.",
+        "invalidColor": "Invalid color."
+      }
     },
     "markdownNotes": {
       "name": "Markdown Notes",

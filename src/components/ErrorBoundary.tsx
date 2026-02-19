@@ -34,7 +34,7 @@ class ErrorBoundary extends Component<Props, State> {
     console.error(
       `Uncaught error in ${this.props.appName || "a component"}:`,
       error,
-      errorInfo
+      errorInfo,
     );
   }
 
@@ -57,7 +57,7 @@ class ErrorBoundary extends Component<Props, State> {
         >
           <h2>
             Algo deu errado
-            {this.props.appName ? `em ${this.props.appName}` : ""}.
+            {this.props.appName ? ` em ${this.props.appName}` : ""}.
           </h2>
           <p>Por favor, tente recarregar o aplicativo ou esta seção.</p>
           {this.state.error && (
@@ -88,7 +88,7 @@ class ErrorBoundary extends Component<Props, State> {
             }>,
             {
               parentModalContainerRef,
-            }
+            },
           );
         }
         return child;

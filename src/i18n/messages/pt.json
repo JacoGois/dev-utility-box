@@ -105,6 +105,10 @@
       "massDataGenerator": {
         "name": "Gerador de Dados em Massa",
         "shortName": "Massa"
+      },
+      "kanban": {
+        "name": "Quadro Kanban",
+        "shortName": "Kanban"
       }
     }
   },
@@ -812,7 +816,129 @@
       "addCard": "Adicionar Cartão",
       "edit": "Editar",
       "delete": "Excluir",
-      "move": "Mover"
+      "move": "Mover",
+      "common": {
+        "cancel": "Cancelar",
+        "save": "Salvar",
+        "create": "Criar",
+        "add": "Adicionar"
+      },
+      "buttons": {
+        "manageTags": "Gerenciar tags",
+        "newColumn": "Nova Coluna"
+      },
+      "itemTypes": {
+        "card": "Cartão",
+        "column": "Coluna",
+        "tag": "Tag"
+      },
+      "messages": {
+        "itemDeleted": "{itemType} \"{itemName}\" excluído(a)."
+      },
+      "deleteDialog": {
+        "title": "Confirmar exclusão de {itemType}",
+        "defaultItemName": "este item",
+        "columnDescription": "Todos os cartões nesta coluna também serão excluídos."
+      },
+      "priorities": {
+        "critical": "Crítico",
+        "high": "Alto",
+        "medium": "Médio",
+        "low": "Baixo"
+      },
+      "defaultColumns": {
+        "todo": "A Fazer",
+        "inProgress": "Em Andamento",
+        "done": "Feito"
+      },
+      "filters": {
+        "title": "Filtros do board",
+        "clear": "Limpar filtros",
+        "collapse": "Recolher",
+        "expand": "Expandir",
+        "search": "Busca",
+        "searchPlaceholder": "Filtrar por título ou descrição do card...",
+        "tagsSelected": "Tags ({count} selecionada(s))",
+        "tagsEmpty": "Crie tags para ativar filtros por contexto.",
+        "prioritySelected": "Prioridade ({count} selecionada(s))",
+        "sla": "SLA",
+        "overdue": "Atrasados",
+        "dueToday": "Vence hoje",
+        "noDueDate": "Sem prazo"
+      },
+      "column": {
+        "empty": "Nenhum cartão nesta coluna.",
+        "newCard": "Novo Cartão",
+        "actions": {
+          "move": "Mover coluna",
+          "edit": "Editar Coluna",
+          "delete": "Excluir Coluna"
+        }
+      },
+      "columnForm": {
+        "editTitle": "Editar Coluna",
+        "newTitle": "Nova Coluna",
+        "titlePlaceholder": "Título da Coluna"
+      },
+      "card": {
+        "subtasksProgress": "Sub-tarefas ({completed}/{total})",
+        "actions": {
+          "move": "Mover cartão",
+          "edit": "Editar Cartão",
+          "delete": "Excluir Cartão"
+        },
+        "links": {
+          "branch": "Branch",
+          "commit": "Commit",
+          "pr": "PR"
+        }
+      },
+      "cardForm": {
+        "editTitle": "Editar Cartão",
+        "newTitle": "Novo Cartão",
+        "fields": {
+          "title": "Título",
+          "description": "Descrição",
+          "priority": "Prioridade",
+          "dueDate": "Data limite",
+          "tags": "Tags",
+          "subtasks": "Sub-tarefas",
+          "devLinks": "Links Dev"
+        },
+        "tagsSelected": "{count} selecionada(s)",
+        "tagInputPlaceholder": "Digite o nome da tag e pressione Enter",
+        "removeTag": "Remover tag",
+        "noTagsSelected": "Sem tags selecionadas. Use tags para facilitar filtros e organização.",
+        "completeAllSubtasks": "Concluir todas",
+        "clearCompletedSubtasks": "Limpar concluídas",
+        "addSubtask": "Adicionar Sub-tarefa",
+        "reorderSubtask": "Reordenar sub-tarefa",
+        "removeSubtask": "Remover sub-tarefa",
+        "placeholders": {
+          "gitBranch": "Branch Git",
+          "commitUrl": "URL do Commit",
+          "pullRequestUrl": "URL do Pull Request"
+        },
+        "saveChanges": "Salvar Alterações",
+        "createCard": "Criar Cartão"
+      },
+      "tagForm": {
+        "editTitle": "Editar Tag",
+        "newTitle": "Nova Tag",
+        "namePlaceholder": "Nome da Tag",
+        "color": "Cor:",
+        "saveTag": "Salvar Tag",
+        "createTag": "Criar Tag",
+        "existingTags": "Tags Existentes",
+        "empty": "Nenhuma tag criada."
+      },
+      "validation": {
+        "columnTitleRequired": "Título da coluna é obrigatório.",
+        "cardTitleRequired": "Título do cartão é obrigatório.",
+        "invalidDueDate": "Data limite inválida.",
+        "tagNameRequired": "Nome da tag é obrigatório.",
+        "invalidColor": "Cor inválida."
+      }
     },
     "markdownNotes": {
       "name": "Notas Markdown",

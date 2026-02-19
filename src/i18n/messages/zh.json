@@ -105,6 +105,10 @@
       "massDataGenerator": {
         "name": "批量数据生成器",
         "shortName": "批量生成"
+      },
+      "kanban": {
+        "name": "看板",
+        "shortName": "看板"
       }
     }
   },
@@ -812,7 +816,129 @@
       "addCard": "添加卡片",
       "edit": "编辑",
       "delete": "删除",
-      "move": "移动"
+      "move": "移动",
+      "common": {
+        "cancel": "取消",
+        "save": "保存",
+        "create": "创建",
+        "add": "添加"
+      },
+      "buttons": {
+        "manageTags": "管理标签",
+        "newColumn": "新建列"
+      },
+      "itemTypes": {
+        "card": "卡片",
+        "column": "列",
+        "tag": "标签"
+      },
+      "messages": {
+        "itemDeleted": "{itemType} \"{itemName}\" 已删除。"
+      },
+      "deleteDialog": {
+        "title": "确认删除 {itemType}",
+        "defaultItemName": "此项",
+        "columnDescription": "此列中的所有卡片也将被删除。"
+      },
+      "priorities": {
+        "critical": "紧急",
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "defaultColumns": {
+        "todo": "待办",
+        "inProgress": "进行中",
+        "done": "已完成"
+      },
+      "filters": {
+        "title": "看板筛选",
+        "clear": "清除筛选",
+        "collapse": "收起",
+        "expand": "展开",
+        "search": "搜索",
+        "searchPlaceholder": "按卡片标题或描述筛选...",
+        "tagsSelected": "标签（已选择 {count}）",
+        "tagsEmpty": "创建标签以启用上下文筛选。",
+        "prioritySelected": "优先级（已选择 {count}）",
+        "sla": "SLA",
+        "overdue": "已逾期",
+        "dueToday": "今日到期",
+        "noDueDate": "无截止日期"
+      },
+      "column": {
+        "empty": "此列中没有卡片。",
+        "newCard": "新建卡片",
+        "actions": {
+          "move": "移动列",
+          "edit": "编辑列",
+          "delete": "删除列"
+        }
+      },
+      "columnForm": {
+        "editTitle": "编辑列",
+        "newTitle": "新建列",
+        "titlePlaceholder": "列标题"
+      },
+      "card": {
+        "subtasksProgress": "子任务（{completed}/{total}）",
+        "actions": {
+          "move": "移动卡片",
+          "edit": "编辑卡片",
+          "delete": "删除卡片"
+        },
+        "links": {
+          "branch": "分支",
+          "commit": "提交",
+          "pr": "PR"
+        }
+      },
+      "cardForm": {
+        "editTitle": "编辑卡片",
+        "newTitle": "新建卡片",
+        "fields": {
+          "title": "标题",
+          "description": "描述",
+          "priority": "优先级",
+          "dueDate": "截止日期",
+          "tags": "标签",
+          "subtasks": "子任务",
+          "devLinks": "开发链接"
+        },
+        "tagsSelected": "已选择 {count}",
+        "tagInputPlaceholder": "输入标签名并按 Enter",
+        "removeTag": "移除标签",
+        "noTagsSelected": "未选择标签。使用标签可提升筛选和组织效果。",
+        "completeAllSubtasks": "全部完成",
+        "clearCompletedSubtasks": "清除已完成",
+        "addSubtask": "添加子任务",
+        "reorderSubtask": "重排子任务",
+        "removeSubtask": "删除子任务",
+        "placeholders": {
+          "gitBranch": "Git 分支",
+          "commitUrl": "提交 URL",
+          "pullRequestUrl": "Pull Request URL"
+        },
+        "saveChanges": "保存更改",
+        "createCard": "创建卡片"
+      },
+      "tagForm": {
+        "editTitle": "编辑标签",
+        "newTitle": "新建标签",
+        "namePlaceholder": "标签名称",
+        "color": "颜色：",
+        "saveTag": "保存标签",
+        "createTag": "创建标签",
+        "existingTags": "已有标签",
+        "empty": "暂无已创建标签。"
+      },
+      "validation": {
+        "columnTitleRequired": "列标题为必填项。",
+        "cardTitleRequired": "卡片标题为必填项。",
+        "invalidDueDate": "截止日期无效。",
+        "tagNameRequired": "标签名称为必填项。",
+        "invalidColor": "颜色无效。"
+      }
     },
     "markdownNotes": {
       "name": "Markdown 笔记",

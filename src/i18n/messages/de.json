@@ -105,6 +105,10 @@
       "massDataGenerator": {
         "name": "Massen-Daten-Generator",
         "shortName": "Massen Gen"
+      },
+      "kanban": {
+        "name": "Kanban-Board",
+        "shortName": "Kanban"
       }
     }
   },
@@ -812,7 +816,129 @@
       "addCard": "Karte hinzufügen",
       "edit": "Bearbeiten",
       "delete": "Löschen",
-      "move": "Verschieben"
+      "move": "Verschieben",
+      "common": {
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "create": "Erstellen",
+        "add": "Hinzufügen"
+      },
+      "buttons": {
+        "manageTags": "Tags verwalten",
+        "newColumn": "Neue Spalte"
+      },
+      "itemTypes": {
+        "card": "Karte",
+        "column": "Spalte",
+        "tag": "Tag"
+      },
+      "messages": {
+        "itemDeleted": "{itemType} \"{itemName}\" gelöscht."
+      },
+      "deleteDialog": {
+        "title": "Löschen von {itemType} bestätigen",
+        "defaultItemName": "dieses Element",
+        "columnDescription": "Alle Karten in dieser Spalte werden ebenfalls gelöscht."
+      },
+      "priorities": {
+        "critical": "Kritisch",
+        "high": "Hoch",
+        "medium": "Mittel",
+        "low": "Niedrig"
+      },
+      "defaultColumns": {
+        "todo": "Zu Erledigen",
+        "inProgress": "In Bearbeitung",
+        "done": "Erledigt"
+      },
+      "filters": {
+        "title": "Board-Filter",
+        "clear": "Filter zurücksetzen",
+        "collapse": "Einklappen",
+        "expand": "Ausklappen",
+        "search": "Suche",
+        "searchPlaceholder": "Nach Kartentitel oder Beschreibung filtern...",
+        "tagsSelected": "Tags ({count} ausgewählt)",
+        "tagsEmpty": "Erstelle Tags, um Kontextfilter zu nutzen.",
+        "prioritySelected": "Priorität ({count} ausgewählt)",
+        "sla": "SLA",
+        "overdue": "Überfällig",
+        "dueToday": "Heute fällig",
+        "noDueDate": "Kein Fälligkeitsdatum"
+      },
+      "column": {
+        "empty": "Keine Karten in dieser Spalte.",
+        "newCard": "Neue Karte",
+        "actions": {
+          "move": "Spalte verschieben",
+          "edit": "Spalte bearbeiten",
+          "delete": "Spalte löschen"
+        }
+      },
+      "columnForm": {
+        "editTitle": "Spalte bearbeiten",
+        "newTitle": "Neue Spalte",
+        "titlePlaceholder": "Spaltentitel"
+      },
+      "card": {
+        "subtasksProgress": "Unteraufgaben ({completed}/{total})",
+        "actions": {
+          "move": "Karte verschieben",
+          "edit": "Karte bearbeiten",
+          "delete": "Karte löschen"
+        },
+        "links": {
+          "branch": "Branch",
+          "commit": "Commit",
+          "pr": "PR"
+        }
+      },
+      "cardForm": {
+        "editTitle": "Karte bearbeiten",
+        "newTitle": "Neue Karte",
+        "fields": {
+          "title": "Titel",
+          "description": "Beschreibung",
+          "priority": "Priorität",
+          "dueDate": "Fälligkeitsdatum",
+          "tags": "Tags",
+          "subtasks": "Unteraufgaben",
+          "devLinks": "Dev-Links"
+        },
+        "tagsSelected": "{count} ausgewählt",
+        "tagInputPlaceholder": "Tag-Namen eingeben und Enter drücken",
+        "removeTag": "Tag entfernen",
+        "noTagsSelected": "Keine Tags ausgewählt. Verwende Tags für bessere Filter und Organisation.",
+        "completeAllSubtasks": "Alle abschließen",
+        "clearCompletedSubtasks": "Abgeschlossene entfernen",
+        "addSubtask": "Unteraufgabe hinzufügen",
+        "reorderSubtask": "Unteraufgabe neu anordnen",
+        "removeSubtask": "Unteraufgabe entfernen",
+        "placeholders": {
+          "gitBranch": "Git-Branch",
+          "commitUrl": "Commit-URL",
+          "pullRequestUrl": "Pull-Request-URL"
+        },
+        "saveChanges": "Änderungen speichern",
+        "createCard": "Karte erstellen"
+      },
+      "tagForm": {
+        "editTitle": "Tag bearbeiten",
+        "newTitle": "Neuer Tag",
+        "namePlaceholder": "Tag-Name",
+        "color": "Farbe:",
+        "saveTag": "Tag speichern",
+        "createTag": "Tag erstellen",
+        "existingTags": "Vorhandene Tags",
+        "empty": "Keine Tags erstellt."
+      },
+      "validation": {
+        "columnTitleRequired": "Spaltentitel ist erforderlich.",
+        "cardTitleRequired": "Kartentitel ist erforderlich.",
+        "invalidDueDate": "Ungültiges Fälligkeitsdatum.",
+        "tagNameRequired": "Tag-Name ist erforderlich.",
+        "invalidColor": "Ungültige Farbe."
+      }
     },
     "markdownNotes": {
       "name": "Markdown-Notizen",

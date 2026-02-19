@@ -10,11 +10,15 @@ export interface CardLinks {
   branch?: string;
 }
 
+export type KanbanCardPriority = 0 | 1 | 2 | 3;
+
 export interface KanbanCard {
   id: string;
   title: string;
   description?: string;
   columnId: string;
+  priority: KanbanCardPriority;
+  dueDate?: string;
   tagIds: string[];
   subtasks: Subtask[];
   links?: CardLinks;

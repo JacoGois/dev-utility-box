@@ -105,6 +105,10 @@
       "massDataGenerator": {
         "name": "Générateur de Données en Masse",
         "shortName": "Masse Gen"
+      },
+      "kanban": {
+        "name": "Tableau Kanban",
+        "shortName": "Kanban"
       }
     }
   },
@@ -812,7 +816,129 @@
       "addCard": "Ajouter une Carte",
       "edit": "Modifier",
       "delete": "Supprimer",
-      "move": "Déplacer"
+      "move": "Déplacer",
+      "common": {
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "create": "Créer",
+        "add": "Ajouter"
+      },
+      "buttons": {
+        "manageTags": "Gérer les tags",
+        "newColumn": "Nouvelle Colonne"
+      },
+      "itemTypes": {
+        "card": "Carte",
+        "column": "Colonne",
+        "tag": "Tag"
+      },
+      "messages": {
+        "itemDeleted": "{itemType} \"{itemName}\" supprimé."
+      },
+      "deleteDialog": {
+        "title": "Confirmer la suppression de {itemType}",
+        "defaultItemName": "cet élément",
+        "columnDescription": "Toutes les cartes de cette colonne seront également supprimées."
+      },
+      "priorities": {
+        "critical": "Critique",
+        "high": "Haute",
+        "medium": "Moyenne",
+        "low": "Basse"
+      },
+      "defaultColumns": {
+        "todo": "À Faire",
+        "inProgress": "En Cours",
+        "done": "Terminé"
+      },
+      "filters": {
+        "title": "Filtres du board",
+        "clear": "Effacer les filtres",
+        "collapse": "Réduire",
+        "expand": "Développer",
+        "search": "Recherche",
+        "searchPlaceholder": "Filtrer par titre ou description de carte...",
+        "tagsSelected": "Tags ({count} sélectionné(s))",
+        "tagsEmpty": "Créez des tags pour activer les filtres contextuels.",
+        "prioritySelected": "Priorité ({count} sélectionnée(s))",
+        "sla": "SLA",
+        "overdue": "En retard",
+        "dueToday": "Échéance aujourd'hui",
+        "noDueDate": "Sans échéance"
+      },
+      "column": {
+        "empty": "Aucune carte dans cette colonne.",
+        "newCard": "Nouvelle Carte",
+        "actions": {
+          "move": "Déplacer la colonne",
+          "edit": "Modifier la colonne",
+          "delete": "Supprimer la colonne"
+        }
+      },
+      "columnForm": {
+        "editTitle": "Modifier la Colonne",
+        "newTitle": "Nouvelle Colonne",
+        "titlePlaceholder": "Titre de la colonne"
+      },
+      "card": {
+        "subtasksProgress": "Sous-tâches ({completed}/{total})",
+        "actions": {
+          "move": "Déplacer la carte",
+          "edit": "Modifier la carte",
+          "delete": "Supprimer la carte"
+        },
+        "links": {
+          "branch": "Branch",
+          "commit": "Commit",
+          "pr": "PR"
+        }
+      },
+      "cardForm": {
+        "editTitle": "Modifier la Carte",
+        "newTitle": "Nouvelle Carte",
+        "fields": {
+          "title": "Titre",
+          "description": "Description",
+          "priority": "Priorité",
+          "dueDate": "Date limite",
+          "tags": "Tags",
+          "subtasks": "Sous-tâches",
+          "devLinks": "Liens Dev"
+        },
+        "tagsSelected": "{count} sélectionné(s)",
+        "tagInputPlaceholder": "Saisissez le nom du tag et appuyez sur Entrée",
+        "removeTag": "Retirer le tag",
+        "noTagsSelected": "Aucun tag sélectionné. Utilisez les tags pour améliorer les filtres et l'organisation.",
+        "completeAllSubtasks": "Tout terminer",
+        "clearCompletedSubtasks": "Nettoyer terminées",
+        "addSubtask": "Ajouter une sous-tâche",
+        "reorderSubtask": "Réordonner la sous-tâche",
+        "removeSubtask": "Supprimer la sous-tâche",
+        "placeholders": {
+          "gitBranch": "Branche Git",
+          "commitUrl": "URL du Commit",
+          "pullRequestUrl": "URL de la Pull Request"
+        },
+        "saveChanges": "Enregistrer les modifications",
+        "createCard": "Créer la Carte"
+      },
+      "tagForm": {
+        "editTitle": "Modifier le Tag",
+        "newTitle": "Nouveau Tag",
+        "namePlaceholder": "Nom du tag",
+        "color": "Couleur :",
+        "saveTag": "Enregistrer le Tag",
+        "createTag": "Créer le Tag",
+        "existingTags": "Tags Existants",
+        "empty": "Aucun tag créé."
+      },
+      "validation": {
+        "columnTitleRequired": "Le titre de la colonne est requis.",
+        "cardTitleRequired": "Le titre de la carte est requis.",
+        "invalidDueDate": "Date limite invalide.",
+        "tagNameRequired": "Le nom du tag est requis.",
+        "invalidColor": "Couleur invalide."
+      }
     },
     "markdownNotes": {
       "name": "Notes Markdown",

@@ -8,21 +8,40 @@ import {
 } from "@/apps/KanbanBoard/types";
 import { arrayMove } from "@dnd-kit/sortable";
 import { nanoid } from "nanoid";
-import { toast } from "sonner";
-import { create } from "zustand";
+import React, { createContext, useContext, useRef } from "react";
+import { createStore, useStore } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 const KANBAN_BOARD_STORAGE_KEY = "kanban-board-data-v2";
+type KanbanStoreState = KanbanBoardState & KanbanActions;
 
-const initialDefaultColumns = () => {
+interface KanbanDefaultColumnTitles {
+  todo: string;
+  inProgress: string;
+  done: string;
+}
+
+const initialDefaultColumns = (titles: KanbanDefaultColumnTitles) => {
   const todoColId = nanoid();
   const inProgColId = nanoid();
   const doneColId = nanoid();
   return {
     columns: {
-      [todoColId]: { id: todoColId, title: "A Fazer", cardIds: [] },
-      [inProgColId]: { id: inProgColId, title: "Em Andamento", cardIds: [] },
-      [doneColId]: { id: doneColId, title: "Feito", cardIds: [] },
+      [todoColId]: {
+        id: todoColId,
+        title: titles.todo,
+        cardIds: [],
+      },
+      [inProgColId]: {
+        id: inProgColId,
+        title: titles.inProgress,
+        cardIds: [],
+      },
+      [doneColId]: {
+        id: doneColId,
+        title: titles.done,
+        cardIds: [],
+      },
     },
     columnOrder: [todoColId, inProgColId, doneColId],
   };
@@ -47,7 +66,12 @@ interface KanbanActions {
       | "tagIds"
       | "links"
     > &
-      Partial<Pick<KanbanCard, "description" | "subtasks" | "links">>
+      Partial<
+        Pick<
+          KanbanCard,
+          "description" | "subtasks" | "links" | "priority" | "dueDate"
+        >
+      >
   ) => KanbanCard;
   updateCard: (updatedCard: KanbanCard) => void;
   deleteCard: (cardId: string) => void;
@@ -73,12 +97,16 @@ interface KanbanActions {
   setBoardState: (newState: KanbanBoardState) => void;
 }
 
-export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
-  persist(
-    (set, get) => ({
+const createKanbanState = (
+  set: any,
+  get: any,
+  defaultColumnTitles: KanbanDefaultColumnTitles
+) => {
+      const defaults = initialDefaultColumns(defaultColumnTitles);
+      return {
       cards: {},
-      columns: initialDefaultColumns().columns,
-      columnOrder: initialDefaultColumns().columnOrder,
+      columns: defaults.columns,
+      columnOrder: defaults.columnOrder,
       tags: {},
 
       setBoardState: (newState) => set(newState),
@@ -131,6 +159,8 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
           columnId,
           title: cardData.title,
           description: cardData.description || "",
+          priority: cardData.priority ?? 2,
+          dueDate: cardData.dueDate || undefined,
           tags: [],
           tagIds: cardData.tagIds || [],
           subtasks: cardData.subtasks || [],
@@ -276,13 +306,19 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
 
         if (isCard) {
           const card = get().cards[activeId];
-          const sourceColumnId = card.columnId;
+          if (!card) return;
+          const sourceColumnId =
+            active.data.current?.sortable?.containerId || card.columnId;
 
-          const destinationColumnId = get().columns[overId]
-            ? overId
-            : get().cards[overId]?.columnId;
+          const destinationColumnId =
+            over.data.current?.type === "Card"
+              ? over.data.current?.sortable?.containerId ||
+                get().cards[overId]?.columnId
+              : get().columns[overId]
+              ? overId
+              : over.data.current?.sortable?.containerId;
 
-          if (!destinationColumnId) return;
+          if (!destinationColumnId || !get().columns[destinationColumnId]) return;
 
           const sourceColumnCardIds =
             get().columns[sourceColumnId]?.cardIds || [];
@@ -290,6 +326,7 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
             get().columns[destinationColumnId]?.cardIds || [];
 
           const oldIndexInSource = sourceColumnCardIds.indexOf(activeId);
+          if (oldIndexInSource === -1) return;
           let newIndexInDestination;
 
           if (sourceColumnId === destinationColumnId) {
@@ -298,6 +335,7 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
             } else {
               newIndexInDestination = destinationColumnCardIds.length;
             }
+            if (newIndexInDestination < 0) return;
             if (oldIndexInSource !== newIndexInDestination) {
               get().moveCardWithinColumn(
                 activeId,
@@ -311,6 +349,7 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
             } else {
               newIndexInDestination = destinationColumnCardIds.length;
             }
+            if (newIndexInDestination < 0) return;
             get().moveCardToDifferentColumn(
               activeId,
               sourceColumnId,
@@ -320,8 +359,14 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
           }
         } else if (isColumn) {
           const oldIndex = get().columnOrder.indexOf(activeId);
-          const newIndex = get().columnOrder.indexOf(overId);
-          if (oldIndex !== newIndex) {
+          const overColumnId = get().columns[overId]
+            ? overId
+            : get().cards[overId]?.columnId ||
+              over.data.current?.sortable?.containerId;
+          const newIndex = overColumnId
+            ? get().columnOrder.indexOf(overColumnId)
+            : -1;
+          if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
             get().moveColumn(oldIndex, newIndex);
           }
         }
@@ -332,7 +377,6 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
           (t) => t.name.toLowerCase() === name.toLowerCase()
         );
         if (existingTag) {
-          toast.info(`Tag "${name}" já existe.`);
           return existingTag;
         }
         const newTagId = nanoid();
@@ -340,7 +384,6 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
         set((state) => ({
           tags: { ...state.tags, [newTagId]: newTag },
         }));
-        toast.success(`Tag "${name}" criada.`);
         return newTag;
       },
       updateTag: (tagId, newName, newColor) => {
@@ -376,10 +419,75 @@ export const useKanbanStore = create<KanbanBoardState & KanbanActions>()(
           return { tags: newTags, cards: newCards };
         });
       },
-    }),
-    {
-      name: KANBAN_BOARD_STORAGE_KEY,
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
+};
+};
+
+const createKanbanStore = (
+  instanceId: string,
+  defaultColumnTitles: KanbanDefaultColumnTitles
+) =>
+  createStore<KanbanStoreState>()(
+    persist(
+      (set, get) => createKanbanState(set, get, defaultColumnTitles),
+      {
+        name: `${KANBAN_BOARD_STORAGE_KEY}:${instanceId}`,
+        storage: createJSONStorage(() => localStorage),
+      }
+    )
+  );
+
+const kanbanStoreRegistry = new Map<
+  string,
+  ReturnType<typeof createKanbanStore>
+>();
+
+const getKanbanStore = (
+  instanceId: string,
+  defaultColumnTitles: KanbanDefaultColumnTitles
+) => {
+  if (!kanbanStoreRegistry.has(instanceId)) {
+    kanbanStoreRegistry.set(
+      instanceId,
+      createKanbanStore(instanceId, defaultColumnTitles)
+    );
+  }
+  return kanbanStoreRegistry.get(instanceId)!;
+};
+
+const KanbanStoreContext = createContext<ReturnType<typeof createKanbanStore> | null>(
+  null
 );
+
+export function KanbanStoreProvider({
+  instanceId,
+  defaultColumnTitles,
+  children,
+}: {
+  instanceId: string;
+  defaultColumnTitles: KanbanDefaultColumnTitles;
+  children: React.ReactNode;
+}) {
+  const storeRef = useRef<ReturnType<typeof createKanbanStore> | null>(null);
+  const instanceRef = useRef<string>("");
+
+  if (!storeRef.current || instanceRef.current !== instanceId) {
+    instanceRef.current = instanceId;
+    storeRef.current = getKanbanStore(instanceId, defaultColumnTitles);
+  }
+
+  return React.createElement(
+    KanbanStoreContext.Provider,
+    { value: storeRef.current },
+    children
+  );
+}
+
+export function useKanbanStore(): KanbanStoreState;
+export function useKanbanStore<T>(selector: (state: KanbanStoreState) => T): T;
+export function useKanbanStore<T>(selector?: (state: KanbanStoreState) => T) {
+  const store = useContext(KanbanStoreContext);
+  if (!store) {
+    throw new Error("useKanbanStore must be used within KanbanStoreProvider");
+  }
+  return selector ? useStore(store, selector) : useStore(store);
+}

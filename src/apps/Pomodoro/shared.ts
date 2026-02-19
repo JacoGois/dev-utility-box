@@ -21,7 +21,6 @@ export const createModes = (t: (key: string) => string) => ({
   },
 });
 
-// Versão estática para compatibilidade (será removida)
 export const MODES = {
   pomodoro: {
     label: "Pomodoro",

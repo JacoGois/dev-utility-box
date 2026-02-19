@@ -2,6 +2,7 @@ import { Auth } from "@/apps/Auth";
 import { DataGenerator } from "@/apps/DataGenerator";
 import { EncodersDecoders } from "@/apps/EncodersDecoders";
 import { JSONTools } from "@/apps/JSONTools";
+import { KanbanBoard } from "@/apps/KanbanBoard";
 import { KnowledgeBase } from "@/apps/KnowledgeBase";
 import { MassDataGenerator } from "@/apps/MassDataGenerator";
 import { Pomodoro } from "@/apps/Pomodoro";
@@ -12,6 +13,7 @@ import {
   Combine,
   Database,
   FileJson,
+  Kanban as KanbanIcon,
   NotebookPen,
   Timer,
   User,
@@ -94,6 +96,16 @@ export const createApps = (t: (key: string) => string) => ({
     icon: FileJson,
     component: MassDataGenerator,
     maxInstances: 4,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: undefined,
+  },
+  Kanban: {
+    name: t("apps.kanban.name"),
+    shortName: t("apps.kanban.shortName"),
+    icon: KanbanIcon,
+    component: KanbanBoard,
+    maxInstances: 3,
     maxWidth: undefined,
     maxHeight: undefined,
     minHeight: undefined,
