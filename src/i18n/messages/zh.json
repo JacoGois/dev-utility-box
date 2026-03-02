@@ -117,6 +117,10 @@
       "schemaLab": {
         "name": "Schema 实验室",
         "shortName": "Schema"
+      },
+      "svgLab": {
+        "name": "SVG 工作室",
+        "shortName": "SVG"
       }
     }
   },
@@ -209,7 +213,11 @@
         "pause": "暂停",
         "reset": "重置",
         "resetShort": "重置"
-      }
+      },
+      "loadingData": "正在加载数据…",
+      "syncing": "同步中…",
+      "synced": "已同步",
+      "offlineMode": "离线模式 — 请登录以同步。"
     },
     "todo": {
       "name": "待办事项",
@@ -254,7 +262,8 @@
       "social": {
         "continueWith": "或继续使用",
         "google": "Google",
-        "github": "GitHub"
+        "github": "GitHub",
+        "comingSoon": "社交登录即将推出。"
       },
       "terms": {
         "agreement": "继续即表示您同意我们的",
@@ -491,6 +500,7 @@
       },
       "messages": {
         "copied": "已复制！",
+        "decodeError": "解码失败，请检查输入格式。",
         "jsonError": "用于签名的 Header 或 Payload JSON 出错。",
         "debugWarning": "调试工具。切勿使用生产密钥。"
       },
@@ -539,7 +549,8 @@
       },
       "messages": {
         "copied": "已复制！",
-        "allIdsCopied": "所有 ID 已复制！"
+        "allIdsCopied": "所有 ID 已复制！",
+        "copyFailed": "无法复制到剪贴板。"
       },
       "uuid": {
         "settings": {
@@ -1095,6 +1106,92 @@
         "dataErrorLiterals": "- `true`、`false`、`null` 必须小写。",
         "dataTipTitle": "提示：",
         "dataTipDescription": "先生成示例 payload，再点击“用作 Data”可快速进入校验循环。"
+      }
+    },
+    "svgLab": {
+      "name": "SVG 工作室",
+      "shortName": "SVG",
+      "title": "SVG 工作室",
+      "description": "编辑 SVG：修改颜色、移除元素或使用完整编辑器。",
+      "tabs": {
+        "simple": "简单",
+        "advanced": "高级"
+      },
+      "simple": {
+        "step1Title": "步骤 1 — 上传",
+        "step1Hint": "选择 SVG 文件后，可修改颜色和移除部分。",
+        "uploadLabel": "上传 SVG",
+        "uploading": "加载中…",
+        "uploadHint": "选择 SVG 文件以编辑颜色和移除元素。",
+        "step2Title": "步骤 2 — 预览与编辑",
+        "step2Hint": "左侧为预览。右侧按元素修改填充或描边，或移除。完成后导出。",
+        "previewTitle": "预览",
+        "previewModeFull": "完整",
+        "previewModeElementOnly": "仅元素",
+        "previewHoverHint": "将鼠标悬停在列表中的元素上可在此处查看。",
+        "elementsTitle": "按元素编辑",
+        "elementFill": "填充",
+        "elementStroke": "描边",
+        "patternOrRef": "引用",
+        "fillReplacePattern": "将图案/渐变替换为纯色",
+        "strokeReplacePattern": "将图案/渐变替换为纯色描边",
+        "recolorImage": "重设图像颜色：",
+        "recolorFrom": "替换此颜色",
+        "recolorTo": "为此颜色",
+        "recolorApply": "应用",
+        "recolorApplying": "应用中…",
+        "recolorSuccess": "图像颜色已更新。",
+        "recolorError": "无法重设图像颜色。",
+        "removeElement": "移除",
+        "hideElement": "隐藏",
+        "showElement": "显示",
+        "close": "关闭",
+        "hidden": "已隐藏",
+        "noSvgYet": "上传 SVG 文件以开始。",
+        "noElements": "未找到可编辑元素。",
+        "showingFirstElements": "显示前 {limit} 个，共 {total} 个元素。",
+        "exportSvg": "导出 SVG",
+        "undo": "撤销",
+        "redo": "重做",
+        "replaceAllFill": "替换所有填充",
+        "replaceAllStroke": "替换所有描边",
+        "globalOptionsTitle": "图标选项",
+        "background": "背景",
+        "backgroundNone": "无",
+        "padding": "边距",
+        "rotation": "旋转",
+        "fillType": "填充类型",
+        "fillTypeSolid": "纯色",
+        "fillTypeGradient": "渐变",
+        "gradientAngle": "角度"
+      },
+      "advanced": {
+        "underConstruction": "建设中",
+        "helpHint": "完整画布编辑器：粘贴或加载 SVG、绘制和编辑形状、撤销、重做、导出。（即将推出。）",
+        "intro": "在下方加载 SVG 或从空白画布开始。选择形状进行移动和编辑；使用按钮撤销、重做和导出。",
+        "actionsLabel": "操作",
+        "toolbarClear": "清空",
+        "toolbarUndo": "撤销",
+        "toolbarRedo": "重做",
+        "toolbarLoadSvg": "加载",
+        "toolbarExport": "导出 SVG",
+        "toolbarSelect": "选择",
+        "toolbarDraw": "绘制",
+        "canvasLabel": "画布",
+        "canvasPlaceholder": "画布加载中…",
+        "loadSectionTitle": "将 SVG 加载到画布",
+        "loadSectionHint": "在下方粘贴 SVG 代码并点击加载，或上传文件。留空以开始绘制。",
+        "loadSvgPlaceholder": "在此粘贴 SVG 代码…",
+        "uploadFile": "上传文件",
+        "exportEmptyHint": "请先添加或加载 SVG。"
+      },
+      "messages": {
+        "invalidSvg": "无效或不支持的 SVG。",
+        "exportSuccess": "SVG 已导出。",
+        "loadSuccess": "SVG 已加载。",
+        "loadError": "无法读取文件。",
+        "fileTooLarge": "文件过大，最大 10 MB。",
+        "cleared": "画布已清空。"
       }
     },
     "markdownNotes": {

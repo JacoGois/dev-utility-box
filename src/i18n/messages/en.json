@@ -117,6 +117,10 @@
       "schemaLab": {
         "name": "Schema Lab",
         "shortName": "Schema"
+      },
+      "svgLab": {
+        "name": "SVG Studio",
+        "shortName": "SVG"
       }
     }
   },
@@ -209,7 +213,11 @@
         "pause": "Pause",
         "reset": "Reset",
         "resetShort": "Reset"
-      }
+      },
+      "loadingData": "Loading data…",
+      "syncing": "Syncing…",
+      "synced": "Synced",
+      "offlineMode": "Offline mode — Sign in to sync."
     },
     "todo": {
       "name": "To Do List",
@@ -254,7 +262,8 @@
       "social": {
         "continueWith": "Or continue with",
         "google": "Google",
-        "github": "GitHub"
+        "github": "GitHub",
+        "comingSoon": "Social login coming soon."
       },
       "terms": {
         "agreement": "By continuing, you agree to our",
@@ -491,6 +500,7 @@
       },
       "messages": {
         "copied": "Copied!",
+        "decodeError": "Decode failed. Check the input format.",
         "jsonError": "Error in Header or Payload JSON for signing.",
         "debugWarning": "Debug tool. Never use production secret keys."
       },
@@ -539,7 +549,8 @@
       },
       "messages": {
         "copied": "Copied!",
-        "allIdsCopied": "All IDs copied!"
+        "allIdsCopied": "All IDs copied!",
+        "copyFailed": "Could not copy to clipboard."
       },
       "uuid": {
         "settings": {
@@ -633,7 +644,8 @@
       },
       "errors": {
         "maxQuantity": "Maximum quantity is 10,000 records.",
-        "copyError": "Error copying data. Please try again."
+        "copyError": "Error copying data. Please try again.",
+        "generationError": "Invalid Faker path in one or more fields. Check field configuration."
       },
       "fields": {
         "person": "Person",
@@ -1095,6 +1107,92 @@
         "dataErrorLiterals": "- `true`, `false`, and `null` must be lowercase.",
         "dataTipTitle": "Tip:",
         "dataTipDescription": "Generate a sample payload and use \"Use as Data\" for a fast validation cycle."
+      }
+    },
+    "svgLab": {
+      "name": "SVG Studio",
+      "shortName": "SVG",
+      "title": "SVG Studio",
+      "description": "Edit SVG files: change colors, remove elements, or use the full editor.",
+      "tabs": {
+        "simple": "Simple",
+        "advanced": "Advanced"
+      },
+      "simple": {
+        "step1Title": "Step 1 — Upload",
+        "step1Hint": "Choose an SVG file. You will then be able to change colors and remove parts.",
+        "uploadLabel": "Upload SVG",
+        "uploading": "Loading…",
+        "uploadHint": "Select an SVG file to edit colors and remove elements.",
+        "step2Title": "Step 2 — Preview & edit",
+        "step2Hint": "Preview on the left. On the right, change fill or stroke per element, or remove it. Then export.",
+        "previewTitle": "Preview",
+        "previewModeFull": "Full",
+        "previewModeElementOnly": "Element only",
+        "previewHoverHint": "Hover an element in the list to see it here.",
+        "elementsTitle": "Edit by element",
+        "elementFill": "Fill",
+        "elementStroke": "Stroke",
+        "patternOrRef": "ref",
+        "fillReplacePattern": "Replace pattern/gradient with solid color",
+        "strokeReplacePattern": "Replace pattern/gradient with solid stroke",
+        "recolorImage": "Recolor image:",
+        "recolorFrom": "Replace this color",
+        "recolorTo": "With this color",
+        "recolorApply": "Apply",
+        "recolorApplying": "Applying…",
+        "recolorSuccess": "Image color updated.",
+        "recolorError": "Could not recolor image.",
+        "removeElement": "Remove",
+        "hideElement": "Hide",
+        "showElement": "Show",
+        "close": "Close",
+        "hidden": "hidden",
+        "noSvgYet": "Upload an SVG file to get started.",
+        "noElements": "No editable elements found.",
+        "showingFirstElements": "Showing first {limit} of {total} elements.",
+        "exportSvg": "Export SVG",
+        "undo": "Undo",
+        "redo": "Redo",
+        "replaceAllFill": "Replace all fill",
+        "replaceAllStroke": "Replace all stroke",
+        "globalOptionsTitle": "Icon options",
+        "background": "Background",
+        "backgroundNone": "None",
+        "padding": "Padding",
+        "rotation": "Rotation",
+        "fillType": "Fill type",
+        "fillTypeSolid": "Solid",
+        "fillTypeGradient": "Gradient",
+        "gradientAngle": "Angle"
+      },
+      "advanced": {
+        "underConstruction": "Under construction",
+        "helpHint": "Full canvas editor: paste or load SVG, draw and edit shapes, undo, redo, export. (Coming soon.)",
+        "intro": "Load an SVG below or start from a blank canvas. Select shapes to move and edit; use the buttons for undo, redo, and export.",
+        "actionsLabel": "Actions",
+        "toolbarClear": "Clear",
+        "toolbarUndo": "Undo",
+        "toolbarRedo": "Redo",
+        "toolbarLoadSvg": "Load",
+        "toolbarExport": "Export SVG",
+        "toolbarSelect": "Select",
+        "toolbarDraw": "Draw",
+        "canvasLabel": "Canvas",
+        "canvasPlaceholder": "Canvas is loading…",
+        "loadSectionTitle": "Load SVG into canvas",
+        "loadSectionHint": "Paste SVG code below and click Load, or upload a file. Leave blank to start drawing.",
+        "loadSvgPlaceholder": "Paste SVG code here…",
+        "uploadFile": "Upload file",
+        "exportEmptyHint": "Add or load an SVG first."
+      },
+      "messages": {
+        "invalidSvg": "Invalid or unsupported SVG.",
+        "exportSuccess": "SVG exported.",
+        "loadSuccess": "SVG loaded.",
+        "loadError": "Could not read file.",
+        "fileTooLarge": "File is too large. Maximum size is 10 MB.",
+        "cleared": "Canvas cleared."
       }
     },
     "markdownNotes": {

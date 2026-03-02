@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/form/Textarea";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import { useAppTranslations } from "@/hooks/useTranslations";
 import Ajv from "ajv";
 import {
@@ -219,6 +220,7 @@ const generateSampleFromSchema = (schema: JsonSchema, depth = 0): unknown => {
 function SchemaLabComponent({ instanceId }: { instanceId: string }) {
   const t = useAppTranslations("schemaLab");
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const modalContainerRef = useWindowShellStore((s) => s.refs[instanceId]);
   const appRootRef = React.useRef<HTMLDivElement | null>(null);
   const [validationIssues, setValidationIssues] = useState<ValidationIssue[]>(
     [],
@@ -358,9 +360,8 @@ function SchemaLabComponent({ instanceId }: { instanceId: string }) {
               </Button>
             </DialogTrigger>
             <DialogContent
-              portalContainer={appRootRef.current ?? undefined}
-              overlayClassName="absolute inset-0 z-[180] bg-black/35"
-              className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+              portalContainer={modalContainerRef?.current ?? undefined}
+              className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
             >
               <DialogHeader>
                 <DialogTitle>{t("title")}</DialogTitle>
@@ -458,9 +459,8 @@ function SchemaLabComponent({ instanceId }: { instanceId: string }) {
                     </Button>
                   </DialogTrigger>
                   <DialogContent
-                    portalContainer={appRootRef.current ?? undefined}
-                    overlayClassName="absolute inset-0 z-[180] bg-black/35"
-                    className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+                    portalContainer={modalContainerRef?.current ?? undefined}
+                    className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
                   >
                     <DialogHeader>
                       <DialogTitle>{t("labels.schema")}</DialogTitle>
@@ -522,9 +522,8 @@ function SchemaLabComponent({ instanceId }: { instanceId: string }) {
                     </Button>
                   </DialogTrigger>
                   <DialogContent
-                    portalContainer={appRootRef.current ?? undefined}
-                    overlayClassName="absolute inset-0 z-[180] bg-black/35"
-                    className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+                    portalContainer={modalContainerRef?.current ?? undefined}
+                    className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
                   >
                     <DialogHeader>
                       <DialogTitle>{t("labels.data")}</DialogTitle>

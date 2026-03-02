@@ -263,12 +263,14 @@ export const MassDataGenerator: FC<MassDataGeneratorProps> = ({
       new URL("./workers/massDataGenerator.worker.ts", import.meta.url)
     );
     workerRef.current.onmessage = (
-      event: MessageEvent<{ generatedData: string }>
+      event: MessageEvent<{ generatedData: string; error?: string }>
     ) => {
+      const { generatedData, error } = event.data;
       setState({
-        generatedData: event.data.generatedData,
+        generatedData: generatedData ?? "",
         isLoading: false,
       });
+      if (error) toast.error(t("errors.generationError"));
     };
     return () => {
       workerRef.current?.terminate();

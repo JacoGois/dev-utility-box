@@ -56,8 +56,9 @@ export const Auth = () => {
     t,
   });
 
-  const handleSocialLogin = (provider: string) => {
-    console.log(`Login with ${provider}`);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- callback signature for future provider use
+  const handleSocialLogin = (_provider: string) => {
+    toast.info(t("social.comingSoon"));
   };
 
   return (

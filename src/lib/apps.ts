@@ -8,6 +8,7 @@ import { KnowledgeBase } from "@/apps/KnowledgeBase";
 import { MassDataGenerator } from "@/apps/MassDataGenerator";
 import { Pomodoro } from "@/apps/Pomodoro";
 import { SchemaLab } from "@/apps/SchemaLab";
+import { SvgLab } from "@/apps/SvgLab";
 import { TodoList } from "@/apps/TodoList";
 import {
   Braces,
@@ -19,6 +20,7 @@ import {
   FileJson,
   Kanban as KanbanIcon,
   NotebookPen,
+  PenTool,
   Timer,
   User,
 } from "lucide-react";
@@ -133,6 +135,16 @@ export const createApps = (t: (key: string) => string) => ({
     maxWidth: undefined,
     maxHeight: undefined,
     minHeight: 520,
+  },
+  SvgLab: {
+    name: t("apps.svgLab.name"),
+    shortName: t("apps.svgLab.shortName"),
+    icon: PenTool,
+    component: SvgLab,
+    maxInstances: 2,
+    maxWidth: undefined,
+    maxHeight: undefined,
+    minHeight: 480,
   },
 });
 

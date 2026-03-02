@@ -117,6 +117,10 @@
       "schemaLab": {
         "name": "スキーマラボ",
         "shortName": "Schema"
+      },
+      "svgLab": {
+        "name": "SVGスタジオ",
+        "shortName": "SVG"
       }
     }
   },
@@ -209,7 +213,11 @@
         "pause": "一時停止",
         "reset": "リセット",
         "resetShort": "リセット"
-      }
+      },
+      "loadingData": "データを読み込み中…",
+      "syncing": "同期中…",
+      "synced": "同期済み",
+      "offlineMode": "オフラインモード — 同期するにはログインしてください。"
     },
     "todo": {
       "name": "To Doリスト",
@@ -254,7 +262,8 @@
       "social": {
         "continueWith": "または以下で続行",
         "google": "Google",
-        "github": "GitHub"
+        "github": "GitHub",
+        "comingSoon": "ソーシャルログインは近日公開予定です。"
       },
       "terms": {
         "agreement": "続行することで、以下に同意したことになります",
@@ -539,7 +548,8 @@
       },
       "messages": {
         "copied": "コピーされました！",
-        "allIdsCopied": "すべてのIDがコピーされました！"
+        "allIdsCopied": "すべてのIDがコピーされました！",
+        "copyFailed": "クリップボードにコピーできませんでした。"
       },
       "uuid": {
         "settings": {
@@ -1095,6 +1105,92 @@
         "dataErrorLiterals": "- `true`、`false`、`null` は小文字で記述します。",
         "dataTipTitle": "ヒント:",
         "dataTipDescription": "サンプル payload を生成し、「Dataに使用」を使うと素早く検証できます。"
+      }
+    },
+    "svgLab": {
+      "name": "SVGスタジオ",
+      "shortName": "SVG",
+      "title": "SVGスタジオ",
+      "description": "SVGを編集：色の変更、要素の削除、またはフルエディター。",
+      "tabs": {
+        "simple": "シンプル",
+        "advanced": "詳細"
+      },
+      "simple": {
+        "step1Title": "ステップ1 — アップロード",
+        "step1Hint": "SVGファイルを選んでください。その後、色の変更や部分の削除ができます。",
+        "uploadLabel": "SVGをアップロード",
+        "uploading": "読み込み中…",
+        "uploadHint": "色の編集や要素の削除のためにSVGファイルを選択してください。",
+        "step2Title": "ステップ2 — プレビューと編集",
+        "step2Hint": "左がプレビュー。右で要素ごとに塗り・線を変更または削除できます。最後にエクスポート。",
+        "previewTitle": "プレビュー",
+        "previewModeFull": "全体",
+        "previewModeElementOnly": "要素のみ",
+        "previewHoverHint": "リストの要素にマウスを乗せるとここに表示されます。",
+        "elementsTitle": "要素ごとに編集",
+        "elementFill": "塗り",
+        "elementStroke": "線",
+        "patternOrRef": "参照",
+        "fillReplacePattern": "パターン/グラデーションを単色に置換",
+        "strokeReplacePattern": "パターン/グラデーションを単色の線に置換",
+        "recolorImage": "画像の色を変更:",
+        "recolorFrom": "この色を",
+        "recolorTo": "この色に置換",
+        "recolorApply": "適用",
+        "recolorApplying": "適用中…",
+        "recolorSuccess": "画像の色を更新しました。",
+        "recolorError": "画像の色を変更できませんでした。",
+        "removeElement": "削除",
+        "hideElement": "非表示",
+        "showElement": "表示",
+        "close": "閉じる",
+        "hidden": "非表示",
+        "noSvgYet": "SVGファイルをアップロードして開始してください。",
+        "noElements": "編集可能な要素が見つかりません。",
+        "showingFirstElements": "全{total}件中、最初の{limit}件を表示しています。",
+        "exportSvg": "SVGをエクスポート",
+        "undo": "元に戻す",
+        "redo": "やり直す",
+        "replaceAllFill": "すべての塗りを置換",
+        "replaceAllStroke": "すべての線を置換",
+        "globalOptionsTitle": "アイコンオプション",
+        "background": "背景",
+        "backgroundNone": "なし",
+        "padding": "余白",
+        "rotation": "回転",
+        "fillType": "塗りタイプ",
+        "fillTypeSolid": "単色",
+        "fillTypeGradient": "グラデーション",
+        "gradientAngle": "角度"
+      },
+      "advanced": {
+        "underConstruction": "準備中",
+        "helpHint": "フルキャンバスエディタ：SVGを貼り付けまたは読み込み、形を描画・編集、元に戻す・やり直す・エクスポート。（近日公開。）",
+        "intro": "下でSVGを読み込むか、白紙から始めます。形を選択して移動・編集し、ボタンで元に戻す・やり直す・エクスポート。",
+        "actionsLabel": "操作",
+        "toolbarClear": "クリア",
+        "toolbarUndo": "元に戻す",
+        "toolbarRedo": "やり直す",
+        "toolbarLoadSvg": "読み込み",
+        "toolbarExport": "SVGをエクスポート",
+        "toolbarSelect": "選択",
+        "toolbarDraw": "描画",
+        "canvasLabel": "キャンバス",
+        "canvasPlaceholder": "キャンバスを読み込み中…",
+        "loadSectionTitle": "キャンバスにSVGを読み込む",
+        "loadSectionHint": "下にSVGコードを貼り付けて「読み込み」をクリック。またはファイルをアップロード。空のまま描画を開始できます。",
+        "loadSvgPlaceholder": "SVGコードをここに貼り付けて…",
+        "uploadFile": "ファイルをアップロード",
+        "exportEmptyHint": "先にSVGを追加または読み込んでください。"
+      },
+      "messages": {
+        "invalidSvg": "無効またはサポートされていないSVGです。",
+        "exportSuccess": "SVGをエクスポートしました。",
+        "loadSuccess": "SVGを読み込みました。",
+        "loadError": "ファイルを読み込めませんでした。",
+        "fileTooLarge": "ファイルが大きすぎます。最大10MBまで。",
+        "cleared": "キャンバスをクリアしました。"
       }
     },
     "markdownNotes": {

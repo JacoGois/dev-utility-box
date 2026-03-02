@@ -291,14 +291,16 @@ function DataGeneratorComponent({ instanceId }: DataGeneratorProps) {
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard
       .writeText(text)
-      .then(() => toast.success(t("messages.copied")));
+      .then(() => toast.success(t("messages.copied")))
+      .catch(() => toast.error(t("messages.copyFailed")));
   };
   const handleCopyAllIds = () => {
     if (formattedIds.length === 0) return;
     const allIds = formattedIds.join("\n");
     navigator.clipboard
       .writeText(allIds)
-      .then(() => toast.success(t("messages.allIdsCopied")));
+      .then(() => toast.success(t("messages.allIdsCopied")))
+      .catch(() => toast.error(t("messages.copyFailed")));
   };
 
   useEffect(() => {

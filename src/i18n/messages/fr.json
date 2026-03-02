@@ -117,6 +117,10 @@
       "schemaLab": {
         "name": "Laboratoire de Schemas",
         "shortName": "Schema"
+      },
+      "svgLab": {
+        "name": "Studio SVG",
+        "shortName": "SVG"
       }
     }
   },
@@ -209,7 +213,11 @@
         "pause": "Pause",
         "reset": "Réinitialiser",
         "resetShort": "Reset"
-      }
+      },
+      "loadingData": "Chargement des données…",
+      "syncing": "Synchronisation…",
+      "synced": "Synchronisé",
+      "offlineMode": "Mode hors ligne — Connecte-toi pour synchroniser."
     },
     "todo": {
       "name": "Liste de Tâches",
@@ -254,7 +262,8 @@
       "social": {
         "continueWith": "Ou continuer avec",
         "google": "Google",
-        "github": "GitHub"
+        "github": "GitHub",
+        "comingSoon": "Connexion sociale bientôt disponible."
       },
       "terms": {
         "agreement": "En continuant, vous acceptez nos",
@@ -491,6 +500,7 @@
       },
       "messages": {
         "copied": "Copié !",
+        "decodeError": "Échec du décodage. Vérifiez le format d'entrée.",
         "jsonError": "Erreur dans le Header ou Payload JSON pour la signature.",
         "debugWarning": "Outil de débogage. N'utilisez jamais de clés secrètes de production."
       },
@@ -539,7 +549,8 @@
       },
       "messages": {
         "copied": "Copié !",
-        "allIdsCopied": "Tous les IDs copiés !"
+        "allIdsCopied": "Tous les IDs copiés !",
+        "copyFailed": "Impossible de copier dans le presse-papiers."
       },
       "uuid": {
         "settings": {
@@ -1095,6 +1106,92 @@
         "dataErrorLiterals": "- `true`, `false` et `null` doivent etre en minuscules.",
         "dataTipTitle": "Astuce :",
         "dataTipDescription": "Generez un payload d'exemple puis utilisez \"Utiliser comme Data\" pour valider plus vite."
+      }
+    },
+    "svgLab": {
+      "name": "Studio SVG",
+      "shortName": "SVG",
+      "title": "Studio SVG",
+      "description": "Modifiez des SVG : couleurs, suppression d'elements ou editeur complet.",
+      "tabs": {
+        "simple": "Simple",
+        "advanced": "Avance"
+      },
+      "simple": {
+        "step1Title": "Etape 1 — Importer",
+        "step1Hint": "Choisissez un fichier SVG. Vous pourrez ensuite modifier les couleurs et supprimer des parties.",
+        "uploadLabel": "Importer un SVG",
+        "uploading": "Chargement…",
+        "uploadHint": "Selectionnez un fichier SVG pour modifier les couleurs et supprimer des elements.",
+        "step2Title": "Etape 2 — Apercu et edition",
+        "step2Hint": "Apercu a gauche. A droite, modifiez le remplissage ou le contour par element ou supprimez-le. Puis exportez.",
+        "previewTitle": "Apercu",
+        "previewModeFull": "Complet",
+        "previewModeElementOnly": "Element seul",
+        "previewHoverHint": "Survolez un element de la liste pour le voir ici.",
+        "elementsTitle": "Modifier par element",
+        "elementFill": "Remplissage",
+        "elementStroke": "Contour",
+        "patternOrRef": "ref",
+        "fillReplacePattern": "Remplacer motif/dégradé par une couleur unie",
+        "strokeReplacePattern": "Remplacer motif/dégradé par un contour uni",
+        "recolorImage": "Recolorer l'image :",
+        "recolorFrom": "Remplacer cette couleur",
+        "recolorTo": "Par cette couleur",
+        "recolorApply": "Appliquer",
+        "recolorApplying": "Application…",
+        "recolorSuccess": "Couleur de l'image mise à jour.",
+        "recolorError": "Impossible de recolorer l'image.",
+        "removeElement": "Supprimer",
+        "hideElement": "Masquer",
+        "showElement": "Afficher",
+        "close": "Fermer",
+        "hidden": "masqué",
+        "noSvgYet": "Importez un fichier SVG pour commencer.",
+        "noElements": "Aucun element editable trouve.",
+        "showingFirstElements": "Affichage des {limit} premiers éléments sur {total}.",
+        "exportSvg": "Exporter en SVG",
+        "undo": "Annuler",
+        "redo": "Rétablir",
+        "replaceAllFill": "Remplacer tous les remplissages",
+        "replaceAllStroke": "Remplacer tous les contours",
+        "globalOptionsTitle": "Options de l'icône",
+        "background": "Fond",
+        "backgroundNone": "Aucun",
+        "padding": "Marge",
+        "rotation": "Rotation",
+        "fillType": "Type de remplissage",
+        "fillTypeSolid": "Uni",
+        "fillTypeGradient": "Dégradé",
+        "gradientAngle": "Angle"
+      },
+      "advanced": {
+        "underConstruction": "En construction",
+        "helpHint": "Éditeur de canvas complet : coller ou charger un SVG, dessiner et modifier des formes, annuler, rétablir, exporter. (Bientôt.)",
+        "intro": "Chargez un SVG ci-dessous ou demarrez a blanc. Selectionnez les formes pour les deplacer et editer ; utilisez les boutons pour annuler, retablir et exporter.",
+        "actionsLabel": "Actions",
+        "toolbarClear": "Effacer",
+        "toolbarUndo": "Annuler",
+        "toolbarRedo": "Retablir",
+        "toolbarLoadSvg": "Charger",
+        "toolbarExport": "Exporter en SVG",
+        "toolbarSelect": "Selectionner",
+        "toolbarDraw": "Dessiner",
+        "canvasLabel": "Canvas",
+        "canvasPlaceholder": "Chargement du canvas…",
+        "loadSectionTitle": "Charger un SVG dans le canvas",
+        "loadSectionHint": "Collez le code SVG ci-dessous et cliquez sur Charger, ou importez un fichier. Laissez vide pour commencer a dessiner.",
+        "loadSvgPlaceholder": "Collez le code SVG ici…",
+        "uploadFile": "Importer un fichier",
+        "exportEmptyHint": "Ajoutez ou chargez un SVG d'abord."
+      },
+      "messages": {
+        "invalidSvg": "SVG invalide ou non pris en charge.",
+        "exportSuccess": "SVG exporte.",
+        "loadSuccess": "SVG charge.",
+        "loadError": "Impossible de lire le fichier.",
+        "fileTooLarge": "Fichier trop volumineux. Taille max. 10 Mo.",
+        "cleared": "Canvas efface."
       }
     },
     "markdownNotes": {

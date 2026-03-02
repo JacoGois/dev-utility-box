@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/form/Textarea";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { usePersistentAppStore } from "@/hooks/usePersistentAppStore";
+import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import { useAppTranslations } from "@/hooks/useTranslations";
 import {
   CircleHelp,
@@ -69,6 +70,7 @@ type ImageTextLabProps = {
 function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
   const t = useAppTranslations("imageTextLab");
   const [state, setState] = usePersistentAppStore(instanceId, defaultState);
+  const modalContainerRef = useWindowShellStore((s) => s.refs[instanceId]);
   const appRootRef = useRef<HTMLDivElement | null>(null);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -407,9 +409,8 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
               </Button>
             </DialogTrigger>
             <DialogContent
-              portalContainer={appRootRef.current ?? undefined}
-              overlayClassName="absolute inset-0 z-[180] bg-black/35"
-              className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+              portalContainer={modalContainerRef?.current ?? undefined}
+              className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
             >
               <DialogHeader>
                 <DialogTitle>{t("title")}</DialogTitle>
@@ -492,9 +493,8 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
                     </Button>
                   </DialogTrigger>
                   <DialogContent
-                    portalContainer={appRootRef.current ?? undefined}
-                    overlayClassName="absolute inset-0 z-[180] bg-black/35"
-                    className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+                    portalContainer={modalContainerRef?.current ?? undefined}
+                    className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
                   >
                     <DialogHeader>
                       <DialogTitle>{t("tabs.imageToText")}</DialogTitle>
@@ -637,9 +637,8 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
                     </Button>
                   </DialogTrigger>
                   <DialogContent
-                    portalContainer={appRootRef.current ?? undefined}
-                    overlayClassName="absolute inset-0 z-[180] bg-black/35"
-                    className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+                    portalContainer={modalContainerRef?.current ?? undefined}
+                    className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
                   >
                     <DialogHeader>
                       <DialogTitle>{t("tabs.removeBackground")}</DialogTitle>
@@ -792,9 +791,8 @@ function ImageTextLabComponent({ instanceId }: ImageTextLabProps) {
                     </Button>
                   </DialogTrigger>
                   <DialogContent
-                    portalContainer={appRootRef.current ?? undefined}
-                    overlayClassName="absolute inset-0 z-[180] bg-black/35"
-                    className="!absolute top-1/2 left-1/2 z-[181] sm:max-w-md"
+                    portalContainer={modalContainerRef?.current ?? undefined}
+                    className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
                   >
                     <DialogHeader>
                       <DialogTitle>{t("tabs.textToImage")}</DialogTitle>

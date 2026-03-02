@@ -93,6 +93,7 @@ function KnowledgeBaseComponent() {
           }
         } catch (e) {
           console.error(t("messages.loadingError"), e);
+          toast.error(t("messages.loadingError"));
         }
       }
     }

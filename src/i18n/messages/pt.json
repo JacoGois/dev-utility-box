@@ -117,6 +117,10 @@
       "schemaLab": {
         "name": "Laboratorio de Schemas",
         "shortName": "Schema"
+      },
+      "svgLab": {
+        "name": "Estúdio SVG",
+        "shortName": "SVG"
       }
     }
   },
@@ -209,7 +213,11 @@
         "pause": "Pausar",
         "reset": "Resetar",
         "resetShort": "Resetar"
-      }
+      },
+      "loadingData": "Carregando dados…",
+      "syncing": "Sincronizando…",
+      "synced": "Sincronizado",
+      "offlineMode": "Modo offline — Faça login para sincronizar."
     },
     "todo": {
       "name": "Lista de Tarefas",
@@ -254,7 +262,8 @@
       "social": {
         "continueWith": "Ou continue com",
         "google": "Google",
-        "github": "GitHub"
+        "github": "GitHub",
+        "comingSoon": "Login social em breve."
       },
       "terms": {
         "agreement": "Ao continuar, você concorda com nossos",
@@ -491,6 +500,7 @@
       },
       "messages": {
         "copied": "Copiado!",
+        "decodeError": "Falha ao decodificar. Verifique o formato da entrada.",
         "jsonError": "Erro no Header ou Payload JSON para assinatura.",
         "debugWarning": "Ferramenta de debug. Nunca use chaves secretas de produção."
       },
@@ -539,7 +549,8 @@
       },
       "messages": {
         "copied": "Copiado!",
-        "allIdsCopied": "Todos os IDs copiados!"
+        "allIdsCopied": "Todos os IDs copiados!",
+        "copyFailed": "Não foi possível copiar para a área de transferência."
       },
       "uuid": {
         "settings": {
@@ -633,7 +644,8 @@
       },
       "errors": {
         "maxQuantity": "Quantidade máxima é de 10.000 registros.",
-        "copyError": "Erro ao copiar dados. Tente novamente."
+        "copyError": "Erro ao copiar dados. Tente novamente.",
+        "generationError": "Caminho Faker inválido em um ou mais campos. Verifique a configuração."
       },
       "fields": {
         "person": "Pessoa",
@@ -1095,6 +1107,92 @@
         "dataErrorLiterals": "- `true`, `false` e `null` sao minusculos.",
         "dataTipTitle": "Dica:",
         "dataTipDescription": "Gere um payload de exemplo e use \"Usar no Data\" para validar mais rapido."
+      }
+    },
+    "svgLab": {
+      "name": "Estúdio SVG",
+      "shortName": "SVG",
+      "title": "Estúdio SVG",
+      "description": "Edite SVGs: mude cores, remova elementos ou use o editor completo.",
+      "tabs": {
+        "simple": "Simples",
+        "advanced": "Avançado"
+      },
+      "simple": {
+        "step1Title": "Passo 1 — Enviar",
+        "step1Hint": "Escolha um arquivo SVG. Depois você poderá alterar cores e remover partes.",
+        "uploadLabel": "Enviar SVG",
+        "uploading": "Carregando…",
+        "uploadHint": "Selecione um arquivo SVG para editar cores e remover elementos.",
+        "step2Title": "Passo 2 — Visualizar e editar",
+        "step2Hint": "Pré-visualização à esquerda. À direita, altere preenchimento ou contorno por elemento ou remova. Depois exporte.",
+        "previewTitle": "Pré-visualização",
+        "previewModeFull": "Completo",
+        "previewModeElementOnly": "Só o elemento",
+        "previewHoverHint": "Passe o mouse em um elemento na lista para vê-lo aqui.",
+        "elementsTitle": "Editar por elemento",
+        "elementFill": "Preenchimento",
+        "elementStroke": "Contorno",
+        "patternOrRef": "ref",
+        "fillReplacePattern": "Substituir padrão/gradiente por cor sólida",
+        "strokeReplacePattern": "Substituir padrão/gradiente por contorno sólido",
+        "recolorImage": "Recolorir imagem:",
+        "recolorFrom": "Substituir esta cor",
+        "recolorTo": "Por esta cor",
+        "recolorApply": "Aplicar",
+        "recolorApplying": "Aplicando…",
+        "recolorSuccess": "Cor da imagem atualizada.",
+        "recolorError": "Não foi possível recolorir a imagem.",
+        "removeElement": "Remover",
+        "hideElement": "Ocultar",
+        "showElement": "Mostrar",
+        "close": "Fechar",
+        "hidden": "oculto",
+        "noSvgYet": "Envie um arquivo SVG para começar.",
+        "noElements": "Nenhum elemento editável encontrado.",
+        "showingFirstElements": "Mostrando os primeiros {limit} de {total} elementos.",
+        "exportSvg": "Exportar SVG",
+        "undo": "Desfazer",
+        "redo": "Refazer",
+        "replaceAllFill": "Substituir todos os preenchimentos",
+        "replaceAllStroke": "Substituir todos os contornos",
+        "globalOptionsTitle": "Opções do ícone",
+        "background": "Fundo",
+        "backgroundNone": "Nenhum",
+        "padding": "Margem",
+        "rotation": "Rotação",
+        "fillType": "Tipo de preenchimento",
+        "fillTypeSolid": "Sólido",
+        "fillTypeGradient": "Gradiente",
+        "gradientAngle": "Ângulo"
+      },
+      "advanced": {
+        "underConstruction": "Em construção",
+        "helpHint": "Editor de canvas completo: cole ou carregue SVG, desenhe e edite formas, desfazer, refazer, exportar. (Em breve.)",
+        "intro": "Carregue um SVG abaixo ou comece em branco. Selecione formas para mover e editar; use os botões para desfazer, refazer e exportar.",
+        "actionsLabel": "Ações",
+        "toolbarClear": "Limpar",
+        "toolbarUndo": "Desfazer",
+        "toolbarRedo": "Refazer",
+        "toolbarLoadSvg": "Carregar",
+        "toolbarExport": "Exportar SVG",
+        "toolbarSelect": "Selecionar",
+        "toolbarDraw": "Desenhar",
+        "canvasLabel": "Canvas",
+        "canvasPlaceholder": "Carregando canvas…",
+        "loadSectionTitle": "Carregar SVG no canvas",
+        "loadSectionHint": "Cole o código SVG abaixo e clique em Carregar, ou envie um arquivo. Deixe em branco para começar a desenhar.",
+        "loadSvgPlaceholder": "Cole o código SVG aqui…",
+        "uploadFile": "Enviar arquivo",
+        "exportEmptyHint": "Adicione ou carregue um SVG antes."
+      },
+      "messages": {
+        "invalidSvg": "SVG inválido ou não suportado.",
+        "exportSuccess": "SVG exportado.",
+        "loadSuccess": "SVG carregado.",
+        "loadError": "Não foi possível ler o arquivo.",
+        "fileTooLarge": "Arquivo muito grande. Tamanho máximo 10 MB.",
+        "cleared": "Canvas limpo."
       }
     },
     "markdownNotes": {

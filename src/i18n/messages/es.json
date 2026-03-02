@@ -117,6 +117,10 @@
       "schemaLab": {
         "name": "Laboratorio de Esquemas",
         "shortName": "Schema"
+      },
+      "svgLab": {
+        "name": "Estudio SVG",
+        "shortName": "SVG"
       }
     }
   },
@@ -209,7 +213,11 @@
         "pause": "Pausa",
         "reset": "Restablecer",
         "resetShort": "Reset"
-      }
+      },
+      "loadingData": "Cargando datos…",
+      "syncing": "Sincronizando…",
+      "synced": "Sincronizado",
+      "offlineMode": "Modo sin conexión — Inicia sesión para sincronizar."
     },
     "todo": {
       "name": "Lista de Tareas",
@@ -254,7 +262,8 @@
       "social": {
         "continueWith": "O continúa con",
         "google": "Google",
-        "github": "GitHub"
+        "github": "GitHub",
+        "comingSoon": "Inicio de sesión social próximamente."
       },
       "terms": {
         "agreement": "Al continuar, aceptas nuestros",
@@ -491,6 +500,7 @@
       },
       "messages": {
         "copied": "¡Copiado!",
+        "decodeError": "Error al decodificar. Comprueba el formato de entrada.",
         "jsonError": "Error en Header o Payload JSON para firmar.",
         "debugWarning": "Herramienta de depuración. Nunca uses claves secretas de producción."
       },
@@ -539,7 +549,8 @@
       },
       "messages": {
         "copied": "¡Copiado!",
-        "allIdsCopied": "¡Todos los IDs copiados!"
+        "allIdsCopied": "¡Todos los IDs copiados!",
+        "copyFailed": "No se pudo copiar al portapapeles."
       },
       "uuid": {
         "settings": {
@@ -1095,6 +1106,92 @@
         "dataErrorLiterals": "- `true`, `false` y `null` deben ir en minusculas.",
         "dataTipTitle": "Consejo:",
         "dataTipDescription": "Genera un payload de ejemplo y usa \"Usar como Data\" para validar mas rapido."
+      }
+    },
+    "svgLab": {
+      "name": "Estudio SVG",
+      "shortName": "SVG",
+      "title": "Estudio SVG",
+      "description": "Edita SVG: cambia colores, elimina elementos o usa el editor completo.",
+      "tabs": {
+        "simple": "Simple",
+        "advanced": "Avanzado"
+      },
+      "simple": {
+        "step1Title": "Paso 1 — Subir",
+        "step1Hint": "Elige un archivo SVG. Luego podras cambiar colores y quitar partes.",
+        "uploadLabel": "Subir SVG",
+        "uploading": "Cargando…",
+        "uploadHint": "Selecciona un archivo SVG para editar colores y eliminar elementos.",
+        "step2Title": "Paso 2 — Vista previa y editar",
+        "step2Hint": "Vista previa a la izquierda. A la derecha, cambia relleno o stroke por elemento o eliminalo. Luego exporta.",
+        "previewTitle": "Vista previa",
+        "previewModeFull": "Completo",
+        "previewModeElementOnly": "Solo el elemento",
+        "previewHoverHint": "Pasa el ratón sobre un elemento de la lista para verlo aquí.",
+        "elementsTitle": "Editar por elemento",
+        "elementFill": "Relleno",
+        "elementStroke": "Stroke",
+        "patternOrRef": "ref",
+        "fillReplacePattern": "Reemplazar patrón/degradado por color sólido",
+        "strokeReplacePattern": "Reemplazar patrón/degradado por trazo sólido",
+        "recolorImage": "Recolorear imagen:",
+        "recolorFrom": "Reemplazar este color",
+        "recolorTo": "Por este color",
+        "recolorApply": "Aplicar",
+        "recolorApplying": "Aplicando…",
+        "recolorSuccess": "Color de imagen actualizado.",
+        "recolorError": "No se pudo recolorear la imagen.",
+        "removeElement": "Eliminar",
+        "hideElement": "Ocultar",
+        "showElement": "Mostrar",
+        "close": "Cerrar",
+        "hidden": "oculto",
+        "noSvgYet": "Sube un archivo SVG para empezar.",
+        "noElements": "No se encontraron elementos editables.",
+        "showingFirstElements": "Mostrando los primeros {limit} de {total} elementos.",
+        "exportSvg": "Exportar SVG",
+        "undo": "Deshacer",
+        "redo": "Rehacer",
+        "replaceAllFill": "Reemplazar todo el relleno",
+        "replaceAllStroke": "Reemplazar todo el stroke",
+        "globalOptionsTitle": "Opciones del icono",
+        "background": "Fondo",
+        "backgroundNone": "Ninguno",
+        "padding": "Margen",
+        "rotation": "Rotación",
+        "fillType": "Tipo de relleno",
+        "fillTypeSolid": "Sólido",
+        "fillTypeGradient": "Gradiente",
+        "gradientAngle": "Ángulo"
+      },
+      "advanced": {
+        "underConstruction": "En construcción",
+        "helpHint": "Editor de canvas completo: pega o carga SVG, dibuja y edita formas, deshacer, rehacer, exportar. (Próximamente.)",
+        "intro": "Carga un SVG abajo o empieza en blanco. Selecciona formas para mover y editar; usa los botones para deshacer, rehacer y exportar.",
+        "actionsLabel": "Acciones",
+        "toolbarClear": "Limpiar",
+        "toolbarUndo": "Deshacer",
+        "toolbarRedo": "Rehacer",
+        "toolbarLoadSvg": "Cargar",
+        "toolbarExport": "Exportar SVG",
+        "toolbarSelect": "Seleccionar",
+        "toolbarDraw": "Dibujar",
+        "canvasLabel": "Canvas",
+        "canvasPlaceholder": "Cargando canvas…",
+        "loadSectionTitle": "Cargar SVG en el canvas",
+        "loadSectionHint": "Pega el codigo SVG abajo y haz clic en Cargar, o sube un archivo. Deja en blanco para empezar a dibujar.",
+        "loadSvgPlaceholder": "Pega el codigo SVG aqui…",
+        "uploadFile": "Subir archivo",
+        "exportEmptyHint": "Anade o carga un SVG antes."
+      },
+      "messages": {
+        "invalidSvg": "SVG invalido o no soportado.",
+        "exportSuccess": "SVG exportado.",
+        "loadSuccess": "SVG cargado.",
+        "loadError": "No se pudo leer el archivo.",
+        "fileTooLarge": "Archivo demasiado grande. Tamaño máximo 10 MB.",
+        "cleared": "Canvas limpiado."
       }
     },
     "markdownNotes": {

@@ -467,14 +467,20 @@ const TextToTextLayout: FC<{
   processor: (input: string, options: { mode: "encode" | "decode" }) => string;
   t: (key: string) => string;
 }> = ({ inputValue, setInputValue, mode, processor, t }) => {
-  const outputValue = useMemo(() => {
-    if (!inputValue.trim()) return "";
+  const { outputValue, decodeError } = useMemo(() => {
+    if (!inputValue.trim()) return { outputValue: "", decodeError: null as string | null };
     try {
-      return processor(inputValue, { mode });
+      const value = processor(inputValue, { mode });
+      return { outputValue: value, decodeError: null };
     } catch (e) {
-      return (e as Error).message;
+      const msg = (e as Error).message;
+      return { outputValue: msg, decodeError: mode === "decode" ? msg : null };
     }
   }, [inputValue, mode, processor]);
+
+  React.useEffect(() => {
+    if (decodeError) toast.error(t("messages.decodeError"));
+  }, [decodeError, t]);
 
   return (
     <div className="grid @md:grid-cols-2 gap-4 flex-grow min-h-0 overflow-y-auto">

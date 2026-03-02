@@ -117,6 +117,10 @@
       "schemaLab": {
         "name": "Schema-Labor",
         "shortName": "Schema"
+      },
+      "svgLab": {
+        "name": "SVG-Studio",
+        "shortName": "SVG"
       }
     }
   },
@@ -209,7 +213,11 @@
         "pause": "Pause",
         "reset": "Zurücksetzen",
         "resetShort": "Reset"
-      }
+      },
+      "loadingData": "Daten werden geladen…",
+      "syncing": "Synchronisiere…",
+      "synced": "Synchronisiert",
+      "offlineMode": "Offline-Modus — Melde dich an zum Synchronisieren."
     },
     "todo": {
       "name": "To-Do-Liste",
@@ -254,7 +262,8 @@
       "social": {
         "continueWith": "Oder fortfahren mit",
         "google": "Google",
-        "github": "GitHub"
+        "github": "GitHub",
+        "comingSoon": "Social Login demnächst verfügbar."
       },
       "terms": {
         "agreement": "Durch Fortfahren stimmen Sie unseren",
@@ -491,6 +500,7 @@
       },
       "messages": {
         "copied": "Kopiert!",
+        "decodeError": "Decodierung fehlgeschlagen. Eingabeformat prüfen.",
         "jsonError": "Fehler im Header oder Payload JSON für die Signierung.",
         "debugWarning": "Debug-Tool. Verwenden Sie niemals Produktions-Geheimschlüssel."
       },
@@ -539,7 +549,8 @@
       },
       "messages": {
         "copied": "Kopiert!",
-        "allIdsCopied": "Alle IDs kopiert!"
+        "allIdsCopied": "Alle IDs kopiert!",
+        "copyFailed": "In die Zwischenablage kopieren fehlgeschlagen."
       },
       "uuid": {
         "settings": {
@@ -1095,6 +1106,92 @@
         "dataErrorLiterals": "- `true`, `false` und `null` muessen kleingeschrieben sein.",
         "dataTipTitle": "Tipp:",
         "dataTipDescription": "Generiere eine Beispiel-Payload und nutze \"Als Daten verwenden\" fuer schnellere Tests."
+      }
+    },
+    "svgLab": {
+      "name": "SVG-Studio",
+      "shortName": "SVG",
+      "title": "SVG-Studio",
+      "description": "SVG bearbeiten: Farben aendern, Elemente entfernen oder den Volleditor nutzen.",
+      "tabs": {
+        "simple": "Einfach",
+        "advanced": "Erweitert"
+      },
+      "simple": {
+        "step1Title": "Schritt 1 — Hochladen",
+        "step1Hint": "Waehle eine SVG-Datei. Anschliessend kannst du Farben aendern und Teile entfernen.",
+        "uploadLabel": "SVG hochladen",
+        "uploading": "Wird geladen…",
+        "uploadHint": "Waehle eine SVG-Datei zum Bearbeiten von Farben und Entfernen von Elementen.",
+        "step2Title": "Schritt 2 — Vorschau und Bearbeiten",
+        "step2Hint": "Vorschau links. Rechts Fuellung oder Strich pro Element aendern oder entfernen. Dann exportieren.",
+        "previewTitle": "Vorschau",
+        "previewModeFull": "Voll",
+        "previewModeElementOnly": "Nur Element",
+        "previewHoverHint": "Bewege die Maus über ein Element in der Liste, um es hier zu sehen.",
+        "elementsTitle": "Nach Element bearbeiten",
+        "elementFill": "Fuellung",
+        "elementStroke": "Strich",
+        "patternOrRef": "Ref",
+        "fillReplacePattern": "Muster/Verlauf durch Vollfarbe ersetzen",
+        "strokeReplacePattern": "Muster/Verlauf durch Vollstrich ersetzen",
+        "recolorImage": "Bild umfärben:",
+        "recolorFrom": "Diese Farbe ersetzen",
+        "recolorTo": "Mit dieser Farbe",
+        "recolorApply": "Anwenden",
+        "recolorApplying": "Wird angewendet…",
+        "recolorSuccess": "Bildfarbe aktualisiert.",
+        "recolorError": "Bild konnte nicht umgefärbt werden.",
+        "removeElement": "Entfernen",
+        "hideElement": "Ausblenden",
+        "showElement": "Einblenden",
+        "close": "Schließen",
+        "hidden": "ausgeblendet",
+        "noSvgYet": "Lade eine SVG-Datei hoch, um zu starten.",
+        "noElements": "Keine bearbeitbaren Elemente gefunden.",
+        "showingFirstElements": "Zeige die ersten {limit} von {total} Elementen.",
+        "exportSvg": "SVG exportieren",
+        "undo": "Rückgängig",
+        "redo": "Wiederholen",
+        "replaceAllFill": "Alle Fuellungen ersetzen",
+        "replaceAllStroke": "Alle Striche ersetzen",
+        "globalOptionsTitle": "Symbol-Optionen",
+        "background": "Hintergrund",
+        "backgroundNone": "Keiner",
+        "padding": "Abstand",
+        "rotation": "Drehung",
+        "fillType": "Fuellungstyp",
+        "fillTypeSolid": "Einfarbig",
+        "fillTypeGradient": "Verlauf",
+        "gradientAngle": "Winkel"
+      },
+      "advanced": {
+        "underConstruction": "In Arbeit",
+        "helpHint": "Vollständiger Canvas-Editor: SVG einfügen oder laden, Formen zeichnen und bearbeiten, Rückgängig, Wiederholen, Export. (Demnächst.)",
+        "intro": "Lade unten ein SVG oder starte mit leerer Leinwand. Formen auswaehlen zum Verschieben und Bearbeiten; Buttons fuer Rueckgaengig, Wiederholen und Export.",
+        "actionsLabel": "Aktionen",
+        "toolbarClear": "Leeren",
+        "toolbarUndo": "Rueckgaengig",
+        "toolbarRedo": "Wiederholen",
+        "toolbarLoadSvg": "Laden",
+        "toolbarExport": "SVG exportieren",
+        "toolbarSelect": "Auswaehlen",
+        "toolbarDraw": "Zeichnen",
+        "canvasLabel": "Leinwand",
+        "canvasPlaceholder": "Leinwand wird geladen…",
+        "loadSectionTitle": "SVG in die Leinwand laden",
+        "loadSectionHint": "SVG-Code unten einfuegen und Laden klicken, oder Datei hochladen. Leer lassen zum Zeichnen.",
+        "loadSvgPlaceholder": "SVG-Code hier einfuegen…",
+        "uploadFile": "Datei hochladen",
+        "exportEmptyHint": "Zuerst ein SVG hinzufuegen oder laden."
+      },
+      "messages": {
+        "invalidSvg": "Ungueltiges oder nicht unterstuetztes SVG.",
+        "exportSuccess": "SVG exportiert.",
+        "loadSuccess": "SVG geladen.",
+        "loadError": "Datei konnte nicht gelesen werden.",
+        "fileTooLarge": "Datei zu groß. Maximale Größe 10 MB.",
+        "cleared": "Leinwand geleert."
       }
     },
     "markdownNotes": {

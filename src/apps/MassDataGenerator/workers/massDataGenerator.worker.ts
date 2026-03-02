@@ -84,13 +84,21 @@ self.onmessage = (event: MessageEvent<MessageData>) => {
   }
 
   const generatedRecords: GeneratedRecord[] = [];
+  let generationError: string | undefined;
 
   for (let i = 0; i < quantity; i++) {
     const record: GeneratedRecord = {};
 
     fields.forEach((field) => {
       const fakerFunction = getFakerMethod(field.fakerMethod);
-      record[field.fieldName] = fakerFunction();
+      const value = fakerFunction();
+      record[field.fieldName] = value;
+      if (
+        typeof value === "string" &&
+        value.startsWith("Error: Invalid method (")
+      ) {
+        generationError = value;
+      }
     });
 
     generatedRecords.push(record);
@@ -103,5 +111,8 @@ self.onmessage = (event: MessageEvent<MessageData>) => {
     result = convertToCSV(generatedRecords, csvOptions);
   }
 
-  self.postMessage({ generatedData: result });
+  self.postMessage({
+    generatedData: result,
+    ...(generationError && { error: generationError }),
+  });
 };

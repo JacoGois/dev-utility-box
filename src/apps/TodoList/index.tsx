@@ -110,9 +110,9 @@ function TodoListComponent({ instanceId }: { instanceId: string }) {
   }, [state]);
 
   return (
-    <div className="flex flex-col h-full w-full p-4 bg-card text-card-foreground border-t">
+    <div className="@container flex h-full w-full min-h-0 flex-col p-4 bg-card text-card-foreground border-t overflow-hidden">
       <AddTaskForm dispatch={dispatch} />
-      <div className="flex-grow overflow-auto pr-2">
+      <div className="min-h-0 flex-1 overflow-auto pr-2 stable-scrollbar-container">
         <TaskList tasks={state.tasks} dispatch={dispatch} />
       </div>
     </div>

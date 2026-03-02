@@ -19,6 +19,7 @@ import {
   ScrollArea,
 } from "@/components/ui/ScrollArea";
 import { useAppTranslations } from "@/hooks/useTranslations";
+import { useWindowShellStore } from "@/stores/useWindowShellStore";
 import { getTagTextColor, hexToRgba } from "@/lib/color";
 import { cn } from "@/lib/utils";
 import { KanbanStoreProvider, useKanbanStore } from "@/stores/useKanbanStore";
@@ -85,8 +86,13 @@ const resolvePriority = (priority: unknown): KanbanCardPriority => {
   return 2;
 };
 
-function KanbanBoardComponent() {
+function KanbanBoardComponent({
+  instanceId,
+}: {
+  instanceId: string;
+}) {
   const t = useAppTranslations("kanbanBoard");
+  const modalContainerRef = useWindowShellStore((s) => s.refs[instanceId]);
   const {
     cards,
     columns,
@@ -793,9 +799,8 @@ function KanbanBoardComponent() {
           }}
         >
           <DialogContent
-            portalContainer={appRootRef.current ?? undefined}
-            overlayClassName="absolute inset-0 z-[120] bg-black/35"
-            className="!absolute top-1/2 left-1/2 z-[121] sm:max-w-md"
+            portalContainer={modalContainerRef?.current ?? undefined}
+            className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
           >
             <DialogHeader>
               <DialogTitle>
@@ -839,9 +844,8 @@ function KanbanBoardComponent() {
           }}
         >
           <DialogContent
-            portalContainer={appRootRef.current ?? undefined}
-            overlayClassName="absolute inset-0 z-[130] bg-black/40"
-            className="!absolute top-1/2 left-1/2 z-[131] w-[min(96vw,680px)] max-w-[calc(100%-1rem)] p-4 sm:p-6"
+            portalContainer={modalContainerRef?.current ?? undefined}
+            className="max-h-[80vh] w-[min(96vw,680px)] max-w-[calc(100%-1rem)] overflow-y-auto p-4 sm:p-6 z-[9999999]"
             contentRef={(node) => setCardModalContentEl(node)}
           >
             <DialogHeader>
@@ -1176,10 +1180,9 @@ function KanbanBoardComponent() {
         <Dialog open={isTagManagerOpen} onOpenChange={setIsTagManagerOpen}>
           <DialogContent
             portalContainer={
-              cardModalContentEl ?? appRootRef.current ?? undefined
+              cardModalContentEl ?? modalContainerRef?.current ?? undefined
             }
-            overlayClassName="absolute inset-0 z-[140] bg-black/35"
-            className="!absolute top-1/2 left-1/2 z-[141] sm:max-w-md"
+            className="max-w-md max-h-[80vh] overflow-y-auto z-[9999999]"
           >
             <DialogHeader>
               <DialogTitle>
@@ -1306,7 +1309,7 @@ export function KanbanBoard({ instanceId }: { instanceId: string }) {
         done: t("defaultColumns.done"),
       }}
     >
-      <MemoizedKanbanBoard />
+      <MemoizedKanbanBoard instanceId={instanceId} />
     </KanbanStoreProvider>
   );
 }

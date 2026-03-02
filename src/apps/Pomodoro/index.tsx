@@ -220,19 +220,19 @@ export function Pomodoro({ instanceId }: PomodoroProps) {
             {pomodoroStorage.isLoading ? (
               <div className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                Carregando dados...
+                {t("loadingData")}
               </div>
             ) : pomodoroStorage.isLoggedIn ? (
               <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-md">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 {pomodoroStorage.pendingChanges
-                  ? "Sincronizando..."
-                  : "Sincronizado"}
+                  ? t("syncing")
+                  : t("synced")}
               </div>
             ) : (
               <div className="flex items-center gap-2 text-xs text-yellow-600 bg-yellow-50 px-2 py-1 rounded-md">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                Modo Offline - Faça login para sincronizar
+                {t("offlineMode")}
               </div>
             )}
           </div>

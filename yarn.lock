@@ -1650,6 +1650,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@svgedit/svgcanvas@npm:^7.4.1":
+  version: 7.4.1
+  resolution: "@svgedit/svgcanvas@npm:7.4.1"
+  checksum: 10c0/c2b8b3dcc617d2c5bbb9a8007a8430c9e840ec9134313190d94c83091cd338c0f5d57bedc5c032f2d8e64af345cfd9076eae4ef8f5f4b0ac9cb8ee900358a035
+  languageName: node
+  linkType: hard
+
 "@swc/counter@npm:0.1.3":
   version: 0.1.3
   resolution: "@swc/counter@npm:0.1.3"
@@ -3178,6 +3185,7 @@ __metadata:
     "@radix-ui/react-slot": "npm:^1.2.3"
     "@radix-ui/react-switch": "npm:^1.2.5"
     "@radix-ui/react-tabs": "npm:^1.1.12"
+    "@svgedit/svgcanvas": "npm:^7.4.1"
     "@tailwindcss/postcss": "npm:^4"
     "@tailwindcss/typography": "npm:^0.5.16"
     "@types/crypto-js": "npm:^4.2.2"
