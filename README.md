@@ -1,95 +1,95 @@
-# 🧰 Dev Utility Box
+# Dev Utility Box
 
-**Uma suíte de ferramentas para desenvolvedores que roda em um desktop simulado no navegador.**  
-Múltiplos apps em uma única página: timer Pomodoro, Kanban, base de conhecimento, editores JSON/SVG, codificadores, geração de dados e muito mais — com janelas arrastáveis, temas e estado persistente.
-
----
-
-## ✨ O que é o Dev Utility Box?
-
-O **DUB** é uma aplicação web que simula um ambiente de desktop dentro do navegador. Em vez de abrir dezenas de abas ou apps externos, você concentra utilitários do dia a dia em um só lugar: um “OS” leve, rápido e focado em produtividade.
-
-- **Múltiplas janelas** — Arraste, redimensione, minimize e maximize como em um desktop real.
-- **Vários apps ao mesmo tempo** — Abra quantas instâncias cada app permitir (ex.: vários Kanbans, várias listas de tarefas).
-- **Estado salvo** — Posição das janelas, itens no dock e dados dos apps (onde aplicável) persistem no `localStorage`.
-- **Internacionalizado** — Interface em inglês, português, espanhol, francês, alemão, japonês e chinês.
-- **Temas** — Visual inspirado em Ubuntu, macOS e Windows XP, além de temas claro/escuro.
+**A production-ready suite of developer tools running in a simulated desktop inside the browser.**  
+Pomodoro, Kanban, knowledge base, JSON/SVG editors, encoders, data generation and more — in a single page, with draggable windows, theming and full state persistence.
 
 ---
 
-## 🖥️ Aplicativos incluídos
+## Overview
 
-| App | Descrição |
-|-----|-----------|
-| 🍅 **Pomodoro** | Timer de foco com ciclos configuráveis (trabalho / pausa). |
-| 📝 **Todo List** | Lista de tarefas com estado persistente por instância. |
-| 📋 **Kanban Board** | Quadro Kanban com colunas, cards, subtarefas, tags, prioridade e prazos. |
-| 🧠 **Knowledge Base** | Base de conhecimento estilo Notion: páginas, favoritos, ícones e editor Markdown (MDXEditor). |
-| 📐 **JSON Tools** | Validação, formatação e manipulação de JSON. |
-| 🔐 **Encoders & Decoders** | Base64, JWT, URL e outros codificadores/decodificadores. |
-| 🗄️ **Data Generator** | Geração de dados sintéticos (nomes, emails, etc.) com Faker. |
-| 📦 **Mass Data Generator** | Geração em massa de JSON com templates e Faker. |
-| 🖼️ **Image Text Lab** | Ferramentas com imagem e texto (OCR com Tesseract, etc.). |
-| 📋 **Schema Lab** | Validação com JSON Schema, geração de tipos e exemplos. |
-| ✏️ **SVG Lab** | Edição e recolorização de SVGs (modo simples e avançado). |
-| 👤 **Auth** | Fluxos de autenticação e JWT para testes. |
+**DUB** is a modular web application that replicates a desktop environment in the browser. It consolidates daily dev utilities into one place: a lightweight, type-safe “OS” built for productivity and scalability.
 
-Cada app é um módulo independente: pode ser aberto em janela própria, ter estado isolado e ser estendido ou trocado sem quebrar o restante do sistema.
+- **Multi-window UX** — Drag, resize, minimize and maximize; focus and z-order are managed automatically.
+- **Multi-instance apps** — Each app supports multiple open instances (e.g. several Kanban boards, several task lists) with isolated state.
+- **Full persistence** — Window layout, dock configuration and per-app data persist across sessions via `localStorage`.
+- **i18n** — Seven locales: English, Portuguese, Spanish, French, German, Japanese, Chinese.
+- **Theming** — Ubuntu-, macOS- and Windows XP–inspired themes, plus system-aware light/dark mode.
 
 ---
 
-## 🚀 Como o projeto funciona
+## Included applications
 
-### Experiência do usuário
+| App                     | Description                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| **Pomodoro**            | Focus timer with configurable work/break cycles.                                      |
+| **Todo List**           | Task list with per-instance persistent state.                                         |
+| **Kanban Board**        | Kanban board with columns, cards, subtasks, tags, priority and due dates.             |
+| **Knowledge Base**      | Notion-style knowledge base: pages, favorites, icons and Markdown editor (MDXEditor). |
+| **JSON Tools**          | Validation, formatting and manipulation of JSON.                                      |
+| **Encoders & Decoders** | Base64, JWT, URL and other encode/decode tools.                                       |
+| **Data Generator**      | Synthetic data generation (names, emails, etc.) with Faker.                           |
+| **Mass Data Generator** | Bulk JSON generation with templates and Faker.                                        |
+| **Image Text Lab**      | Image and text tools (OCR with Tesseract, etc.).                                      |
+| **Schema Lab**          | JSON Schema validation, type and example generation.                                  |
+| **SVG Lab**             | SVG editing and recolor (simple and advanced modes).                                  |
+| **Auth**                | Authentication flows and JWT for testing.                                             |
 
-1. **Desktop** — Ao acessar a aplicação, você vê um “desktop” com wallpaper e ícones (ou tema escolhido).
-2. **Dock** — Na parte inferior, um dock mostra apps fixos e os que estão abertos; é possível adicionar/remover atalhos.
-3. **Lançador** — Um launcher (estilo Spotlight) lista todos os apps; atalho **Ctrl+K** / **Cmd+K** para busca rápida.
-4. **Janelas** — Ao abrir um app, uma janela é criada: barra de título com minimizar/maximizar/fechar, arrastar e redimensionar. O foco e o empilhamento (z-index) são controlados automaticamente.
-5. **Persistência** — Posições e tamanhos das janelas, itens no dock e estado de cada app (quando implementado) são salvos no `localStorage` e restaurados ao recarregar.
-
-### Fluxo técnico (em alto nível)
-
-- **Registro de apps** (`src/lib/apps.ts`) — Cada app é registrado com nome, ícone, componente React, limites de instâncias e tamanhos máximos/mínimos de janela.
-- **Gerenciamento de janelas** — `useWindowStore` (Zustand + persist) guarda quais apps estão abertos, posições, tamanhos, ordem de foco, minimizados e maximizados.
-- **Renderização** — O `Desktop` renderiza um `AppWindow` para cada instância aberta; cada janela recebe um `instanceId` e renderiza o componente do app. Um **Error Boundary** envolve cada app para que um erro em um não derrube os outros.
-- **Internacionalização** — `next-intl` fornece as traduções; o registro de apps usa uma função `t(key)` para nomes e textos, e cada app pode usar `useAppTranslations("appName")` para suas próprias chaves.
+Apps are **fully decoupled**: each runs in its own window with isolated state and can be extended or replaced without affecting the rest of the system.
 
 ---
 
-## 🏗️ Arquitetura e stack
+## How it works
 
-### Stack principal
+### User flow
 
-| Camada | Tecnologia |
-|--------|------------|
-| **Framework** | [Next.js 15](https://nextjs.org/) (App Router) |
-| **Linguagem** | [TypeScript](https://www.typescriptlang.org/) |
-| **UI** | [React 19](https://react.dev/) |
-| **Estilos** | [Tailwind CSS 4](https://tailwindcss.com/) |
-| **Componentes** | Primitivos [Radix UI](https://www.radix-ui.com/), padrão próximo ao [shadcn/ui](https://ui.shadcn.com/) |
-| **Estado global** | [Zustand](https://github.com/pmndrs/zustand) (com middleware `persist` para localStorage) |
-| **Formulários / validação** | [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) |
-| **i18n** | [next-intl](https://next-intl-docs.vercel.app/) |
-| **Animações** | [Framer Motion](https://www.framer.com/motion/) |
+1. **Desktop** — Wallpaper, icons and theme define the workspace.
+2. **Dock** — Pinned and open apps; shortcuts can be added or removed.
+3. **Launcher** — Spotlight-style app list; **Ctrl+K** / **Cmd+K** for quick search.
+4. **Windows** — Per-app windows with title bar (min/max/close), drag and resize; focus and stacking are handled by the shell.
+5. **Persistence** — Layout, dock and per-app state are saved and restored on reload.
+
+### Technical design
+
+- **App registry** (`src/lib/apps.ts`) — Single source of truth: name, icon, component, instance limits, min/max window size. The only coupling point between apps and the desktop core.
+- **Window shell** — `useWindowStore` (Zustand + persist) holds open apps, positions, sizes, focus order and min/max state.
+- **Rendering** — `Desktop` mounts one `AppWindow` per instance; each receives an `instanceId` and renders the app. **Error Boundaries** isolate failures so one broken app cannot take down the shell.
+- **i18n** — `next-intl` drives translations; the registry and each app use namespaced keys for labels and copy.
+
+---
+
+## Architecture & stack
+
+### Tech stack
+
+| Layer             | Technology                                                                                                        |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Framework**     | [Next.js 15](https://nextjs.org/) (App Router)                                                                    |
+| **Language**      | [TypeScript](https://www.typescriptlang.org/) (strict)                                                            |
+| **UI**            | [React 19](https://react.dev/)                                                                                    |
+| **Styles**        | [Tailwind CSS 4](https://tailwindcss.com/)                                                                        |
+| **Components**    | [Radix UI](https://www.radix-ui.com/) primitives, [shadcn/ui](https://ui.shadcn.com/) patterns                    |
+| **State**         | [Zustand](https://github.com/pmndrs/zustand) + `persist` (localStorage)                                           |
+| **Forms**         | [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)                                         |
+| **i18n**          | [next-intl](https://next-intl-docs.vercel.app/)                                                                   |
+| **Animation**     | [Framer Motion](https://www.framer.com/motion/)                                                                   |
 | **Drag and drop** | [react-draggable](https://github.com/react-grid-layout/react-draggable), [@dnd-kit](https://dndkit.com/) (Kanban) |
-| **Ícones** | [Lucide React](https://lucide.dev/) |
+| **Icons**         | [Lucide React](https://lucide.dev/)                                                                               |
 
-### Decisões de arquitetura
+### Design decisions
 
-- **Apps como módulos** — Cada app vive em `src/apps/<AppName>/` com seu próprio `index.tsx`, estados e, quando faz sentido, store específica (ex.: Kanban). O registro em `apps.ts` é o único ponto de acoplamento com o “core” do desktop.
-- **Estado por instância** — Janelas são identificadas por `id`; o app recebe `instanceId` e pode persistir estado por essa id (ex.: Todo, Kanban), permitindo múltiplas instâncias com dados diferentes.
-- **Error Boundaries** — Cada janela envolve o conteúdo do app em um Error Boundary; falhas são contidas e o usuário pode fechar a janela ou recarregar sem perder os outros apps.
-- **Temas e acessibilidade** — Temas (Ubuntu, macOS, Windows XP) são aplicados via classes no `body` e variáveis CSS; componentes usam tokens semânticos (e.g. `--card`, `--foreground`) para respeitar contraste e acessibilidade.
-- **Container e responsividade** — Uso de `@container` (Tailwind) e layout flex/grid com `min-h-0` e `overflow-y-auto` para que os apps se adaptem bem a janelas pequenas e tenham scroll interno quando necessário.
+- **Modular apps** — Each app is a self-contained module under `src/apps/<AppName>/` (component, state, optional store). Only `apps.ts` ties it to the desktop; adding or replacing an app does not touch the shell.
+- **Instance isolation** — Windows are keyed by `id`; apps receive `instanceId` and persist state per instance (e.g. Todo, Kanban), enabling multiple independent instances.
+- **Fault isolation** — Every app is wrapped in an Error Boundary; a crash in one app does not affect others. The shell remains stable and the user can close the faulty window or reload.
+- **Theming & a11y** — Themes (Ubuntu, macOS, Windows XP) use `body` classes and CSS variables; UI uses semantic tokens (`--card`, `--foreground`) for contrast and accessibility.
+- **Responsive layout** — `@container` (Tailwind), flex/grid, `min-h-0` and `overflow-y-auto` so apps adapt to small viewports and scroll inside their frame.
 
-### Estrutura de pastas (resumida)
+### Folder structure (summary)
 
 ```
 dev-utility-box/
 ├── src/
-│   ├── app/                    # Next.js App Router: [locale], layout, página inicial
-│   ├── apps/                   # Um diretório por aplicativo
+│   ├── app/                    # Next.js App Router: [locale], layout, home
+│   ├── apps/                   # One directory per application
 │   │   ├── Auth/
 │   │   ├── KanbanBoard/
 │   │   ├── KnowledgeBase/
@@ -97,110 +97,88 @@ dev-utility-box/
 │   │   ├── SvgLab/
 │   │   └── ...
 │   ├── components/             # Desktop, AppWindow, Dock, Spotlight, ErrorBoundary, UI
-│   ├── hooks/                  # useTranslations, usePersistentAppStore, etc.
+│   │   ├── __tests__/          # Core component tests
+│   │   └── ui/
+│   │       └── __tests__/      # UI component tests
+│   ├── hooks/
+│   │   └── __tests__/          # Hook tests
 │   ├── i18n/                   # next-intl: routing, config, request
-│   ├── lib/                    # apps.ts (registro), utils
-│   └── stores/                 # Zustand: useWindowStore, useDockStore, useThemeStore, etc.
-├── public/                     # Wallpapers, ícones, assets estáticos
+│   ├── lib/
+│   │   └── __tests__/          # Utils, apps registry, color, constants, shortcuts
+│   ├── stores/
+│   │   └── __tests__/          # Zustand store tests
+│   └── test/
+│       └── setup.ts            # Global test setup (jest-dom, mocks)
+├── public/                     # Wallpapers, icons, static assets
 ├── package.json
 └── README.md
 ```
 
 ---
 
-## 🏁 Como rodar o projeto
+## Testing
 
-### Pré-requisitos
+The core is covered by **unit and component tests** using **[Vitest](https://vitest.dev/)** and **[React Testing Library](https://testing-library.com/react)**. Tests live in **`__tests__`** folders next to the code they cover, keeping each module and its tests in one place.
 
-- **Node.js** 18+ (recomendado 20+)
-- **Yarn** (o projeto usa Yarn 4; veja `packageManager` em `package.json`)
+### Coverage
 
-### Passos
+| Layer          | Path                           | Scope                                                                                                                                |
+| -------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Lib**        | `src/lib/__tests__/`           | `utils`, `apps`, `color`, `constants`, `shortcuts`                                                                                   |
+| **Stores**     | `src/stores/__tests__/`        | `useWindowStore`, `useDockStore`, `useThemeStore`, `useSpotlightStore`, `useDesktopStore`, `useAppStateStore`, `useWindowShellStore` |
+| **Hooks**      | `src/hooks/__tests__/`         | `useResizeObserver`, `useShortcuts`, `useApi`, `usePersistentAppStore`                                                               |
+| **Components** | `src/components/__tests__/`    | `ErrorBoundary`, `AppIcon`, `SpotlightSearch`                                                                                        |
+| **UI**         | `src/components/ui/__tests__/` | `Button`                                                                                                                             |
 
-1. **Clonar e entrar na pasta**
-   ```bash
-   git clone https://github.com/seu-usuario/dev-utility-box.git
-   cd dev-utility-box
-   ```
+Scenarios include **success and failure paths**, store actions, hooks with mocks (`ResizeObserver`, `localStorage`, i18n), and component behavior (render, click, keyboard, context menu).
 
-2. **Instalar dependências**
-   ```bash
-   yarn install
-   ```
-
-3. **Subir o servidor de desenvolvimento**
-   ```bash
-   yarn dev
-   ```
-
-4. **Abrir no navegador**  
-   Acesse [http://localhost:3000](http://localhost:3000). A rota pode incluir o locale (ex.: `/en`, `/pt`).
-
-### Scripts disponíveis
-
-| Comando | Descrição |
-|---------|-----------|
-| `yarn dev` | Servidor de desenvolvimento (Next.js) |
-| `yarn build` | Build de produção |
-| `yarn start` | Servidor para o build de produção |
-| `yarn lint` | Executa o ESLint |
-| `yarn test` | Roda os testes (Vitest) uma vez |
-| `yarn test:watch` | Roda os testes em modo watch |
-| `yarn test:coverage` | Gera relatório de cobertura |
-
----
-
-## 🧪 Testes
-
-O projeto usa **[Vitest](https://vitest.dev/)** com **[React Testing Library](https://testing-library.com/react)** para testes unitários e de componentes.
-
-### Por onde começar a cobrir o sistema
-
-1. **Utilitários e funções puras** (`src/lib/*.test.ts`) — Comece por `cn`, helpers e o registro de apps; são rápidos e estáveis.
-2. **Stores Zustand** (`src/stores/*.test.ts`) — Teste a lógica de estado: use `getState()` e `setState()` e, quando houver `persist`, mocke `localStorage` no setup ou no teste.
-3. **Componentes UI** (`src/components/ui/*.test.tsx`) — Teste renderização, clique e acessibilidade com `render`, `screen` e `userEvent`.
-4. **Hooks** (`src/hooks/*.test.ts`) — Use `renderHook` de `@testing-library/react` para hooks que dependem de contexto ou store.
-5. **Apps** — Por último, teste fluxos críticos de cada app (ex.: criar card no Kanban, salvar página na Knowledge Base); prefira testes enxutos e mocks para APIs/`localStorage`.
-
-### Onde colocar os testes
-
-**Testes co-localizados:** cada arquivo de teste fica no **mesmo diretório** que o código testado (ex.: `utils.ts` e `utils.test.ts` em `src/lib/`). Isso mantém o módulo (fonte + teste) como uma única unidade, facilita refatoração e descoberta. Ver **[docs/TESTING_PLAN_CORE.md](docs/TESTING_PLAN_CORE.md)** para o raciocínio completo (clean code e arquitetura).
-
-### Estrutura
-
-- Convenção: `*.test.ts` / `*.test.tsx` ao lado do fonte; opcionalmente `__tests__/` na mesma pasta para agrupar.
-- Setup global em `src/test/setup.ts` (jest-dom, cleanup, mocks de `matchMedia`).
-- Config em `vitest.config.ts` (alias `@/`, ambiente jsdom, coverage com v8).
-
-### Executar
+**Setup:** `src/test/setup.ts` (jest-dom, cleanup, jsdom mocks). **Config:** `vitest.config.ts` (path alias, jsdom, v8 coverage).
 
 ```bash
-yarn test           # uma execução
-yarn test:watch     # watch mode
-yarn test:coverage  # cobertura (relatório em coverage/)
+yarn test            # single run
+yarn test:watch      # watch
+yarn test:coverage   # report in coverage/
 ```
 
-Para um **planejamento detalhado da cobertura do core** (lib, stores, hooks, componentes), veja **[docs/TESTING_PLAN_CORE.md](docs/TESTING_PLAN_CORE.md)**.
+---
+
+## Getting started
+
+**Requirements:** Node.js 18+ (20+ recommended), Yarn 4 (`packageManager` in `package.json`).
+
+```bash
+git clone https://github.com/your-username/dev-utility-box.git
+cd dev-utility-box
+yarn install
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) (locale in path, e.g. `/en`, `/pt`).
+
+| Script               | Description            |
+| -------------------- | ---------------------- |
+| `yarn dev`           | Dev server             |
+| `yarn build`         | Production build       |
+| `yarn start`         | Serve production build |
+| `yarn lint`          | ESLint                 |
+| `yarn test`          | Vitest (single run)    |
+| `yarn test:watch`    | Vitest watch           |
+| `yarn test:coverage` | Coverage report        |
 
 ---
 
-## 🌐 Internacionalização
+## Internationalization
 
-O DUB usa **next-intl** com rotas por locale. Locales suportados: **en**, **pt**, **es**, **fr**, **de**, **ja**, **zh**.  
-As chaves de tradução ficam em `src/i18n/messages/<locale>.json`. O registro de apps e cada app consomem essas chaves para nomes, botões, mensagens e placeholders.
-
----
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas: novos utilitários, melhorias de acessibilidade, i18n ou correções de bugs.
-
-1. Abra uma **Issue** para discutir a mudança.
-2. Faça um **Fork**, crie uma branch (`git checkout -b feature/nome-da-feature`).
-3. Commit e push para a branch e abra um **Pull Request**.
+**next-intl** powers locale-based routing and messages. Locales: **en**, **pt**, **es**, **fr**, **de**, **ja**, **zh**. Keys live in `src/i18n/messages/<locale>.json`; the registry and apps use namespaced keys for labels and copy.
 
 ---
 
-## 📄 Licença
+## Contributing
 
-Este projeto está sob a licença **MIT**. Consulte o arquivo `LICENSE` para mais detalhes.
+Contributions are welcome (utilities, accessibility, i18n, bug fixes). Open an issue to discuss, then fork, branch and open a pull request.
+
+---
+
+## License
+
+**MIT** — see `LICENSE`.
