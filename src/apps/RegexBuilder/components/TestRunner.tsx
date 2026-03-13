@@ -23,7 +23,6 @@ export function TestRunner({
   dispatch,
 }: TestRunnerProps) {
   const { matches, error, highlightedText } = useMemo(() => {
-    // Se o padrão estiver vazio, não há nada para testar.
     if (!pattern?.trim()) {
       return { matches: [], error: null, highlightedText: testString };
     }
@@ -45,7 +44,6 @@ export function TestRunner({
         groups: rawMatch.slice(1).filter((g) => g !== undefined),
       }));
 
-      // A lógica para criar o texto com destaques
       const parts: (string | React.ReactNode)[] = [];
       let lastIndex = 0;
       allMatches.forEach((match, i) => {

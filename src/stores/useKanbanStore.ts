@@ -1,14 +1,15 @@
-/* eslint-disable */
-// @ts-nocheck
 import {
   KanbanBoardState,
   KanbanCard,
+  KanbanCardPriority,
   KanbanColumn,
   Tag,
 } from "@/apps/KanbanBoard/types";
+import { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { nanoid } from "nanoid";
 import React, { createContext, useContext, useRef } from "react";
+import type { StoreApi } from "zustand";
 import { createStore, useStore } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -72,7 +73,7 @@ const initialDefaultColumns = (titles: KanbanDefaultColumnTitles) => {
         title: "Implement OAuth login",
         description:
           "Add Google and GitHub login, including a callback error fallback flow.",
-        priority: 1,
+        priority: 1 as KanbanCardPriority,
         dueDate: "2026-03-15",
         tagIds: [backendTagId, frontendTagId],
         subtasks: [
@@ -106,7 +107,7 @@ const initialDefaultColumns = (titles: KanbanDefaultColumnTitles) => {
         title: "Design onboarding checklist",
         description:
           "Create a guided checklist for new users focused on first-task completion.",
-        priority: 2,
+        priority: 2 as KanbanCardPriority,
         dueDate: "2026-03-20",
         tagIds: [uxTagId],
         subtasks: [
@@ -134,7 +135,7 @@ const initialDefaultColumns = (titles: KanbanDefaultColumnTitles) => {
         title: "Refactor kanban drag-and-drop",
         description:
           "Improve collision detection strategy to reduce sorting/reordering bugs.",
-        priority: 0,
+        priority: 0 as KanbanCardPriority,
         dueDate: "2026-03-10",
         tagIds: [frontendTagId, qaTagId],
         subtasks: [
@@ -168,7 +169,7 @@ const initialDefaultColumns = (titles: KanbanDefaultColumnTitles) => {
         title: "Add locale switcher in settings",
         description:
           "Allow language switching without page reload and persist user preference.",
-        priority: 2,
+        priority: 2 as KanbanCardPriority,
         dueDate: "2026-03-01",
         tagIds: [frontendTagId],
         subtasks: [
@@ -237,14 +238,17 @@ interface KanbanActions {
   updateTag: (tagId: string, newName: string, newColor?: string) => void;
   deleteTag: (tagId: string) => void;
 
-  handleDragEnd: (event: any) => void;
+  handleDragEnd: (event: DragEndEvent) => void;
 
   setBoardState: (newState: KanbanBoardState) => void;
 }
 
+type KanbanSetState = StoreApi<KanbanStoreState>["setState"];
+type KanbanGetState = StoreApi<KanbanStoreState>["getState"];
+
 const createKanbanState = (
-  set: any,
-  get: any,
+  set: KanbanSetState,
+  get: KanbanGetState,
   defaultColumnTitles: KanbanDefaultColumnTitles,
 ) => {
   const defaults = initialDefaultColumns(defaultColumnTitles);
@@ -254,9 +258,9 @@ const createKanbanState = (
     columnOrder: defaults.columnOrder,
     tags: defaults.tags,
 
-    setBoardState: (newState) => set(newState),
+    setBoardState: (newState: KanbanBoardState) => set(newState),
 
-    addColumn: (title) => {
+    addColumn: (title: string) => {
       const newColumnId = nanoid();
       const newColumn: KanbanColumn = { id: newColumnId, title, cardIds: [] };
       set((state) => ({
@@ -264,7 +268,7 @@ const createKanbanState = (
         columnOrder: [...state.columnOrder, newColumnId],
       }));
     },
-    updateColumnTitle: (columnId, newTitle) => {
+    updateColumnTitle: (columnId: string, newTitle: string) => {
       set((state) => ({
         columns: {
           ...state.columns,
@@ -272,7 +276,7 @@ const createKanbanState = (
         },
       }));
     },
-    deleteColumn: (columnId) => {
+    deleteColumn: (columnId: string) => {
       set((state) => {
         const columnToDelete = state.columns[columnId];
         if (!columnToDelete) return state;
@@ -290,13 +294,32 @@ const createKanbanState = (
         };
       });
     },
-    moveColumn: (oldIndex, newIndex) => {
+    moveColumn: (oldIndex: number, newIndex: number) => {
       set((state) => ({
         columnOrder: arrayMove(state.columnOrder, oldIndex, newIndex),
       }));
     },
 
-    addCard: (columnId, cardData) => {
+    addCard: (
+      columnId: string,
+      cardData: Omit<
+        KanbanCard,
+        | "id"
+        | "columnId"
+        | "createdAt"
+        | "updatedAt"
+        | "order"
+        | "subtasks"
+        | "tagIds"
+        | "links"
+      > &
+        Partial<
+          Pick<
+            KanbanCard,
+            "description" | "subtasks" | "links" | "priority" | "dueDate" | "tagIds"
+          >
+        >,
+    ) => {
       const newCardId = nanoid();
       const now = Date.now();
       const newCard: KanbanCard = {
@@ -304,9 +327,8 @@ const createKanbanState = (
         columnId,
         title: cardData.title,
         description: cardData.description || "",
-        priority: cardData.priority ?? 2,
+        priority: (cardData.priority ?? 2) as KanbanCardPriority,
         dueDate: cardData.dueDate || undefined,
-        tags: [],
         tagIds: cardData.tagIds || [],
         subtasks: cardData.subtasks || [],
         links: cardData.links || {},
@@ -329,7 +351,7 @@ const createKanbanState = (
       });
       return newCard;
     },
-    updateCard: (updatedCard) => {
+    updateCard: (updatedCard: KanbanCard) => {
       set((state) => ({
         cards: {
           ...state.cards,
@@ -341,7 +363,7 @@ const createKanbanState = (
         },
       }));
     },
-    deleteCard: (cardId) => {
+    deleteCard: (cardId: string) => {
       set((state) => {
         const cardToDelete = state.cards[cardId];
         if (!cardToDelete) return state;
@@ -362,7 +384,7 @@ const createKanbanState = (
         };
       });
     },
-    toggleSubtask: (cardId, subtaskId) => {
+    toggleSubtask: (cardId: string, subtaskId: string) => {
       set((state) => {
         const card = state.cards[cardId];
         if (!card) return state;
@@ -383,10 +405,10 @@ const createKanbanState = (
     },
 
     moveCardToDifferentColumn: (
-      cardId,
-      oldColumnId,
-      newColumnId,
-      newIndexInNewColumn,
+      cardId: string,
+      oldColumnId: string,
+      newColumnId: string,
+      newIndexInNewColumn: number,
     ) => {
       set((state) => {
         const oldCol = state.columns[oldColumnId];
@@ -414,7 +436,11 @@ const createKanbanState = (
         };
       });
     },
-    moveCardWithinColumn: (cardId, columnId, newIndexInColumn) => {
+    moveCardWithinColumn: (
+      cardId: string,
+      columnId: string,
+      newIndexInColumn: number,
+    ) => {
       set((state) => {
         const column = state.columns[columnId];
         if (!column) return state;
@@ -439,7 +465,7 @@ const createKanbanState = (
         };
       });
     },
-    handleDragEnd: (event: any) => {
+    handleDragEnd: (event: DragEndEvent) => {
       const { active, over } = event;
       if (!active || !over) return;
 
@@ -517,7 +543,7 @@ const createKanbanState = (
       }
     },
 
-    addTag: (name, color) => {
+    addTag: (name: string, color?: string) => {
       const existingTag = Object.values(get().tags).find(
         (t) => t.name.toLowerCase() === name.toLowerCase(),
       );
@@ -531,7 +557,7 @@ const createKanbanState = (
       }));
       return newTag;
     },
-    updateTag: (tagId, newName, newColor) => {
+    updateTag: (tagId: string, newName: string, newColor?: string) => {
       set((state) => {
         if (!state.tags[tagId]) return state;
         return {
@@ -546,7 +572,7 @@ const createKanbanState = (
         };
       });
     },
-    deleteTag: (tagId) => {
+    deleteTag: (tagId: string) => {
       set((state) => {
         const newTags = { ...state.tags };
         delete newTags[tagId];
@@ -596,6 +622,21 @@ const getKanbanStore = (
   return kanbanStoreRegistry.get(instanceId)!;
 };
 
+const DUMMY_TITLES: KanbanDefaultColumnTitles = {
+  todo: "",
+  inProgress: "",
+  done: "",
+};
+
+let dummyStore: ReturnType<typeof createKanbanStore> | null = null;
+
+function getDummyStore(): ReturnType<typeof createKanbanStore> {
+  if (!dummyStore) {
+    dummyStore = createKanbanStore("__kanban_dummy__", DUMMY_TITLES);
+  }
+  return dummyStore;
+}
+
 const KanbanStoreContext = createContext<ReturnType<
   typeof createKanbanStore
 > | null>(null);
@@ -624,12 +665,16 @@ export function KanbanStoreProvider({
   );
 }
 
+const identitySelector = (s: KanbanStoreState): KanbanStoreState => s;
+
 export function useKanbanStore(): KanbanStoreState;
 export function useKanbanStore<T>(selector: (state: KanbanStoreState) => T): T;
 export function useKanbanStore<T>(selector?: (state: KanbanStoreState) => T) {
   const store = useContext(KanbanStoreContext);
+  const sel = (selector ?? identitySelector) as (state: KanbanStoreState) => T;
+  const state = useStore(store ?? getDummyStore(), sel);
   if (!store) {
     throw new Error("useKanbanStore must be used within KanbanStoreProvider");
   }
-  return selector ? useStore(store, selector) : useStore(store);
+  return state;
 }

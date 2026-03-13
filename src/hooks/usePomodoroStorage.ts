@@ -83,10 +83,8 @@ export const usePomodoroStorage = () => {
     httpClient.get(getEndpoint("pomodoroStats").route)
   );
 
-  // Load data from server when logged in
   const loadServerData = useCallback(async () => {
     if (!sessionsStorage.isLoggedIn) {
-      // Load from local storage when not logged in
       const localSessions = await sessionsStorage.loadLocal();
       const localSettings = await settingsStorage.loadLocal();
 
@@ -108,13 +106,11 @@ export const usePomodoroStorage = () => {
 
     setIsLoading(true);
     try {
-      // Load settings from server
       const settingsResponse = await getSettingsApi.makeRequest();
       const serverSettings = settingsResponse.data as PomodoroSettings;
       setSettings(serverSettings);
       await settingsStorage.saveLocal(serverSettings);
 
-      // Load history from server
       const historyResponse = await getHistoryApi.makeRequest({
         page: 1,
         limit: 100,
@@ -142,7 +138,6 @@ export const usePomodoroStorage = () => {
     } catch (error) {
       console.error("[Pomodoro] Error loading data from server:", error);
 
-      // Fallback to local data
       const localSessions = await sessionsStorage.loadLocal();
       const localSettings = await settingsStorage.loadLocal();
 
@@ -164,7 +159,6 @@ export const usePomodoroStorage = () => {
     }
   }, [sessionsStorage, settingsStorage, getSettingsApi, getHistoryApi]);
 
-  // Load data on mount and when login status changes
   useEffect(() => {
     loadServerData();
   }, [loadServerData]);
@@ -177,14 +171,11 @@ export const usePomodoroStorage = () => {
         completedAt: new Date().toISOString(),
       };
 
-      // Update local state immediately
       const updatedSessions = [...sessions, newSession];
       setSessions(updatedSessions);
 
-      // Save to local storage
       await sessionsStorage.saveLocal(updatedSessions);
 
-      // Sync to server if logged in
       if (sessionsStorage.isLoggedIn) {
         try {
           await logSessionApi.makeRequest({
@@ -217,10 +208,8 @@ export const usePomodoroStorage = () => {
       const updatedSettings = { ...settings, ...newSettings };
       setSettings(updatedSettings);
 
-      // Save to local storage
       await settingsStorage.saveLocal(updatedSettings);
 
-      // Sync to server if logged in
       if (sessionsStorage.isLoggedIn) {
         try {
           await updateSettingsApi.makeRequest(updatedSettings);
@@ -271,18 +260,13 @@ export const usePomodoroStorage = () => {
   }, [sessionsStorage, settingsStorage]);
 
   return {
-    // Data
     sessions,
     settings,
-
-    // Status
     isLoggedIn: sessionsStorage.isLoggedIn,
     hasLocalData: sessionsStorage.hasLocalData,
     pendingChanges: sessionsStorage.pendingChanges,
     lastSync: sessionsStorage.lastSync,
     isLoading,
-
-    // Actions
     addSession,
     getSessions,
     getSettings,
@@ -290,8 +274,6 @@ export const usePomodoroStorage = () => {
     getStats,
     clearAllData,
     loadServerData,
-
-    // Loading states
     loading:
       isLoading ||
       logSessionApi.loading ||

@@ -26,10 +26,10 @@ const blockPrototypes: (Omit<
 
 function DraggableToolboxItem({
   block,
-  dispatch, // MUDANÇA: Recebemos o dispatch aqui
+  dispatch,
 }: {
   block: (typeof blockPrototypes)[0];
-  dispatch: React.Dispatch<RegexBuilderAction>; // E tipamos ele
+  dispatch: React.Dispatch<RegexBuilderAction>;
 }) {
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: `toolbox-${block.label}`,
@@ -68,7 +68,6 @@ function DraggableToolboxItem({
       {...attributes}
       variant="secondary"
       className="cursor-grab"
-      // MUDANÇA: O clique também adiciona o bloco (melhora acessibilidade)
       onClick={handleAdd}
     >
       {block.label}
@@ -76,7 +75,6 @@ function DraggableToolboxItem({
   );
 }
 
-// MUDANÇA: O componente Toolbox agora aceita e passa a prop 'dispatch'
 export function Toolbox({
   dispatch,
 }: {

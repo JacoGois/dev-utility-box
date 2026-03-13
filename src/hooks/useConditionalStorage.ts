@@ -21,7 +21,6 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
     pendingChanges: false,
   });
 
-  // Update status when auth changes
   useEffect(() => {
     setStatus((prev) => ({
       ...prev,
@@ -29,7 +28,6 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
     }));
   }, [user]);
 
-  // Check if has local data
   useEffect(() => {
     const hasData = localStorage.getItem(config.key) !== null;
     setStatus((prev) => ({
@@ -38,7 +36,6 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
     }));
   }, [config.key]);
 
-  // Save data locally
   const saveLocal = useCallback(
     async (data: T): Promise<void> => {
       try {
@@ -54,7 +51,7 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
         setStatus((prev) => ({
           ...prev,
           hasLocalData: true,
-          pendingChanges: !prev.isLoggedIn, // Only pending if not logged in
+          pendingChanges: !prev.isLoggedIn,
         }));
 
         console.log(`[${config.key}] Data saved locally`);
@@ -66,7 +63,6 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
     [config.key]
   );
 
-  // Load data from local storage
   const loadLocal = useCallback(async (): Promise<T | null> => {
     try {
       const stored = localStorage.getItem(config.key);
@@ -82,7 +78,6 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
     }
   }, [config.key]);
 
-  // Clear local data
   const clearLocal = useCallback(async (): Promise<void> => {
     try {
       localStorage.removeItem(config.key);
@@ -98,7 +93,6 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
     }
   }, [config.key]);
 
-  // Sync data to API (only when logged in)
   const syncToAPI = useCallback(
     async (apiCall: () => Promise<unknown>): Promise<unknown> => {
       if (!status.isLoggedIn) {
@@ -125,13 +119,10 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
     [status.isLoggedIn, config.key]
   );
 
-  // Save with conditional sync
   const save = useCallback(
     async (data: T, apiCall?: () => Promise<unknown>): Promise<void> => {
-      // Always save locally
       await saveLocal(data);
 
-      // Sync to API if logged in and API call provided
       if (status.isLoggedIn && apiCall) {
         try {
           await syncToAPI(apiCall);
@@ -147,16 +138,11 @@ export const useConditionalStorage = <T = unknown>(config: StorageConfig) => {
   );
 
   return {
-    // Status
     ...status,
-
-    // Actions
     save,
     loadLocal,
     clearLocal,
     syncToAPI,
-
-    // Direct access
     saveLocal,
   };
 };

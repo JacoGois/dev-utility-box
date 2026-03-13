@@ -22,11 +22,9 @@ export function BuilderCanvas({
     const { active, over } = event;
     const activeId = active.id as string;
 
-    // Se o item foi arrastado da paleta, o 'over' nos diz onde ele foi solto
     if (activeId.startsWith("toolbox-")) {
       const prototype = active.data.current?.prototype;
       if (prototype) {
-        // Se soltou sobre um grupo, o targetId é o ID do grupo. Senão, é a raiz (null).
         const targetId =
           over?.data.current?.sortable.containerId ||
           (over?.id as string | null);
@@ -41,7 +39,6 @@ export function BuilderCanvas({
       return;
     }
 
-    // Lógica para reordenar itens existentes
     if (over && active.id !== over.id) {
       dispatch({
         type: "MOVE_COMPONENT",
@@ -51,13 +48,11 @@ export function BuilderCanvas({
   };
 
   return (
-    // Usamos o DndContext para gerenciar todo o estado de arrastar e soltar
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
       <div className="p-4 border rounded-lg bg-background flex-grow">
         <h3 className="text-lg font-semibold mb-4">
           Sua Expressão Visual (Arraste e Solte)
         </h3>
-        {/* O SortableContext de nível raiz */}
         <SortableContext
           items={components.map((c) => c.id)}
           strategy={horizontalListSortingStrategy}

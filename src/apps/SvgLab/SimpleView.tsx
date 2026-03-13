@@ -159,7 +159,6 @@ export function SimpleView({
     feDropShadow2.setAttribute("flood-opacity", "0.95");
     filter.appendChild(feDropShadow2);
     defs.appendChild(filter);
-    // Force clone to fill container and show entire image (scale to fit)
     if (!clone.hasAttribute("viewBox")) {
       const { x, y, w, h } = getViewBox(clone);
       clone.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);

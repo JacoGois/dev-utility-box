@@ -57,7 +57,6 @@ export function PropertiesPanel({
     });
   };
 
-  // MUDANÇA: Nova função para remover o bloco selecionado
   const handleRemove = () => {
     dispatch({ type: "REMOVE_COMPONENT", payload: { id } });
   };
@@ -131,7 +130,6 @@ export function PropertiesPanel({
           </div>
         )}
 
-        {/* MUDANÇA: Adicionamos o botão de remover */}
         <div className="border-t pt-4">
           <Button
             variant="destructive"

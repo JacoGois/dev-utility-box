@@ -50,7 +50,6 @@ export function RegexBlock({
             isOver ? "bg-primary/20" : ""
           )}
         >
-          {/* MUDANÇA: Contexto de ordenação aninhado para os filhos do grupo */}
           <SortableContext
             items={component.children?.map((c) => c.id) || []}
             strategy={horizontalListSortingStrategy}

@@ -242,7 +242,6 @@ export function SvgLab({ instanceId }: SvgLabProps) {
               if (process.env.NODE_ENV === "development") {
                 console.error("[SvgLab]", code, err);
               }
-              // In production you can send to Sentry: Sentry.captureException(err, { tags: { svgLab: code } });
             }}
             t={t}
           />

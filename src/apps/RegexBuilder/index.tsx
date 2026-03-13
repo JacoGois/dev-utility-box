@@ -190,7 +190,6 @@ function regexReducer(
   }
 }
 
-// Função recursiva para gerar a string da regex a partir da árvore
 const componentToRegexString = (component: RegexComponent): string => {
   const quantifierMap: Record<
     QuantifierType,
@@ -239,7 +238,6 @@ function RegexBuilderComponent({ instanceId }: { instanceId: string }) {
     return state.componentsTree.map(componentToRegexString).join("");
   }, [state.componentsTree]);
 
-  // Handler para remoção via teclado
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (

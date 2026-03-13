@@ -113,7 +113,6 @@ export function KanbanCard({
           {card.title}
         </h4>
         <div className="flex-shrink-0 flex items-center">
-          {/* Botão de arrastar (opcional, pode arrastar pelo card inteiro) */}
           <button
             {...attributes}
             {...listeners}

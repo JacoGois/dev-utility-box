@@ -41,7 +41,6 @@ function ensureDefs(svgRoot: SVGSVGElement): SVGDefsElement {
   return defs;
 }
 
-/** Parse SVG string into a document and return the root <svg> element or null */
 export function parseSvgString(svgString: string): SVGSVGElement | null {
   const parser = new DOMParser();
   const doc = parser.parseFromString(svgString, "image/svg+xml");
@@ -51,12 +50,10 @@ export function parseSvgString(svgString: string): SVGSVGElement | null {
   return svg;
 }
 
-/** True if value is a url() reference (pattern, gradient, etc.) */
 export function isUrlRef(value: string | null): boolean {
   return typeof value === "string" && value.trim().toLowerCase().startsWith("url(");
 }
 
-/** Collect elements that can be edited (have fill/stroke or are shapes); includes elements in defs/symbol/pattern */
 function collectEditableElements(
   root: Element,
   entries: SvgElementEntry[],
@@ -105,7 +102,6 @@ export function setElementStroke(el: Element, color: string): void {
   setStyleOrAttr(el, "stroke", color);
 }
 
-/** Set element fill to a linear gradient. Creates a gradient in svg defs and references it. */
 export function setElementFillGradient(
   svgRoot: SVGSVGElement,
   el: Element,
@@ -143,7 +139,6 @@ export function removeElement(el: Element): void {
   el.remove();
 }
 
-/** Set element visibility: hidden (true) or visible (false). Does not remove from DOM. */
 export function setElementHidden(el: Element, hidden: boolean): void {
   const svg = el as SVGElement;
   if (hidden) {
@@ -167,7 +162,6 @@ export function getViewBox(svgRoot: SVGSVGElement): { x: number; y: number; w: n
   return { x: 0, y: 0, w, h };
 }
 
-/** Serialize SVG with optional background, padding, and rotation (Iconizer-style). */
 export function serializeSvg(
   svgRoot: SVGSVGElement,
   options?: SvgGlobalOptions | null,
@@ -227,7 +221,6 @@ export function serializeSvg(
   return serializer.serializeToString(clone);
 }
 
-/** Return a clone of the SVG with options applied (for interactive preview with highlight). */
 export function getPreviewClone(
   svgRoot: SVGSVGElement,
   options?: SvgGlobalOptions | null,
@@ -285,7 +278,6 @@ export function getPreviewClone(
   return clone;
 }
 
-/** Replace fill on all elements in entries. */
 export function replaceAllFill(
   entries: SvgElementEntry[],
   color: string,
@@ -293,7 +285,6 @@ export function replaceAllFill(
   entries.forEach((e) => setElementFill(e.node, color));
 }
 
-/** Replace stroke on all elements in entries. */
 export function replaceAllStroke(
   entries: SvgElementEntry[],
   color: string,
@@ -303,7 +294,6 @@ export function replaceAllStroke(
 
 const XLINK_NS = "http://www.w3.org/1999/xlink";
 
-/** If the element is a rect with fill url(#patternId) and the pattern contains an image with data URL, return that image element. */
 export function getEmbeddedImageFromRect(
   svgRoot: SVGSVGElement,
   el: Element,
@@ -351,7 +341,6 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   return { r, g, b };
 }
 
-/** Recolor pixels in a data URL image: replace fromColor (with tolerance) by toColor. Returns new data URL. */
 export function recolorEmbeddedImage(
   dataUrl: string,
   fromColorHex: string,

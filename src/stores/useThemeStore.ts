@@ -9,7 +9,7 @@ export const useThemeStore = create<{
   setTheme: (theme: ThemeKey) => void;
   hydrateTheme: () => void;
 }>((set, get) => ({
-  currentTheme: defaultTheme, // Start with default theme to prevent hydration mismatch
+  currentTheme: defaultTheme,
   setTheme: (theme) => {
     if (typeof document !== "undefined") {
       document.body.classList.remove(

@@ -13,16 +13,12 @@ import {
 import { AppKey, appsType, createApps } from "@/lib/apps";
 import { useDockStore } from "@/stores/useDockStore";
 import { useWindowStore } from "@/stores/useWindowStore";
-import {
-  // Dock as DockIcon,
-  Monitor,
-} from "lucide-react";
+import { Monitor } from "lucide-react";
 
 export function AppLauncher() {
   const {
     isAppLauncherOpen,
     toggleLauncher,
-    //  addToDock,
     addToDesktop,
   } = useDockStore();
   const { openApp } = useWindowStore();
@@ -60,13 +56,6 @@ export function AppLauncher() {
                     <div className="text-xs font-medium">{app.name}</div>
                   </button>
                   <div className="flex gap-2">
-                    {/* <button
-                      onClick={() => addToDock(key)}
-                      title="Adicionar ao Dock"
-                      className="bg-card cursor-pointer hover:opacity-70 p-1 rounded-md"
-                    >
-                      <DockIcon className="w-4 h-4" />
-                    </button> */}
                     <button
                       onClick={() => addToDesktop(key)}
                       title="Adicionar à Área de Trabalho"

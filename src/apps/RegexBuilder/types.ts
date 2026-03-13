@@ -1,14 +1,11 @@
-// Define os tipos de quantificadores que um bloco pode ter
 export type QuantifierType = "none" | "+" | "*" | "?" | "exact" | "range";
 
-// Estrutura de um único componente (bloco ou grupo) na nossa árvore de Regex
 export interface RegexComponent {
   id: string;
-  parentId: string | null; // ID do grupo pai, para aninhamento
+  parentId: string | null;
   type: "literal" | "char_class" | "anchor" | "group" | "or_operator";
-  token: string; // O token da regex (ex: "\\d", "abc", "|")
-  label: string; // O que o usuário vê (ex: "Dígito")
-  // Apenas grupos podem ter filhos
+  token: string;
+  label: string;
   children?: RegexComponent[];
   quantifier: {
     type: QuantifierType;
@@ -18,20 +15,17 @@ export interface RegexComponent {
   };
 }
 
-// O estado completo do nosso aplicativo
 export interface RegexBuilderState {
-  // A árvore de componentes da Regex
   componentsTree: RegexComponent[];
   selectedComponentId: string | null;
   testString: string;
   flags: {
-    g: boolean; // Global
-    i: boolean; // Case-insensitive
-    m: boolean; // Multiline
+    g: boolean;
+    i: boolean;
+    m: boolean;
   };
 }
 
-// As ações que podemos despachar para modificar o estado
 export type RegexBuilderAction =
   | {
       type: "ADD_COMPONENT";
@@ -54,7 +48,6 @@ export type RegexBuilderAction =
     }
   | { type: "RESET" };
 
-// Tipo para um resultado de match encontrado
 export interface Match {
   fullMatch: string;
   index: number;
@@ -62,7 +55,7 @@ export interface Match {
 }
 
 export interface RegexFlags {
-  g: boolean; // Global
-  i: boolean; // Case-insensitive
-  m: boolean; // Multiline
+  g: boolean;
+  i: boolean;
+  m: boolean;
 }

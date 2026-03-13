@@ -166,7 +166,6 @@ export function AdvancedView({ t }: AdvancedViewProps) {
         {t("advanced.intro")}
       </p>
 
-      {/* Load SVG — first so user knows they can paste or start blank */}
       <section className="shrink-0 rounded-lg border border-border bg-muted/10 p-3">
         <p className="text-sm font-medium text-foreground">
           {t("advanced.loadSectionTitle")}
@@ -215,7 +214,6 @@ export function AdvancedView({ t }: AdvancedViewProps) {
         </div>
       </section>
 
-      {/* Actions */}
       <section className="shrink-0">
         <p className="mb-2 text-xs font-medium text-muted-foreground">
           {t("advanced.actionsLabel")}
@@ -260,7 +258,6 @@ export function AdvancedView({ t }: AdvancedViewProps) {
         </div>
       </section>
 
-      {/* Canvas */}
       <section className="min-h-0 flex-1 overflow-auto rounded-lg border border-border bg-muted/20 p-2">
         <p className="mb-2 text-xs font-medium text-muted-foreground">
           {t("advanced.canvasLabel")}

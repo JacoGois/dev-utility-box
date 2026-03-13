@@ -12,7 +12,6 @@ const baseEndpoints: Endpoint[] = [
   { name: "me", route: "/auth/me", method: "get" },
 ];
 
-// Pomodoro endpoints
 const pomodoroEndpoints: Endpoint[] = [
   { name: "pomodoroSettings", route: "/pomodoro/settings", method: "get" },
   {
